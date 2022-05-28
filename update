@@ -1,0 +1,102 @@
+#!/bin/bash
+#
+# --------------------------------------------------------
+# File name:		Update
+# Program description:	Prompted update script for Fedora
+# Author:		Jennifer Romero
+# Usage:		sudo ./update
+# --------------------------------------------------------
+#
+
+VERSION='0.1';
+
+# Check whether user has supplied -h or --help. If yes, display usage
+if [[ ( $@ == "--help") || $@ == "-h" ]]; then
+	echo "Usage: sudo ./$(basename $0)"
+	exit 0
+fi
+
+checkInternet() {
+	#Check the internet connectivity!
+	wget -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
+	
+	if [ ! -s /tmp/index.google ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+isRoot() {
+	# Check if the current user is root or not!
+	if [ $EUID -ne 0 ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+update() {
+	# Update fedora!
+	echo ' ---------------------- '
+	echo "[!] Update the system..."
+	dnf update -y
+	echo ' ----------------------- '
+	echo "[!] Upgrade the system..."
+	dnf upgrade -y
+	echo ' ----------------------- '
+	echo "[!] Remove all leftover dependencies..."
+	dnf autoremove -y
+	echo ' ----------------------- '
+	echo "[!] Clean temporary files..."
+	dnf clean all -y
+	echo ' ----------------------- '
+}
+
+#
+# Here's the script!
+#
+
+echo ' ---------------------------- '
+echo " - Update script for Fedora - "
+echo " ------ Starting now... ----- "
+echo ' ---------------------------- '
+
+
+if [ checkInternet = 0 ]; then
+	echo "[x] There is no Internet connection..."
+	exit 1
+fi
+
+UPDATES=`sudo dnf check-update -q | awk '{print $1}'`
+COUNT=`printf "%s\n" "$UPDATES" | grep -v "^$" | wc -l`
+DNF=`printf "%s\n" "$UPDATES" | grep -v "^$" | grep dnf`
+
+
+if [ isRoot ]; then
+	clear
+	echo '--------------------------------------------------'
+	echo " Update Notification for `hostname`"
+	echo "          -> $COUNT updates(s) available"
+
+	if [ -n "$DNF" ]; then
+
+	echo '          -> IMPORTANT: A dnf update is available.'
+
+	fi
+
+	echo '--------------------------------------------------'
+	printf "%s\n" "$UPDATES"
+
+	read -p "Do you want to update `hostname`? (y/N) " answer
+	if [ "$answer" = 'y' ]; then
+		update
+	fi
+
+else
+	echo "This script must be run as root..." 1>&2
+	clear
+	exit 1
+
+fi
+echo "Update Complete!"
