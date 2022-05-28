@@ -68,7 +68,7 @@ if [ checkInternet = 0 ]; then
 	exit 1
 fi
 
-UPDATES=`sudo dnf check-update -q | awk '{print $1}'`
+UPDATES=`dnf check-update -q | awk '{print $1}'`
 COUNT=`printf "%s\n" "$UPDATES" | grep -v "^$" | wc -l`
 DNF=`printf "%s\n" "$UPDATES" | grep -v "^$" | grep dnf`
 
