@@ -1,0 +1,97 @@
+#!/bin/bash
+#
+# -------------------------------------------------------- #
+# File name:		Update
+# Program description:	Prompted update script for Debian
+# Author:		Jennifer Romero
+# Usage:		sudo ./update
+# -------------------------------------------------------- #
+#
+
+VERSION='0.1';
+
+# Check whether user has supplied -h or --help.
+# If yes, display usage.
+
+if [[ ( $@ == "--help") || $@ == "-h" ]]; then
+	echo "Usage: sudo ./$(basename $0)"
+	exit 0
+fi
+
+##### VARIABLES #####
+
+checkInternet() {
+	# Check the internet connectivity !
+	wget -q --tries=10 --timeout=5 http://www.google.com -O /tmp/index.google &> /dev/null
+	if [ ! -s /tmp/index.google ]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+update() {
+	# Update debian !
+	echo ' ------------------------------ '
+	echo ' '
+	echo "[!] Getting system up-to-date..."
+	apt update -y
+	echo ' '
+	echo ' ------------------------------ '
+	echo ' '
+	echo "[!] Upgrading system..."
+	apt upgrade -y
+	echo ' '
+	echo ' ------------------------------ '
+	echo ' '
+	echo "[!] Cleaning system..."
+	apt clean -y
+	echo ' '
+	echo ' ------------------------------ '
+	echo ' '
+	echo "[!] Removing unused packages..."
+	apt autoremove -y
+	echo ' '
+	echo ' ------------------------------ '
+	echo ' '
+	echo "[**] Rebooting system now..."
+	shutdown -r now
+} 
+
+#
+# Here's the script !
+#
+
+echo ' ------------------------------------------------- '
+echo " ------------- Update script for debian ---------- "
+echo " ---------------- Starting script ---------------- "
+echo ' ------------------------------------------------- '
+
+if [ checkInternet = 0 ]; then
+	echo "[x] There is no Internet connection..."
+	exit 1
+fi
+
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run as root..."
+	echo "Run --help or -h for usage."
+	exit 1
+fi
+
+UPDATES=`apt list --upgradable`
+clear
+echo ' -------------------------------------------------- '
+echo " Update Notification for `hostname` "
+echo ' -------------------------------------------------- '
+echo ' '
+echo "$UPDATES"
+echo ' '
+echo ' -------------------------------------------------- '
+
+echo ' '
+read -p "Do you want to update `hostname`? (y/N) " answer
+if [ "$answer" = 'y' ]; then
+	update
+fi
+echo ' '
+echo "Update Complete!"
