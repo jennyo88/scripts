@@ -8,7 +8,7 @@ VERSION='0.1';
  File name:		Update
  Program description:	Prompted update script for Debian
  Author:		Jennifer Romero
- Usage:		sudo ./update
+ Usage:			sudo ./update
  --------------------------------------------------------
 '
 
