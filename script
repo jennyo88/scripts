@@ -1,0 +1,360 @@
+#!/usr/bin/env bash
+
+### Console menu for converting Files
+### A menu driven shell script.
+### Just a simple menu, nothing more than a shortcut.
+
+## ----------------------
+## Step #1: Define variables
+## ----------------------
+
+main_menu="0"
+
+## -------------------------------
+# Step #2: User defined functions
+## -------------------------------
+
+show_banner_0() {
+  clear
+    echo -e "${blu}"
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    echo "                  Converting Files - Service Menu                      "
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+}
+
+show_banner_1() {
+  clear
+    echo -e "${blu}"
+	  echo '                   __     _____ ____  _____ ___  ____                   '
+    echo '                   \ \   / /_ _|  _ \| ____/ _ \/ ___|                  '
+    echo '                    \ \ / / | || | | |  _|| | | \___ \                  '
+    echo '                     \ V /  | || |_| | |__| |_| |___) |                 '
+    echo '                      \_/  |___|____/|_____\___/|____/                  '
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+}
+
+show_banner_2() {
+	clear
+    echo -e "${blu}"
+    echo '                           ____  _   _ ____ ____                        '
+    echo '                          / ___|| | | | __ ) ___|                       '
+    echo '                          \___ \| | | |  _ \___ \                       '
+    echo '                           ___) | |_| | |_) |__) |                      '
+    echo '                          |____/ \___/|____/____/                       '
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+}
+
+show_menu_0() {
+  # clear --> moved to show_banner
+  echo -e
+  echo " 1) Videos"
+  echo " 2) Subs"
+  echo -e "\n 0) Exit Menu \n"
+
+  echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
+    case $ans in
+      [vV]|[vV][iI][dD][eE][oO][sS]|"1")
+        show_banner_1
+        show_menu_1
+        ;;
+      [sS]|[sS][uU][bB][sS]|"2")
+        show_banner_2
+        show_menu_2
+        ;;
+      ## Exit menu
+      [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+        goodbye
+        ;;
+      # Hidden options
+      [xX][2][6][5])
+        show_banner_1
+        x265
+        ;;
+      [mM][3][uU][8])
+        show_banner_1
+        m3u8
+        ;;
+      [pP][lL][eE][xX])
+        show_banner_1
+        plex
+        ;;
+      [eE][xX][tT][rR][aA][cC][tT])
+        show_banner_2
+        ts2srt
+        ;;
+      [cC][oO][nN][vV][eE][rR][tT])
+        show_banner_2
+        vtt2srt
+        ;;
+      ## Anything else is invalid option.
+      *) echo -e "Sorry, that is not an option" && sleep 1
+      ;;
+    esac
+}
+
+show_menu_1() {
+  echo -e
+  echo "1) Main Menu"
+  echo "2) Convert to x265"
+  echo "3) Download m3u8"
+  echo "4) Fix mkv for plex"
+  echo "5) Subs Menu"
+  echo -e "\n 0) Exit Menu \n"
+
+  PS3=""$'\n'"${blu}Select: ${end}" ; echo
+  echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
+    case $ans in
+      [mM][aA][iI][nN]|"1")
+        show_banner_0
+        show_menu_0
+        ;;
+      [xX]|[xX][2][6][5]|"2")
+        show_banner_1
+        x265
+        ;;
+      [mM]|[mM][3][uU][8]|"3")
+        show_banner_1
+        m3u8
+        ;;
+      [pP]|[pP][lL][eE][xX]|"4")
+        show_banner_1
+        plex
+        ;;
+      [sS]|[sS][uU][bB][sS]|"5")
+        show_banner_2
+        show_menu_2
+        ;;
+      ## Exit menu
+      [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+        goodbye
+        ;;
+      ## Anything else is invalid option.
+      *) echo -e "Sorry, that is not an option" && sleep 1
+        ;;
+    esac
+}
+
+show_menu_2() {
+  echo -e
+  echo "1) Main Menu"
+  echo "2) Extract subs from ts"
+  echo "3) Convert vtt to srt"
+  echo "4) Videos Menu"
+  echo -e "\n 0) Exit Menu \n"
+
+  echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
+    case $ans in
+      [mM][aA][iI][nN]|"1")
+        show_banner_0
+        show_menu_0
+        ;;
+      [eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
+        show_banner_2
+        ts2srt
+        ;;
+      [cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
+        show_banner_2
+        vtt2srt
+        ;;
+      [vV]|[vV][iI][dD][eE][oO][sS]|"4")
+        show_banner_1
+        show_menu_1
+        ;;
+      [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+        goodbye
+        ;;
+      *) echo -e "Sorry, that is not an option" && sleep 1
+        ;;
+    esac
+}
+
+
+pause() {
+  echo ; read -rp "Press ENTER to continue..." fackEnterKey
+}
+
+goodbye() {
+  echo -e "${end}"
+  clear ; exit
+}
+
+load_colors() {
+  blu=$'\e[38;5;39m'
+  orn=$'\e[38;5;208m'
+  red=$'\e[1;31m'
+  end=$'\e[0m'
+} ; load_colors # Only loaded once
+
+# ----------------------------------
+# Step #3: Formulas
+# ----------------------------------
+
+x265() {
+  echo "${blu}""                           MKV or MP4 x265 Script               "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}"
+
+	printf "Source extension? (mkv, mp4, or avi) : "
+	read srcExt
+
+	printf "Destination extension? (mkv or mp4) : "
+	read destExt
+
+	printf "Source directory? (.) : "
+	read srcDir
+
+	printf "Destination directory? (./DONE) : "
+	read destDir
+
+	printf "Options? (in quotes) : "
+	read opts
+
+
+	for filename in "$srcDir"/*.$srcExt;
+	do
+    basePath=${filename%.*}
+		baseName=${basePath##*/}
+
+		ffmpeg -i $filename -c:v libx265 -c:a copy -threads 3 $opts "$destDir"/"$baseName"."$destExt"
+	done
+  echo -e "Conversion from {srcExt} to {destExt} complete!"
+
+}
+
+m3u8() {
+  echo "${blu}""                            M3U8 to TS Script                   "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}"
+
+	printf "Source extension? : "
+	read srcExt
+
+	printf "Destination extension? : "
+	read destExt
+
+	printf "Destination directory? : "
+	read destDir
+
+	printf "Source web-address? : "
+	read srcAdd
+
+	printf "Movie name? (include periods between words) : "
+	read baseName
+
+	printf "Movie release year? : "
+	read baseYear
+
+
+	for file in directory;
+	do
+    mkdir "$dirName"
+		newname=`echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' `
+		mv "$dirName" "$newname"
+		mv "$newname" ~/down.jromero/DONE/
+	done
+
+
+	for file in download;
+	do
+		dirName="${baseName} (${baseYear})"
+		ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 "$destDir"/"$baseName"."$baseYear".720p.WEBRip.x265-TCM."$destExt"
+	done
+  echo -e "Conversion from {srcExt} to {destExt} complete!"
+}
+
+plex() {
+  echo "${blu}""                           Ready for PLEX Script                "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}"
+
+  printf "Source extension? : "
+  read srcExt
+
+  printf "Destination extension? : "
+  read destExt
+
+  printf "Source directory? : "
+  read srcDir
+
+  printf "Destination directory? : "
+  read destDir
+
+  printf "Movie language? (two letter code) : "
+  read srcLan
+
+
+  for filename in "$srcDir"/*.$srcExt; do
+
+    basePath=${filename%.*}
+    baseName=${basePath##*/}
+
+    ffmpeg -i $filename -map 0 -metadata:s:a:0 language=${srcLan} -c copy "$destDir"/"$baseName"."$destExt"
+
+  done
+  echo "Conversion from ${srcExt} to ${destExt} complete!"
+}
+
+ts2srt() {
+  echo "${blu}""                             TS to SRT script                   "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}"
+  printf "Source extension? : "
+  read srcExt
+
+  printf "Destination extension? : "
+  read destExt
+
+  printf "Source directory? : "
+  read srcDir
+
+  printf "Destination directory? : "
+  read destDir
+
+  for filename in "$srcDir"/*.$srcExt; do
+
+  	basePath=${filename%.*}
+    baseName=${basePath##*/}
+
+  	ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s "$destDir"/"$baseName".en."$destExt"
+
+  done
+  echo "Conversion from ${srcExt} to ${destExt} complete!"
+
+}
+
+vtt2srt() {
+  echo "${blu}""                             VTT to SRT script                  "
+  echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  echo -e "${end}"
+
+  printf "Source extension? : "
+  read srcExt
+
+  printf "Destination extension? : "
+  read destExt
+
+  printf "Source directory? : "
+  read srcDir
+
+  printf "Destination directory? : "
+  read destDir
+
+  for filename in "$srcDir"/*.$srcExt; do
+
+  	basePath=${filename%.*}
+    baseName=${basePath##*/}
+
+  	ffmpeg -i $filename "$destDir"/"$baseName"."$destExt"
+
+  done
+  echo "Conversion from ${srcExt} to ${destExt} complete!"
+
+}
+
+# -----------------------------------
+# Step #4: Main logic - infinite loop
+# ------------------------------------
+
+while true; do
+show_banner_0 && show_menu_${main_menu}
+done
