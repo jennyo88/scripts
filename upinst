@@ -1,0 +1,163 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+##### INFO #####
+VERSION='0.1';
+
+: '
+ --------------------------------------------------------
+ File name:		        Update
+ Program description:	Menu update and install script for Debian
+ Author:		          Jennifer Romero
+ Usage:			          sudo ./upinst
+ --------------------------------------------------------
+'
+# install
+install() {
+  # Update debian first !
+	echo ' ------------------------------ '
+	echo -e "[!] Getting system up-to-date..."
+	apt update -y
+  echo -e ' ------------------------------ '
+  apt install $1
+}
+
+updateCheck() {
+	echo ' ------------------------------ '
+	echo -e "[!] Checking if system is upgradable..."  
+  apt list --upgradable
+}
+
+upgrade() {
+  # Update debian first !
+	echo ' ------------------------------ '
+	echo -e "[!] Getting system up-to-date..."
+	apt update -y
+	echo ' ------------------------------ '
+	echo -e "[!] Upgrading system..."
+	apt upgrade -y
+}
+
+remove() {
+  # Update debian first !
+	echo ' ------------------------------ '
+	echo -e "[!] Getting system up-to-date..."
+	apt update -y
+  echo ' ------------------------------ '
+  echo -e "[!] Removing $(basename $1)..."
+  apt remove $1
+	echo ' ------------------------------ '
+	echo -e "[!] Cleaning system..."
+	apt clean -y
+	echo ' ------------------------------ '
+	echo -e "[!] Removing unused packages..."
+	apt autoremove -y
+}
+
+reboot() {
+	echo "[**] Rebooting system now..."
+	shutdown -r now
+}
+
+# ================
+# Script structure
+# ================
+
+# Show usage via commandline arguments 
+usage() {
+  echo "~~~~~~~~"
+  echo " USAGE"
+  echo "~~~~~~~~"
+  echo "Usage: sudo ./$(basename $0)"
+  echo "  options:"
+  echo "    -i : Install"
+  echo "    -u : Update check"
+  echo "    -U : Upgrade"
+  echo "    -r : Uninstall"
+  echo "    -R : Reboot"
+  echo "    -m : Show interactive menu"
+  echo :    -h : Show help"
+  echo ""
+  exit
+}
+
+# Function to display menu options
+show_menus() {
+  clear
+  echo "~~~~~~~~~~~~~~~~~~~~~~"
+  echo " Main Menu"
+  echo "  1. Install"
+  echo "  2. Update check"
+  echo "  3. Upgrade"
+  echo "  4. Uninstall"
+  echo "  5. Reboot"
+  echo "  ---"
+  echo "  6. Exit"
+  echo ""
+}
+
+# Function to read menu input selection and take an action
+read_options() {
+  local choice
+  read -p "Enter choice [ 1 - 6 ] " choice
+  case $choice in
+  1) install;;
+  2) updateCheck;;
+  3) upgrade;;
+  4) uninstall;;
+  5) reboot;;
+  6) exit 0;;
+  *) echo -e "${READ}Error...${STD}" && sleep 2
+  esac
+}
+
+# Use menu...
+do_menu() {
+  # Main menu handler loop
+  while true
+  do
+    show_menus
+    read_options
+  done
+}
+
+# If no arguments provided, display usage information
+[[ $# -eq 0 ]] && usage
+
+# Process command line arguments
+if [[ $@ ]]; then
+  while getopts "iurRmh" opt; do
+    case $opt in
+      i)
+        install
+        shift
+        ;;
+      u)
+        update
+        shift
+        ;;
+      r)
+        uninstall
+        shift
+        ;;
+      R)
+        reboot
+        shift
+        ;;
+      m)
+        do_menu
+        shift
+        ;;
+      h)
+        usage
+        exit 0
+        ;;
+      \?)
+        ;;
+     esac
+  done
+else
+  usage
+  exit 0
+fi
