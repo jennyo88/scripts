@@ -19,14 +19,14 @@ install() {
 	echo ' ------------------------------ '
 	echo -e "[!] Getting system up-to-date..."
 	apt update -y
-  echo -e ' ------------------------------ '
-  apt install $1
+  	echo -e ' ------------------------------ '
+  	apt install $1
 }
 
 updateCheck() {
 	echo ' ------------------------------ '
 	echo -e "[!] Checking if system is upgradable..."  
-  apt list --upgradable
+  	apt list --upgradable
 }
 
 upgrade() {
@@ -44,9 +44,9 @@ remove() {
 	echo ' ------------------------------ '
 	echo -e "[!] Getting system up-to-date..."
 	apt update -y
-  echo ' ------------------------------ '
-  echo -e "[!] Removing $(basename $1)..."
-  apt remove $1
+  	echo ' ------------------------------ '
+  	echo -e "[!] Removing $(basename $1)..."
+  	apt remove $1
 	echo ' ------------------------------ '
 	echo -e "[!] Cleaning system..."
 	apt clean -y
@@ -78,7 +78,7 @@ usage() {
   echo "    -R : Reboot"
   echo "    -m : Show interactive menu"
   echo :    -h : Show help"
-  echo ""
+  echo
   exit
 }
 
@@ -94,7 +94,7 @@ show_menus() {
   echo "  5. Reboot"
   echo "  ---"
   echo "  6. Exit"
-  echo ""
+  echo
 }
 
 # Function to read menu input selection and take an action
