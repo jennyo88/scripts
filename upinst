@@ -4,7 +4,7 @@
 install() {
   # Update debian first !
 	echo ' ------------------------------ '
-	echo -e "[!] Getting system up-to-date..."
+	echo -e '[!] Getting system up-to-date...'
 	apt update -y
   	echo ' ------------------------------ '
   	apt install $1
@@ -12,7 +12,7 @@ install() {
 
 updateCheck() {
 	echo ' ------------------------------ '
-	echo -e "[!] Checking if system is upgradable..."  
+	echo -e "[!] Checking if system is upgradable... 
   	apt list --upgradable
 }
 
@@ -64,7 +64,7 @@ usage() {
   	echo "    -r : Uninstall"
   	echo "    -R : Reboot"
   	echo "    -m : Show interactive menu"
-  	echo :    -h : Show help"
+  	echo "    -h : Show help"
   	echo
   	exit
 }
