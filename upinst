@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 
-set -Eeuo pipefail
-
-##### INFO #####
-VERSION='0.1';
-
-: '
- --------------------------------------------------------
- File name:		        Update
- Program description:	Menu update and install script for Debian
- Author:		          Jennifer Romero
- Usage:			          sudo ./upinst
- --------------------------------------------------------
-'
 # install
 install() {
   # Update debian first !
