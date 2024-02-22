@@ -108,8 +108,7 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-    echo -e "\n"  # Add a space before the menu
-    PS3="Choose a tmux command (enter a number): "
+    PS3="        Choose a tmux command (enter a number): "
 
     options=(
         "Create a new session"
