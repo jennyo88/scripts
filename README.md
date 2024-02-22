@@ -9,7 +9,9 @@ This repository contains several Bash scripts for various purposes. Below is a b
 A bash script for converting video files using ffmpeg.
 
 **Usage:**
+```
 ./cfiles
+```
 
 ## script
 
