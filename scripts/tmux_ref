@@ -2,11 +2,19 @@
 
 # tmux reference interactive script
 
-# Function to print the header at the top of the menu
+# ANSI color codes
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+CYAN='\033[1;36m'
+RESET='\033[0m'
+
+# Function to print the colored header at the top of the menu
 print_header() {
     clear
-    echo "==================== TMUX REFERENCE SCRIPT ===================="
-    echo "Press Ctrl+C to exit at any time."
+    echo -e "${BLUE}==================== TMUX REFERENCE SCRIPT ====================${RESET}"
+    echo -e "${CYAN}Press Ctrl+C to exit at any time.${RESET}"
     echo ""
 }
 
@@ -14,7 +22,7 @@ print_header() {
 create_session() {
     # Check if already in a session
     if [ -n "$TMUX" ]; then
-        echo "Error: You are already in a tmux session. Cannot create a new session."
+        echo -e "${RED}Error: You are already in a tmux session. Cannot create a new session.${RESET}"
         return
     fi
 
@@ -22,7 +30,7 @@ create_session() {
 
     # Check if the session already exists
     if tmux has-session -t "$session_name" 2>/dev/null; then
-        echo "Error: Session '$session_name' already exists. Choose a different name."
+        echo -e "${RED}Error: Session '$session_name' already exists. Choose a different name.${RESET}"
     else
         # If the session doesn't exist, create a new one
         tmux new-session -s "$session_name"
@@ -42,7 +50,7 @@ attach_session() {
     if tmux has-session -t "$session_name" 2>/dev/null; then
         tmux attach -t "$session_name"
     else
-        echo "Error: Session '$session_name' does not exist."
+        echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
     fi
 }
 
@@ -72,7 +80,7 @@ close_pane() {
     if [ "$(tmux list-panes | wc -l)" -gt 1 ]; then
         tmux kill-pane
     else
-        echo "Error: Cannot close the last pane in the window."
+        echo -e "${RED}Error: Cannot close the last pane in the window.${RESET}"
     fi
 }
 
@@ -84,7 +92,7 @@ rename_session() {
 
 # Function to display information about the current tmux session
 show_session_info() {
-    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+    tmux display-message -p "${GREEN}#{session_name} (#{session_id}): #{session_windows} windows${RESET}"
 }
 
 # Function for the main menu loop
@@ -92,47 +100,45 @@ main_menu() {
     PS3="Choose a tmux command (enter a number): "
 
     options=(
-        "Create a new session"
-        "List sessions"
-        "Attach to a session"
-        "Detach from the current session"
-        "Split pane horizontally"
-        "Split pane vertically"
-        "Navigate between panes"
-        "Close current pane"
-        "Rename session"
-        "Show session information"
-        "Exit"
+        "${YELLOW}Create a new session${RESET}"
+        "${YELLOW}List sessions${RESET}"
+        "${YELLOW}Attach to a session${RESET}"
+        "${YELLOW}Detach from the current session${RESET}"
+        "${YELLOW}Split pane horizontally${RESET}"
+        "${YELLOW}Split pane vertically${RESET}"
+        "${YELLOW}Navigate between panes${RESET}"
+        "${YELLOW}Close current pane${RESET}"
+        "${YELLOW}Rename session${RESET}"
+        "${YELLOW}Show session information${RESET}"
+        "${YELLOW}Exit${RESET}"
     )
 
     echo ""
 
-    # Calculate the number of options per column
-    options_per_column=$(( (${#options[@]} + 1) / 2 ))
-
-    # Print the options in two columns
-    for ((i = 1; i <= ${#options[@]}; i++)); do
-        printf "%-2s) %-35s" "$i" "${options[$((i - 1))]}"
-        if [ $((i % options_per_column)) -eq 0 ]; then
-            echo ""
-        fi
+    select opt in "${options[@]}"; do
+        case $REPLY in
+            1) create_session ;;
+            2) list_sessions ;;
+            3) attach_session ;;
+            4) detach_session ;;
+            5) split_horizontal ;;
+            6) split_vertical ;;
+            7) navigate_panes ;;
+            8) close_pane ;;
+            9) rename_session ;;
+            10) show_session_info ;;
+            11)
+                echo -e "${BLUE}Exiting the tmux reference script. Goodbye!${RESET}"
+                exit 0
+                ;;
+            *)
+                echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
+                ;;
+        esac
     done
-
-    # Prompt the user to choose an option
-    read -rp "Enter a number: " choice
-
-    case $choice in
-        [1-$((${#options[@]}))])
-            # Valid choice, execute the corresponding function
-            eval "${options[$((choice - 1))]// /_}"
-            ;;
-        *)
-            echo "Invalid choice. Please enter a valid number."
-            ;;
-    esac
 }
 
-# Main loop to display the header and run the main menu
+# Main loop to display the colored header and run the main menu
 while true; do
     print_header
     main_menu
