@@ -6,11 +6,11 @@ A collection of bash scripts for various file conversion and system update tasks
 
 - [Description](#description)
 - [Scripts](#scripts)
-  - [cfiles](#cfiles)
-  - [script](#script)
-  - [update-debian](#update-debian)
-  - [update-fedora](#update-fedora)
-  - [upinst](#upinst)
+  - [convert](#convert)
+  - [linux](#linux)
+    - [update-debian](#update-debian)
+    - [update-fedora](#update-fedora)
+    - [upinst](#upinst)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -20,27 +20,21 @@ This repository contains a set of bash scripts designed for different tasks. The
 
 ## Scripts
 
-### cfiles
-
-**Description:**
-A bash script for converting video files using ffmpeg.
-
-**Usage:**
-```bash
-./cfiles
-```
-
-### script
+### convert
 
 **Description:**
 A bash script for performing system updates on Debian-based systems.
 
 **Usage:**
 ```bash
-./script
+./convert
 ```
 
-### update-debian
+### Linux
+
+Linux related scripts.
+
+#### update-debian
 
 **Description:**
 A prompted update script for Debian systems.
@@ -54,7 +48,7 @@ sudo ./update-debian
 
 `-h` or `--help`: Display usage information.
 
-### update-fedora
+#### update-fedora
 
 **Description:**
 A prompted update script for Fedora systems.
@@ -69,7 +63,7 @@ sudo ./update-fedora
 `-h` or `--help`: Display usage information.
 
 
-### upinst
+#### upinst
 
 **Description:**
 A bash script with options for installing, updating, and managing Debian-based systems.
