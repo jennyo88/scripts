@@ -31,7 +31,7 @@ create_session() {
 
 # Function to list existing tmux sessions
 list_sessions() {
-    tmux list-sessions | cut -d ':' -f 1
+    tmux list-sessions
 }
 
 # Function to attach to a specific tmux session
@@ -89,47 +89,48 @@ show_session_info() {
 
 # Function for the main menu loop
 main_menu() {
-    echo ""
-    echo "1. Create a new session"
-    echo "2. List sessions"
-    echo "3. Attach to a session"
-    echo "4. Detach from the current session"
-    echo "5. Split pane horizontally"
-    echo "6. Split pane vertically"
-    echo "7. Navigate between panes"
-    echo "8. Close current pane"
-    echo "9. Rename session"
-    echo "10. Show session information"
-    echo "0. Exit"
+    PS3="Choose a tmux command (enter a number): "
 
-    read -p "Choose a tmux command (enter a number): " choice
+    options=(
+        "Create a new session"
+        "List sessions"
+        "Attach to a session"
+        "Detach from the current session"
+        "Split pane horizontally"
+        "Split pane vertically"
+        "Navigate between panes"
+        "Close current pane"
+        "Rename session"
+        "Show session information"
+        "Exit"
+    )
+
+    echo ""
+
+    # Calculate the number of options per column
+    options_per_column=$(( (${#options[@]} + 1) / 2 ))
+
+    # Print the options in two columns
+    for ((i = 1; i <= ${#options[@]}; i++)); do
+        printf "%-2s) %-35s" "$i" "${options[$((i - 1))]}"
+        if [ $((i % options_per_column)) -eq 0 ]; then
+            echo ""
+        fi
+    done
+
+    # Prompt the user to choose an option
+    read -rp "Enter a number: " choice
 
     case $choice in
-        1) create_session ;;
-        2) list_sessions ;;
-        3) attach_session ;;
-        4) detach_session ;;
-        5) split_horizontal ;;
-        6) split_vertical ;;
-        7) navigate_panes ;;
-        8) close_pane ;;
-        9) rename_session ;;
-        10) show_session_info ;;
-        0)
-            echo "Exiting the tmux reference script. Goodbye!"
-            exit 0
+        [1-$((${#options[@]}))])
+            # Valid choice, execute the corresponding function
+            eval "${options[$((choice - 1))]// /_}"
             ;;
         *)
             echo "Invalid choice. Please enter a valid number."
             ;;
     esac
 }
-
-# Check if tmux is installed
-if ! command -v tmux &> /dev/null; then
-    echo "Error: 'tmux' is not installed. Please install tmux before running this script."
-    exit 1
-fi
 
 # Main loop to display the header and run the main menu
 while true; do
