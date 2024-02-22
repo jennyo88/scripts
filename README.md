@@ -25,65 +25,121 @@ This repository contains a set of bash scripts designed for different tasks. The
 A bash script for converting video files using ffmpeg.
 
 **Usage:**
-```bash
+```
 ./cfiles
 ```
 
 ### script
+
 **Description:**
 A bash script for performing system updates on Debian-based systems.
 
 **Usage:**
-```bash
-sudo ./script
+```
+./script
 ```
 
 ### update-debian
 
-Description:
+**Description:**
 A prompted update script for Debian systems.
 
-Usage:
-
-bash
-Copy code
+**Usage:**
+```
 sudo ./update-debian
-update-fedora
-Description:
+```
+
+**Options:**
+
+`-h` or `--help`: Display usage information.
+
+### update-fedora
+
+**Description:**
 A prompted update script for Fedora systems.
 
-Usage:
-
-bash
-Copy code
+**Usage:**
+```
 sudo ./update-fedora
-upinst
-Description:
+```
+
+**Options:**
+
+`-h` or `--help`: Display usage information.
+
+
+### upinst
+
+**Description:**
 A bash script with options for installing, updating, and managing Debian-based systems.
 
-Usage:
-
-bash
-Copy code
+**Usage:**
+```
 sudo ./upinst [options]
-Usage
-Refer to each script's individual section for specific usage instructions. Make sure to check the respective scripts for details on how to use them effectively.
+```
 
-License
+**Options:**
+
+`-i`: Install
+`-u`: Update check
+`-U`: Upgrade
+`-r`: Uninstall
+`-R`: Reboot
+`-m`: Show interactive menu
+`-h`: Show help
+
+**Usage Examples:**
+```
+# Install a package
+sudo ./upinst -i package_name
+
+# Check for updates
+sudo ./upinst -u
+
+# Upgrade system
+sudo ./upinst -U
+
+# Uninstall a package
+sudo ./upinst -r package_name
+
+# Reboot system
+sudo ./upinst -R
+
+# Show interactive menu
+sudo ./upinst -m
+
+# Display help
+sudo ./upinst -h
+```
+
+## Usage
+Refer to each script's individual section for specific usage instructions.
+Make sure to check the respective scripts for details on how to use them effectively.
+
+## License
 This project is licensed under the MIT License.
 
 MIT License:
-
-text
-Copy code
-Copyright (c) 2024 Your Name
+```
+Copyright (c) 2024 Jennifer Romero
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-...
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-Feel free to customize this template based on your specific repository details.
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-csharp
-Copy code
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Replace "Converting Scripts," "Your Name," and other placeholders with your actual information. Feel free to add more details or customize the content further as needed.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+``
+
+```
