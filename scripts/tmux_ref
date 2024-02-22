@@ -5,6 +5,7 @@ display_intro() {
     echo "TMUX QUICK REFERENCE"
     echo "-------------------"
     echo "This script provides an interactive quick reference for using tmux."
+    echo "Focus is on the most commonly used tmux commands."
     echo ""
 }
 
@@ -19,7 +20,7 @@ display_help() {
     echo ""
 }
 
-# Display basics section with tmux commands for starting and attaching sessions.
+# Display basics section with the most commonly used tmux commands.
 display_basics() {
     echo "1. BASICS"
     echo "----------"
@@ -27,14 +28,17 @@ display_basics() {
     echo "   tmux"
     echo ""
     echo "b. Attach to an existing session:"
-    echo "   tmux attach-session -t SESSION_NAME"
+    echo "   tmux attach"
     echo ""
-    echo "c. Detach from the current session (inside tmux):"
+    echo "c. Detach from the current session:"
     echo "   Press Ctrl-b, then release and press d"
+    echo ""
+    echo "d. List all sessions:"
+    echo "   tmux list-sessions"
     echo ""
 }
 
-# Display windows and panes section with tmux commands for managing windows and panes.
+# Display windows and panes section with the most commonly used tmux commands.
 display_windows_and_panes() {
     echo "2. WINDOWS AND PANES"
     echo "---------------------"
@@ -50,27 +54,21 @@ display_windows_and_panes() {
     echo "d. Split the current pane vertically:"
     echo "   Press Ctrl-b, then press \""
     echo ""
-    echo "e. Navigate between panes:"
-    echo "   Press Ctrl-b, then press arrow keys"
-    echo ""
 }
 
-# Display session management section with tmux commands for managing sessions.
+# Display session management section with the most commonly used tmux commands.
 display_session_management() {
     echo "3. SESSION MANAGEMENT"
     echo "----------------------"
     echo "a. List existing sessions:"
     echo "   tmux list-sessions"
     echo ""
-    echo "b. Create a new session with a name:"
-    echo "   tmux new-session -s SESSION_NAME"
-    echo ""
-    echo "c. Kill a session:"
-    echo "   tmux kill-session -t SESSION_NAME"
+    echo "b. Kill the current session:"
+    echo "   tmux kill-session"
     echo ""
 }
 
-# Display miscellaneous section with additional tmux commands.
+# Display miscellaneous section with additional commonly used tmux commands.
 display_miscellaneous() {
     echo "4. MISCELLANEOUS"
     echo "----------------"
@@ -84,8 +82,8 @@ display_miscellaneous() {
 
 # Main function to determine which section to display based on the user's choice.
 main() {
-    while true
-    do
+    display_intro
+    while true; do
         display_help
         read -p "Enter the number of the section you want to explore (q to quit): " choice
         case $choice in
@@ -100,5 +98,4 @@ main() {
 }
 
 # Call the main function to start the interactive mode.
-display_intro
 main
