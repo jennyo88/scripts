@@ -108,7 +108,7 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-    echo "\n"  # Add a space before the menu
+    echo -e "\n"  # Add a space before the menu
     PS3="Choose a tmux command (enter a number): "
 
     options=(
@@ -147,7 +147,6 @@ main_menu() {
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
-	echo -e "\n \n"
     done
 }
 
