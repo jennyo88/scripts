@@ -125,7 +125,7 @@ main_menu() {
         "Exit"
     )
 
-    echo "\n"
+	echo -e "\n \n"
 
     select opt in "${options[@]}"; do
         case $REPLY in
