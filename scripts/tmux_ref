@@ -108,14 +108,9 @@ kill_session() {
     fi
 }
 
-# Function to print the footer separating the menu and user prompt
-print_footer() {
-    echo ""
-    echo "==============================================================="
-}
-
 # Function for the main menu loop
 main_menu() {
+    echo ""
     PS3="Choose a tmux command (enter a number): "
 
     options=(
@@ -132,8 +127,6 @@ main_menu() {
         "Kill a session"
         "Exit"
     )
-
-    print_footer
 
     select opt in "${options[@]}"; do
         case $REPLY in
@@ -156,8 +149,6 @@ main_menu() {
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
-
-        print_footer
     done
 }
 
