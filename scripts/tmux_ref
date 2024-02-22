@@ -101,6 +101,7 @@ main_menu() {
     echo "9. Rename session"
     echo "10. Show session information"
     echo "0. Exit"
+    echo ""
 
     read -p "Choose a tmux command (enter a number): " choice
 
@@ -124,6 +125,12 @@ main_menu() {
             ;;
     esac
 }
+
+# Check if tmux is installed
+if ! command -v tmux &> /dev/null; then
+    echo "Error: 'tmux' is not installed. Please install tmux before running this script."
+    exit 1
+fi
 
 # Main loop to display the header and run the main menu
 while true; do
