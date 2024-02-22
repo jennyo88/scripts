@@ -84,7 +84,6 @@ display_miscellaneous() {
 
 # Main function to determine which section to display based on the user's choice.
 main() {
-    display_intro
     while true
     do
         display_help
@@ -101,4 +100,5 @@ main() {
 }
 
 # Call the main function to start the interactive mode.
+display_intro
 main
