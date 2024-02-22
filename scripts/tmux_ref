@@ -95,6 +95,25 @@ show_session_info() {
     tmux display-message -p "${GREEN}#{session_name} (#{session_id}): #{session_windows} windows${RESET}"
 }
 
+# Function to kill a tmux session
+kill_session() {
+    read -p "${YELLOW}Enter session name to kill: ${RESET}" session_name
+
+    # Check if the session exists before attempting to kill
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux kill-session -t "$session_name"
+        echo -e "${GREEN}Session '$session_name' has been killed.${RESET}"
+    else
+        echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
+    fi
+}
+
+# Function to print the footer separating the menu and user prompt
+print_footer() {
+    echo ""
+    echo "==============================================================="
+}
+
 # Function for the main menu loop
 main_menu() {
     PS3="Choose a tmux command (enter a number): "
@@ -110,10 +129,11 @@ main_menu() {
         "Close current pane"
         "Rename session"
         "Show session information"
+        "Kill a session"
         "Exit"
     )
 
-    echo ""
+    print_footer
 
     select opt in "${options[@]}"; do
         case $REPLY in
@@ -127,7 +147,8 @@ main_menu() {
             8) close_pane ;;
             9) rename_session ;;
             10) show_session_info ;;
-            11)
+            11) kill_session ;;
+            12)
                 echo -e "${BLUE}Exiting the tmux reference script. Goodbye!${RESET}"
                 exit 0
                 ;;
@@ -135,6 +156,8 @@ main_menu() {
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
+
+        print_footer
     done
 }
 
