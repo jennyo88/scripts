@@ -82,6 +82,12 @@ close_pane() {
     fi
 }
 
+# Function to create a new tmux window
+create_window() {
+    tmux new-window
+    echo -e "${GREEN}New window created.${RESET}"
+}
+
 # Function to rename the current tmux session
 rename_session() {
     read -p "Enter new session name: " new_session_name
@@ -90,7 +96,7 @@ rename_session() {
 
 # Function to display information about the current tmux session
 show_session_info() {
-    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+    tmux display-message -p "${GREEN}#{session_name} (#{session_id}): #{session_windows} windows${RESET}"
 }
 
 # Function to kill a tmux session
@@ -108,18 +114,19 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-    PS3="        Choose a tmux command (enter a number): "
+    PS3="    Choose a tmux command (enter a number): "
 
     options=(
         "Create a new session"
-        "List sessions"
         "Attach to a session"
         "Detach from the current session"
+        "List existing sessions"
+        "Create a new window"
         "Split pane horizontally"
         "Split pane vertically"
         "Navigate between panes"
         "Close current pane"
-        "Rename session"
+        "Rename the current session"
         "Show session information"
         "Kill a session"
         "Exit"
@@ -128,17 +135,18 @@ main_menu() {
     select opt in "${options[@]}"; do
         case $REPLY in
             1) create_session ;;
-            2) list_sessions ;;
-            3) attach_session ;;
-            4) detach_session ;;
-            5) split_horizontal ;;
-            6) split_vertical ;;
-            7) navigate_panes ;;
-            8) close_pane ;;
-            9) rename_session ;;
-            10) show_session_info ;;
-            11) kill_session ;;
-            12)
+            2) attach_session ;;
+            3) detach_session ;;
+            4) list_sessions ;;
+            5) create_window ;;
+            6) split_horizontal ;;
+            7) split_vertical ;;
+            8) navigate_panes ;;
+            9) close_pane ;;
+            10) rename_session ;;
+            11) show_session_info ;;
+            12) kill_session ;;
+            13)
                 echo -e "${GREEN}Exiting the tmux reference script. Goodbye!${RESET}"
                 exit 0
                 ;;
@@ -146,6 +154,7 @@ main_menu() {
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
+
     done
 }
 
