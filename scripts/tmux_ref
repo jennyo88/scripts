@@ -52,7 +52,7 @@ display_windows_and_panes() {
     echo "   Press Ctrl-b, then press [%]"
     echo ""
     echo "d. Split the current pane vertically:"
-    echo "   Press Ctrl-b, then press \ " \"
+    echo "   Press Ctrl-b, then press " \"
     echo ""
 }
 
