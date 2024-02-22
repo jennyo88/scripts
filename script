@@ -144,6 +144,7 @@ show_menu_0() {
 		# Handling invalid options
         	*)
 			echo -e "Invalid option. Please enter a valid option." && sleep 1
+			clear
             		show_menu_0  # Re-display the menu
             		;;
     	esac
@@ -221,7 +222,8 @@ show_menu_1() {
 		# Handling invalid options
       		*)
 			echo -e "Invalid option. Please enter a valid option." && sleep 1
-            		show_menu_1  # Re-display the menu
+            		clear
+			show_menu_1  # Re-display the menu
             		;;
     	esac
 }
@@ -271,7 +273,8 @@ show_menu_2() {
 		# Handling invalid options
       		*)
 			echo -e "Invalid option. Please enter a valid option." && sleep 1
-            		show_menu_2  # Re-display the menu
+            		clear
+			show_menu_2  # Re-display the menu
             		;;
     	esac
 }
@@ -326,6 +329,7 @@ show_menu_3() {
 		# Handling invalid options
       		*)
 			echo -e "Invalid option. Please enter a valid option." && sleep 1
+			clear
             		show_menu_3  # Re-display the menu
             		;;
     	esac
