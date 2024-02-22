@@ -15,64 +15,106 @@ is_inside_session() {
     [ -n "$TMUX" ]
 }
 
-# Function to display tmux reference information
-tmux_reference_info() {
-    echo "TMUX Reference Information:"
-    echo "1. List sessions"
-    echo "2. Show session information"
-    echo "3. Exit"
+# Function to create a new tmux session
+create_session() {
+    if is_inside_session; then
+        echo "Cannot create a new session: Already inside a tmux session."
+    else
+        read -p "Enter session name: " session_name
+        echo "Command for reference: tmux new-session -s $session_name"
+    fi
 }
 
 # Function to list existing tmux sessions
 list_sessions() {
-    tmux list-sessions
+    echo "Command for reference: tmux list-sessions"
+}
+
+# Function to attach to a specific tmux session
+attach_session() {
+    if is_inside_session; then
+        echo "Cannot attach to another session: Already inside a tmux session."
+    else
+        read -p "Enter session name to attach: " session_name
+        echo "Command for reference: tmux attach -t $session_name"
+    fi
+}
+
+# Function to detach from the current tmux session
+detach_session() {
+    echo "Command for reference: tmux detach"
+}
+
+# Function to split the tmux pane horizontally
+split_horizontal() {
+    echo "Command for reference: tmux split-window -h"
+}
+
+# Function to split the tmux pane vertically
+split_vertical() {
+    echo "Command for reference: tmux split-window -v"
+}
+
+# Function to navigate between tmux panes
+navigate_panes() {
+    echo "Command for reference: tmux select-pane -t :.+"
+}
+
+# Function to close the current tmux pane
+close_pane() {
+    echo "Command for reference: tmux kill-pane"
+}
+
+# Function to rename the current tmux session
+rename_session() {
+    read -p "Enter new session name: " new_session_name
+    echo "Command for reference: tmux rename-session -t $(tmux display-message -p '#S') $new_session_name"
 }
 
 # Function to display information about the current tmux session
 show_session_info() {
-    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+    echo "Command for reference: tmux display-message -p '#{session_name} (#{session_id}): #{session_windows} windows'"
 }
 
 # Function for the main menu loop
 main_menu() {
     PS3="Choose a tmux command (enter a number): "
 
-    if is_inside_session; then
-        tmux_reference_info
-    else
-        options=(
-            "Create a new session"
-            "List sessions"
-            "Attach to a session"
-            "Split pane horizontally"
-            "Split pane vertically"
-            "Navigate between panes"
-            "Close current pane"
-            "Rename session"
-            "Show session information"
-            "Exit"
-        )
-        select opt in "${options[@]}"; do
-            case $REPLY in
-                1) create_session ;;
-                2) list_sessions ;;
-                3) attach_session ;;
-                4) split_horizontal ;;
-                5) split_vertical ;;
-                6) navigate_panes ;;
-                7) close_pane ;;
-                8) rename_session ;;
-                9) show_session_info ;;
-                10)
-                    echo "Exiting the tmux reference script. Goodbye!"
-                    exit 0
-                    ;;
-                *)
-                    echo "Invalid choice. Please enter a valid number."
-                    ;;
-            esac
-        done
-    fi
+    options=(
+        "Create a new session"
+        "List sessions"
+        "Attach to a session"
+        "Detach from the current session"
+        "Split pane horizontally"
+        "Split pane vertically"
+        "Navigate between panes"
+        "Close current pane"
+        "Rename session"
+        "Show session information"
+        "Exit"
+    )
+
+    select opt in "${options[@]}"; do
+        case $REPLY in
+            1) create_session ;;
+            2) list_sessions ;;
+            3) attach_session ;;
+            4) detach_session ;;
+            5) split_horizontal ;;
+            6) split_vertical ;;
+            7) navigate_panes ;;
+            8) close_pane ;;
+            9) rename_session ;;
+            10) show_session_info ;;
+            11)
+                echo "Exiting the tmux reference script. Goodbye!"
+                exit 0
+                ;;
+            *)
+                echo "Invalid choice. Please enter a valid number."
+                ;;
+        esac
+    done
 }
 
 # Main loop to display the header and run the main menu
