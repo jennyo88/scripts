@@ -8,7 +8,7 @@ display_intro() {
 }
 
 display_help() {
-    echo "Usage: ./tmux_ref [option]"
+    echo "Usage: ./tmux [option]"
     echo ""
     echo "Options:"
     echo "  1. Basics"
