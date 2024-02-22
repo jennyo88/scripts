@@ -17,63 +17,73 @@ is_inside_session() {
 
 # Function to create a new tmux session
 create_session() {
+    read -p "Enter session name: " session_name
     if is_inside_session; then
         echo "Cannot create a new session: Already inside a tmux session."
     else
-        read -p "Enter session name: " session_name
-        echo "Command for reference: tmux new-session -s $session_name"
+        echo "Executing: tmux new-session -s $session_name"
+        tmux new-session -s "$session_name"
     fi
 }
 
 # Function to list existing tmux sessions
 list_sessions() {
-    echo "Command for reference: tmux list-sessions"
+    echo "Executing: tmux list-sessions"
+    tmux list-sessions
 }
 
 # Function to attach to a specific tmux session
 attach_session() {
+    read -p "Enter session name to attach: " session_name
     if is_inside_session; then
         echo "Cannot attach to another session: Already inside a tmux session."
     else
-        read -p "Enter session name to attach: " session_name
-        echo "Command for reference: tmux attach -t $session_name"
+        echo "Executing: tmux attach -t $session_name"
+        tmux attach -t "$session_name"
     fi
 }
 
 # Function to detach from the current tmux session
 detach_session() {
-    echo "Command for reference: tmux detach"
+    echo "Executing: tmux detach"
+    tmux detach
 }
 
 # Function to split the tmux pane horizontally
 split_horizontal() {
-    echo "Command for reference: tmux split-window -h"
+    echo "Executing: tmux split-window -h"
+    tmux split-window -h
 }
 
 # Function to split the tmux pane vertically
 split_vertical() {
-    echo "Command for reference: tmux split-window -v"
+    echo "Executing: tmux split-window -v"
+    tmux split-window -v
 }
 
 # Function to navigate between tmux panes
 navigate_panes() {
-    echo "Command for reference: tmux select-pane -t :.+"
+    echo "Executing: tmux select-pane -t :.+"
+    tmux select-pane -t :.+
 }
 
 # Function to close the current tmux pane
 close_pane() {
-    echo "Command for reference: tmux kill-pane"
+    echo "Executing: tmux kill-pane"
+    tmux kill-pane
 }
 
 # Function to rename the current tmux session
 rename_session() {
     read -p "Enter new session name: " new_session_name
-    echo "Command for reference: tmux rename-session -t $(tmux display-message -p '#S') $new_session_name"
+    echo "Executing: tmux rename-session -t $(tmux display-message -p '#S') $new_session_name"
+    tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
 }
 
 # Function to display information about the current tmux session
 show_session_info() {
-    echo "Command for reference: tmux display-message -p '#{session_name} (#{session_id}): #{session_windows} windows'"
+    echo "Executing: tmux display-message -p '#{session_name} (#{session_id}): #{session_windows} windows'"
+    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
 }
 
 # Function for the main menu loop
@@ -106,7 +116,7 @@ main_menu() {
             8) close_pane ;;
             9) rename_session ;;
             10) show_session_info ;;
-            0)
+            11)
                 echo "Exiting the tmux reference script. Goodbye!"
                 exit 0
                 ;;
