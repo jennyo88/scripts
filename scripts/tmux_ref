@@ -28,13 +28,13 @@ display_basics() {
     echo "   tmux"
     echo ""
     echo "b. Attach to an existing session:"
-    echo "   tmux attach"
+    echo "   tmux attach | tmux a"
     echo ""
     echo "c. Detach from the current session:"
     echo "   Press Ctrl-b, then release and press d"
     echo ""
     echo "d. List all sessions:"
-    echo "   tmux list-sessions"
+    echo "   tmux list-sessions | tmux ls"
     echo ""
 }
 
@@ -49,10 +49,10 @@ display_windows_and_panes() {
     echo "   Press Ctrl-b, then press the window number or use arrow keys"
     echo ""
     echo "c. Split the current pane horizontally:"
-    echo "   Press Ctrl-b, then press %"
+    echo "   Press Ctrl-b, then press [%]"
     echo ""
     echo "d. Split the current pane vertically:"
-    echo "   Press Ctrl-b, then press \""
+    echo "   Press Ctrl-b, then press \ " \"
     echo ""
 }
 
