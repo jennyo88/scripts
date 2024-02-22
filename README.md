@@ -9,7 +9,6 @@ This repository contains several Bash scripts for various purposes. Below is a b
 A bash script for converting video files using ffmpeg.
 
 **Usage:**
-```bash
 ./cfiles
 
 ## script
@@ -19,7 +18,7 @@ A bash script for performing system updates on Debian-based systems.
 The `script` script is a general-purpose script with a menu.
 
 **Usage:**
-sudo ./script
+./script
 
 ## update-debian
 
