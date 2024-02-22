@@ -26,7 +26,7 @@ create_session() {
         return
     fi
 
-    read -p "Enter session name: " session_name
+    read -p "${YELLOW}Enter session name: ${RESET}" session_name
 
     # Check if the session already exists
     if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -44,7 +44,7 @@ list_sessions() {
 
 # Function to attach to a specific tmux session
 attach_session() {
-    read -p "Enter session name to attach: " session_name
+    read -p "${YELLOW}Enter session name to attach: ${RESET}" session_name
 
     # Check if the session exists before attempting to attach
     if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -56,7 +56,7 @@ attach_session() {
 
 # Function to detach from the current tmux session
 detach_session() {
-    tmux detach 
+    tmux detach
 }
 
 # Function to split the tmux pane horizontally
@@ -86,7 +86,7 @@ close_pane() {
 
 # Function to rename the current tmux session
 rename_session() {
-    read -p "Enter new session name: " new_session_name
+    read -p "${YELLOW}Enter new session name: ${RESET}" new_session_name
     tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
 }
 
@@ -100,17 +100,17 @@ main_menu() {
     PS3="Choose a tmux command (enter a number): "
 
     options=(
-        "${YELLOW}Create a new session${RESET}"
-        "${YELLOW}List sessions${RESET}"
-        "${YELLOW}Attach to a session${RESET}"
-        "${YELLOW}Detach from the current session${RESET}"
-        "${YELLOW}Split pane horizontally${RESET}"
-        "${YELLOW}Split pane vertically${RESET}"
-        "${YELLOW}Navigate between panes${RESET}"
-        "${YELLOW}Close current pane${RESET}"
-        "${YELLOW}Rename session${RESET}"
-        "${YELLOW}Show session information${RESET}"
-        "${YELLOW}Exit${RESET}"
+        "Create a new session"
+        "List sessions"
+        "Attach to a session"
+        "Detach from the current session"
+        "Split pane horizontally"
+        "Split pane vertically"
+        "Navigate between panes"
+        "Close current pane"
+        "Rename session"
+        "Show session information"
+        "Exit"
     )
 
     echo ""
