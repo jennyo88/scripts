@@ -17,16 +17,16 @@ main_menu="0"
 show_banner_0() {
 	clear
     	echo -e "${blu}"
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo "                  Converting Files - Service Menu                      	"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    	echo "                  			Converting Files - Service Menu                      	"
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
 }
 
 show_banner_1() {
   	clear
     	echo -e "${blu}"
-	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo '       /$$    /$$ /$$$$$$ /$$$$$$$  /$$$$$$$$  /$$$$$$   /$$$$$$		' 
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    	echo '       /$$    /$$ /$$$$$$ /$$$$$$$  /$$$$$$$$  /$$$$$$   /$$$$$$		'
     	echo '      | $$   | $$|_  $$_/| $$__  $$| $$_____/ /$$__  $$ /$$__  $$		'
     	echo '      | $$   | $$  | $$  | $$  \ $$| $$      | $$  \ $$| $$  \__/		'
     	echo '      |  $$ / $$/  | $$  | $$  | $$| $$$$$   | $$  | $$|  $$$$$$ 		'
@@ -34,13 +34,13 @@ show_banner_1() {
     	echo '        \  $$$/    | $$  | $$  | $$| $$      | $$  | $$ /$$  \ $$		'
     	echo '         \  $/    /$$$$$$| $$$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/		'
     	echo '          \_/    |______/|_______/ |________/ \______/  \______/ 		'
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
 }
 
 show_banner_2() {
 	clear
     	echo -e "${blu}"
-	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     	echo '                    /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$ 		'
     	echo '                   /$$__  $$| $$  | $$| $$__  $$ /$$__  $$		'
     	echo '                  | $$  \__/| $$  | $$| $$  \ $$| $$  \__/		'
@@ -48,14 +48,14 @@ show_banner_2() {
     	echo '                   \____  $$| $$  | $$| $$__  $$ \____  $$		'
     	echo '                   /$$  \ $$| $$  | $$| $$  \ $$ /$$  \ $$		'
     	echo '                  |  $$$$$$/|  $$$$$$/| $$$$$$$/|  $$$$$$/		'
-    	echo '                   \______/  \______/ |_______/  \______/			'                                       
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+    	echo '                   \______/  \______/ |_______/  \______/			'
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
 }
 
 show_banner_3() {
 	clear
 	echo -e "${blu}"
-	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     	echo '   /$$$$$$  /$$       /$$$$$$$$  /$$$$$$  /$$   /$$       /$$   /$$ /$$$$$$$  '
     	echo '  /$$__  $$| $$      | $$_____/ /$$__  $$| $$$ | $$      | $$  | $$| $$__  $$ '
     	echo ' | $$  \__/| $$      | $$      | $$  \ $$| $$$$| $$      | $$  | $$| $$  \ $$ '
@@ -64,61 +64,78 @@ show_banner_3() {
     	echo ' | $$    $$| $$      | $$      | $$  | $$| $$\  $$$      | $$  | $$| $$       '
     	echo ' |  $$$$$$/| $$$$$$$$| $$$$$$$$| $$  | $$| $$ \  $$      |  $$$$$$/| $$       '
     	echo '  \______/ |________/|________/|__/  |__/|__/  \__/       \______/ |__/       '
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"                                                                            
-}                                                                           
-                                                                            
+    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+}
+
 
 show_menu_0() {
   	# clear --> moved to show_banner
 	echo -e
   	echo " 1) Videos"
   	echo " 2) Subs"
-	echo " 3) Clean-up"
+		echo " 3) Clean-up"
   	echo -e "\n 0) Exit Menu \n"
 
   	echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
     		case $ans in
       			[vV]|[vV][iI][dD][eE][oO][sS]|"1")
-				show_banner_1
+							show_banner_1
         			show_menu_1
         			;;
       			[sS]|[sS][uU][bB][sS]|"2")
         			show_banner_2
         			show_menu_2
         			;;
-			[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
-				show_banner_3
-				show_menu_3
-				;;
+						[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
+							show_banner_3
+							show_menu_3
+							;;
       			## Exit menu
       			[eE]|[eE][xX][iI][tT]|[qQ]|"0")
        				goodbye
         			;;
       			# Hidden options
-      			[xX][2][6][5]|[1][1])
+      			[xX][2][6][5]|[1][2])
         			show_banner_1
         			x265
         			;;
-      			[mM][3][uU][8]|[1][2])
+      			[mM][3][uU][8]|[1][3])
         			show_banner_1
        			 	m3u8
         			;;
-      			[pP][lL][eE][xX]|[1][3])
-        			show_banner_1
-        			plex
+						[yY][dD][lL]|[1][4])
+							show_banner_1
+							ydl
         			;;
-      			[eE][xX][tT][rR][aA][cC][tT]|[2][1])
-				show_banner_2
+						[tT][uU][bB][iI]|[1][5])
+							show_banner_1
+							tubi
+							;;
+						[mM][eE][tT][aA][dD][aA][tT][aA]|[1][6])
+							show_banner_1
+        			metadata
+        			;;
+						[pP][lL][eE][xX]|[1][7])
+							show_banner_1
+							plex
+							;;
+						[aA][lL][lL]|[1][8])
+							show_banner_0
+							video_sub && sleep 1
+							c_all
+							;;
+      			[eE][xX][tT][rR][aA][cC][tT]|[2][2])
+							show_banner_2
         			extract_srt
         			;;
-      			[vV][tT][tT]|[2][2])
-				show_banner_2
+      			[vV][tT][tT]|[2][3])
+							show_banner_2
         			convert_srt
         			;;
-			[cC][aA][lL][lL]|[3][3])
-				show_banner_3
-				c_all
-				;;
+						[cC][aA][lL][lL]|[3][4])
+							show_banner_3
+							c_all
+							;;
       			## Anything else is invalid option.
       			*) echo -e "Sorry, that is not an option" && sleep 1
       				;;
@@ -127,40 +144,61 @@ show_menu_0() {
 
 show_menu_1() {
   	echo -e
-  	echo "1) Main Menu"
-  	echo "2) Convert to x265"
-  	echo "3) Download m3u8"
-	echo "4) Fix ts for plex"
-  	echo "5) Subs Menu"
-	echo "6) Cleanup Menu"
+  	echo " 1) Main Menu"
+  	echo " 2) Convert to x265"
+  	echo " 3) Download m3u8"
+		echo " 4) Youtube-DL"
+		echo " 5) Tubi"
+		echo " 6) Metadata"
+		echo " 7) Video ONLY"
+		echo " 8) Video & Subs"
+		echo " 9) Subs Menu"
+		echo "10) Cleanup Menu"
   	echo -e "\n 0) Exit Menu \n"
 
  	echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
     		case $ans in
       			[mM][aA][iI][nN]|"1")
-				show_banner_0
+							show_banner_0
         			show_menu_0
         			;;
       			[xX]|[xX][2][6][5]|"2")
-				show_banner_1
+							show_banner_1
         			x265
         			;;
       			[mM]|[mM][3][uU][8]|"3")
-				show_banner_1
+							show_banner_1
         			m3u8
         			;;
-      			[pP]|[pP][lL][eE][xX]|"4")
-				show_banner_1
-        			plex
+      			[yY]|[yY][dD][lL]|"4")
+        			show_banner_1
+							ydl
         			;;
-			[sS]|[sS][uU][bB][sS]|"5")
-				show_banner_2
-				show_menu_2
-				;;
-			[cC]|[cC][lL][eE][aA][nN][uU][pP]|"6")
-				show_banner_3
-				show_menu_3
-				;;
+      			[tT]|[tT][uU][bI][iI]|"5")
+							show_banner_1
+        			tubi
+        			;;
+						[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"6")
+							show_banner_1
+							metadata
+							;;
+						[vV]|[vI][iI][vV][eE][oO]|"7")
+							plex
+							c_ts
+							;;
+						[aA]|[aA][lL][lL]|"8")
+							video_sub && sleep 1
+							c_ts
+							c_mkv
+							;;
+						[sS]|[sS][uU][bB][sS]|"9")
+							show_banner_2
+							show_menu_2
+							;;
+						[cC]|[cC][lL][eE][aA][nN][uU][pP]|"10")
+							show_banner_3
+							show_menu_3
+							;;
       			## Exit menu
       			[eE]|[eE][xX][iI][tT]|[qQ]|"0")
         			goodbye
@@ -173,11 +211,11 @@ show_menu_1() {
 
 show_menu_2() {
   	echo -e
-  	echo "1) Main Menu"
-  	echo "2) Extract subs"
-  	echo "3) Convert subs"
-  	echo "4) Videos Menu"
-	echo "5) Cleanup Menu"
+  	echo " 1) Main Menu"
+  	echo " 2) Extract subs"
+  	echo " 3) Convert subs"
+  	echo " 4) Videos Menu"
+		echo " 5) Cleanup Menu"
   	echo -e "\n 0) Exit Menu \n"
 
   	echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
@@ -187,21 +225,21 @@ show_menu_2() {
         			show_menu_0
         			;;
       			[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
-				show_banner_2
+							show_banner_2
         			extract_srt
         			;;
       			[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
-				show_banner_2
+							show_banner_2
         			convert_srt
         			;;
       			[vV]|[vV][iI][dD][eE][oO][sS]|"4")
-				show_banner_1
+							show_banner_1
         			show_menu_1
         			;;
-			[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
-				show_banner_3
-				show_menu_3
-				;;
+						[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
+							show_banner_3
+							show_menu_3
+							;;
       			[eE]|[eE][xX][iI][tT]|[qQ]|"0")
         			goodbye
         			;;
@@ -212,12 +250,12 @@ show_menu_2() {
 
 show_menu_3() {
   	echo -e
-  	echo "1) Main Menu"
-  	echo "2) Clear folder ts"
-  	echo "3) Clear folder mkv"
-	echo "4) Clear all"
-	echo "5) Videos Menu"
-	echo "6) Subs Menu"
+  	echo " 1) Main Menu"
+  	echo " 2) Clear folder ts"
+  	echo " 3) Clear folder mkv"
+		echo " 4) Clear all"
+		echo " 5) Videos Menu"
+		echo " 6) Subs Menu"
   	echo -e "\n 0) Exit Menu \n"
 
   	echo "${blu}" ; read -rp "Select: " ans ; echo "${end}"
@@ -227,25 +265,25 @@ show_menu_3() {
         			show_menu_0
         			;;
       			[c][tT][sS]|"2")
-				show_banner_3
+							show_banner_3
         			c_ts
         			;;
       			[c][mM][kK][vV]|"3")
-				show_banner_3
+							show_banner_3
         			c_mkv
         			;;
-			[cC][aA][lL][lL]|"4")
-				show_banner_3
-				c_all
-				;;
+						[cC][aA][lL][lL]|"4")
+							show_banner_3
+							c_all
+							;;
       			[vV]|[vV][iI][dD][eE][oO][sS]|"5")
-				show_banner_1
+							show_banner_1
         			show_menu_1
         			;;
-			[sS]|[sS][uU][bB][sS]|"6")
-				show_banner_2
-				show_menu_2
-				;;
+						[sS]|[sS][uU][bB][sS]|"6")
+							show_banner_2
+							show_menu_2
+							;;
       			[eE]|[eE][xX][iI][tT]|[qQ]|"0")
         			goodbye
         			;;
@@ -275,9 +313,12 @@ load_colors() {
 # Step #3: Formulas
 # ----------------------------------
 
+## MENU 1 FORMULAS
+
+
 x265() {
-  	echo "${blu}""                           MKV or MP4 x265 Script               "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                           			x265 Script   						            "
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 
 	printf "Source extension? (mkv, mp4, or avi) : "
@@ -292,34 +333,30 @@ x265() {
 	printf "Destination directory? : "
 	read destDir
 
-	printf "Options? (in quotes) : "
-	read opts
-
-
-	for filename in "$srcDir"/*.$srcExt;
+	for filename in "$srcDir"/*.$srcExt
 	do
     		basePath=${filename%.*}
 		baseName=${basePath##*/}
 
-		ffmpeg -i $filename -c:v libx265 -c:a copy -threads 3 $opts "$destDir"/"$baseName"."$destExt"
+		ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"
 	done
-  	echo -e "Conversion from {srcExt} to {destExt} complete!"
+  	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
 
 }
 
 m3u8() {
-  	echo "${blu}""                            M3U8 to TS Script                   "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                            M3U8 to TS Script         	       		    "
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
  	echo -e "${end}"
 
-	printf "Source extension? : "
-	read srcExt
+#	printf "Source extension? : "
+#	read srcExt
 
-	printf "Destination extension? : "
-	read destExt
+#	printf "Destination extension? : "
+#	read destExt
 
-	printf "Destination directory? : "
-	read destDir
+#	printf "Destination directory? : "
+#	read destDir
 
 	printf "Source web-address? : "
 	read srcAdd
@@ -330,25 +367,350 @@ m3u8() {
 	printf "Movie release year? : "
 	read baseYear
 
+#	printf "Channel name? : "
+#	read channel
+
+	validLanguageCode=false
+
+	while [ "$validLanguageCode" = false ]; do
+   		printf "Movie language? (Enter a three-letter language code, e.g., eng, spa, jpn, fre, zho): "
+    	read language
+
+    	if [ ${#language} -eq 3 ]; then
+        	validLanguageCode=true
+    	else
+        	echo "Invalid language code. Please enter a three-letter code."
+    	fi
+	done
 
 	for file in download;
 	do
 		dirName="${baseName} (${baseYear})"
 		newname=`echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' `
 
-    		mkdir "$dirName"
+    	mkdir "$dirName"
 		mv "$dirName" "$newname"
 		mv "$newname" ./DONE/
 
-		ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 "$destDir"/"$baseName"."$baseYear".720p.WEBRip.x265-TCM."$destExt"
+		ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language ts/"$baseName"."$baseYear".720p.WEBRip.x265-TCM.ts
 	done
 
-  	echo -e "Conversion from {srcExt} to {destExt} complete!"
+  	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
+}
+
+ydl() {
+  	echo "${blu}""              Movies & TV Shows YOUTUBE-DL to MP4 Script              "
+    echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+ 	echo -e "${end}"
+
+
+	# Check if youtube-dl and ffmpeg are installed
+	if ! command -v youtube-dl &> /dev/null || ! command -v ffmpeg &> /dev/null; then
+	    echo "Please make sure youtube-dl and ffmpeg are installed."
+	    exit 1
+	fi
+
+	printf "Is it YouTube or Dailymotion? (Enter 'youtube' or 'dailymotion'): "
+	read -r platform
+
+	if [ "$platform" == "youtube" ]; then
+	    printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
+	    read -r type
+
+	    if [ "$type" == "tv" ]; then
+	        printf "\nEnter the show name (include periods between words): "
+	        read -r show_name
+
+	        printf "Enter the season number (two digits): "
+	        read -r season_number
+
+	        printf "Enter the first episode number: "
+	        read -r first_episode
+
+	        printf "Enter the last episode number: "
+	        read -r last_episode
+
+	        show_folder="${show_name}_YouTube"
+	        mkdir -p "$show_folder"
+
+	        for ((episode = first_episode; episode <= last_episode; episode++)); do
+	            episode_number=$(printf "%02d" "$episode")
+
+	            printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+	            read -r episode_url
+
+	            if [ -z "$episode_url" ]; then
+	                printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+	                continue
+	            fi
+
+	            filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+
+	            printf "\nDownloading %s...\n" "$filename"
+	            youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
+
+	            printf "\nDownloaded %s.\n" "$filename"
+
+	            printf "\nDownloading subtitles for %s...\n" "$filename"
+	            youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
+
+							printf "\nConverting subtitles to SRT format...\n"
+	        		vtt_files=("${filename%.*}"*.vtt)
+	        		for vtt_file in "${vtt_files[@]}"; do
+	            srt_file="${vtt_file%.*}.srt"
+	            ffmpeg -i "$vtt_file" "$srt_file" -y
+	            rm "$vtt_file"
+
+	            printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+	        done
+
+	        printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+	    done
+
+	        printf "\nAll episodes downloaded successfully.\n"
+
+	    elif [ "$type" == "movie" ]; then
+	        printf "\nEnter the name of the movie (include periods between words): "
+	        read -r movie_name
+
+					printf "\nEnter the year of the movie : "
+	        read -r movie_year
+
+					printf "Enter the resolution (e.g., 720p, 1080p): "
+					read -r resolution
+
+	        printf "Enter the movie URL: "
+	        read -r movie_url
+
+	        filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+
+	        printf "\nDownloading %s...\n" "$filename"
+	        youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+
+	        printf "\nDownloaded %s.\n" "$filename"
+
+					printf "\nDownloading subtitles for %s.\n" "$filename"
+					youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+
+					printf "\nConverting subtitles to SRT format...\n"
+					vtt_files=("${filename%.*}"*.vtt)
+					for vtt_file in "${vtt_files[@]}"; do
+					srt_file="${vtt_file%.*}.srt"
+					ffmpeg -i "$vtt_file" "$srt_file" -y
+					rm "$vtt_file"
+					printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+				done
+
+			printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+
+	    else
+	        printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+	        exit 1
+	    fi
+
+	elif [ "$platform" == "dailymotion" ]; then
+	    printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
+	    read -r type
+
+	    if [ "$type" == "tv" ]; then
+	        printf "\nEnter the show name (include periods between words): "
+	        read -r show_name
+
+					printf "Enter the resolution (e.g., 720p, 1080p): "
+	        read -r resolution
+
+	        printf "Enter the season number (two digits): "
+	        read -r season_number
+
+	        printf "Enter the first episode number (two digits): "
+	        read -r first_episode
+
+	        printf "Enter the last episode number (two digits): "
+	        read -r last_episode
+
+	        show_folder="${show_name}_Dailymotion"
+	        mkdir -p "$show_folder"
+
+	        for ((episode = first_episode; episode <= last_episode; episode++)); do
+	            episode_number=$(printf "%02d" "$episode")
+
+	            printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+	            read -r episode_url
+
+	            if [ -z "$episode_url" ]; then
+	                printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+	                continue
+	            fi
+
+	            filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
+
+	            printf "\nDownloading %s...\n" "$filename"
+	            youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
+
+	            printf "\nDownloaded %s.\n" "$filename"
+	        done
+
+	        printf "\nAll episodes downloaded successfully.\n"
+
+	    elif [ "$type" == "movie" ]; then
+	        printf "\nEnter the name of the movie (include periods between words): "
+	        read -r movie_name
+
+					printf "\nEnter the year of the movie: "
+	        read -r movie_year
+
+	        printf "Enter the resolution (e.g., 720p, 1080p): "
+	        read -r resolution
+
+					printf "Enter the movie URL: "
+	        read -r movie_url
+
+	        filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+
+	        printf "\nDownloading %s...\n" "$filename"
+	        youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
+
+	        printf "\nDownloaded %s.\n" "$filename"
+
+	    else
+	        printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+	        exit 1
+	    fi
+
+	else
+	    printf "\nInvalid platform. Please enter 'youtube' or 'dailymotion'.\n"
+	    exit 1
+	fi
+
+}
+
+video_sub() {
+  	echo "${blu}""                          Video and Subs Script       		       		  "
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo -e "${end}"
+
+
+	for filename in ts/*.ts
+	do
+	    basePath=${filename%.*}
+	    baseName=${basePath##*/}
+
+		ffmpeg -i "$filename" -map 0 -c copy -map_metadata 0 "mkv/$baseName.mkv"
+	done
+	sleep 1
+	for filename in ts/*.ts
+	do
+	    basePath=${filename%.*}
+	    baseName=${basePath##*/}
+
+	    ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s srt/"$baseName".en.srt
+	done
+	sleep 1
+	for filename in mkv/*.mkv
+	do
+	    basePath=${filename%.*}
+	    baseName=${basePath##*/}
+
+		ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4"
+	done
+	echo -e "Conversion complete!\a"
+
+}
+
+tubi() {
+  	echo "${blu}""                         	 For tubi Script          		     				  "
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo -e "${end}"
+
+
+	printf "Enter the name of the show: "
+	read -r show_name
+
+	printf "Enter the first episode number: "
+	read -r first_episode
+
+	printf "Enter the last episode number: "
+	read -r last_episode
+
+	for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
+	    printf "Enter the web address for video file of episode %02d: " "${episode_number}"
+	    read -r video_url
+
+	    printf "Enter the web address for audio file of episode %02d: " "${episode_number}"
+	    read -r audio_url
+
+	    video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
+	    audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
+	    output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
+
+	    # Download video file
+	    printf "Downloading video for episode %02d...\n" "${episode_number}"
+	    wget -O "${video_file}" "${video_url}"
+
+	    # Download audio file
+	    printf "Downloading audio for episode %02d...\n" "${episode_number}"
+	    wget -O "${audio_file}" "${audio_url}"
+
+	    # Merge video and audio files
+	    ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
+
+	    printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
+
+	    # Remove downloaded video and audio files
+	    rm "${video_file}" "${audio_file}"
+	done
+
+}
+
+metadata() {
+  	echo "${blu}""                     For Language Metadata Script     		            "
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo -e "${end}"
+
+	# Prompt the user to enter the folder path
+	read -p "Enter the folder path where the video files are located: " folder_path
+
+	# Check if the folder exists
+	if [ -d "$folder_path" ]; then
+	    # Create the Metadata folder if it doesn't exist
+	    mkdir -p "$folder_path/Metadata"
+
+	    # Move to the specified folder
+	    cd "$folder_path"
+
+	    # Loop through each file in the folder
+	    for file in *; do
+	        # Check if the file is an .mp4 video file
+	        if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
+	            # Prompt the user to enter the three-letter language code
+	            read -p "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
+
+	            # Check if the user entered "abort" to stop the script
+	            if [[ "$language" == "abort" ]]; then
+	                echo "Script aborted by user."
+	                exit 1
+	            fi
+
+	            # Set the output file name
+	            output_file="Metadata/$file"
+
+	            # Use ffmpeg to change the metadata language and save the output file
+	            ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"
+
+	            echo "Updated metadata for $file"
+	        fi
+	    done
+
+	    echo "Metadata files are saved in $folder_path/Metadata"
+	else
+	    echo "Folder not found."
+	fi
+
 }
 
 plex() {
-  	echo "${blu}""                           Ready for Plex Script                "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                          For PLEX TS to MKV Script       	          "
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 
   	printf "Source extension? : "
@@ -363,26 +725,25 @@ plex() {
   	printf "Destination directory? : "
   	read destDir
 
-  	printf "Movie language? (two letter code) : "
-  	read srcLan
-
 
   	for filename in "$srcDir"/*.$srcExt; do
 
-    		basePath=${filename%.*}
-    		baseName=${basePath##*/}
+    	basePath=${filename%.*}
+    	baseName=${basePath##*/}
 
-    		ffmpeg -i $filename -map 0 -metadata:s:a:0 language=${srcLan} -c copy "$destDir"/"$baseName"."$destExt"
+    	ffmpeg -i $filename -map 0 -c copy "$destDir"/"$baseName"."$destExt"
 
   	done
-  	echo "Conversion from ${srcExt} to ${destExt} complete!"
+  	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
 }
 
+## MENU 2 FORMULAS
+
 extract_srt() {
-  	echo "${blu}""                             Extract SRT script                   "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                             Extract SRT script                       "
+  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
-	
+
 	printf "Source extension? : "
 	read srcExt
 
@@ -398,18 +759,18 @@ extract_srt() {
   	for filename in "$srcDir"/*.$srcExt; do
 
   		basePath=${filename%.*}
-    		baseName=${basePath##*/}
+    	baseName=${basePath##*/}
 
   		ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s "$destDir"/"$baseName".en."$destExt"
 
   	done
-  	echo "Conversion from ${srcExt} to ${destExt} complete!"
+  	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
 
 }
 
 convert_srt() {
-  	echo "${blu}""                             Convert SRT script                  "
- 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                             Convert SRT script                       "
+ 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 
   	printf "Source directory? : "
@@ -421,49 +782,51 @@ convert_srt() {
   	for filename in "$srcDir"/*.vtt; do
 
   		basePath=${filename%.*}
-    		baseName=${basePath##*/}
+    	baseName=${basePath##*/}
 
   		ffmpeg -i $filename "$destDir"/"$baseName".srt
 
   	done
-  	echo "Conversion from vtt to srt complete!"
+  	echo -e "Conversion from vtt to srt complete!\a"
 
 }
 
+## MENU 3 FORMULAS
+
 c_ts() {
-  	echo "${blu}""                             CLEAN UP script                  "
- 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                             CLEAN UP script             		   	      "
+		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 	printf 'Do you want to clear ts folder (y/N)? '
 	read ans
 	if [ "$ans" != "${ans#[Yy]}" ]; then
 		rm -r ./ts/*.ts
-		echo "TS folder cleared!" ; sleep 1
+		echo -e "TS folder cleared!\a" ; sleep 1
 	fi
 }
 
 c_mkv() {
-  	echo "${blu}""                             CLEAN UP script                  "
- 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                             CLEAN UP script            		          "
+		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 	printf 'Do you want to clear mkv folder (y/N)? '
 	read ans
 	if [ "$ans" != "${ans#[Yy]}" ]; then
 		rm -r ./mkv/*.mkv
-		echo "MKV folder cleared!" ; sleep 1
+		echo -e "MKV folder cleared!\a" ; sleep 1
 	fi
 }
 
 c_all() {
-  	echo "${blu}""                             CLEAN UP script                  "
- 	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+  	echo "${blu}""                             CLEAN UP script           			          "
+ 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 	printf 'Do you want to clear all folders (y/N)? '
 	read ans
 	if [ "$ans" != "${ans#[Yy]}" ]; then
  		rm -r ./ts/*.ts
 		rm -r ./mkv/*.mkv
-		echo "All folders cleared!" ; sleep 1
+		echo -e "All folders cleared!\a" ; sleep 1
 	fi
 }
 
