@@ -69,7 +69,7 @@ show_banner_3() {
 
 # Function for displaying the main menu
 show_menu_0() {
-    # clear --> moved to show_banner
+    	# clear --> moved to show_banner
 	echo -e
 	echo " 1) Videos"
 	echo " 2) Subs"
@@ -80,6 +80,9 @@ show_menu_0() {
 	echo "${blu}"
 	read -rp "Select: " ans
 	echo "${end}"
+
+	# Displaying the menu banner
+    	show_banner_0
 
    	# Handling the user's choice using a case statement
     	case $ans in
@@ -170,6 +173,9 @@ show_menu_1() {
 	read -rp "Select: " ans
 	echo "${end}"
 
+	# Displaying the menu banner
+    	show_banner_0 && show_menu_${main_menu}
+
 	# Handling the user's choice using a case statement
 	case $ans in
       		[mM][aA][iI][nN]|"1")
@@ -240,6 +246,9 @@ show_menu_2() {
 	read -rp "Select: " ans
 	echo "${end}"
 
+	# Displaying the menu banner
+    	show_banner_0 && show_menu_${main_menu}
+
 	# Handling the user's choice using a case statement
     	case $ans in
       		[mM][aA][iI][nN]|"1")
@@ -289,6 +298,9 @@ show_menu_3() {
   	echo "${blu}"
 	read -rp "Select: " ans
 	echo "${end}"
+
+	# Displaying the menu banner
+    	show_banner_0 && show_menu_${main_menu}
 
 	# Handling the user's choice using a case statement
     	case $ans in
