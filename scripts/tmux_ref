@@ -61,7 +61,7 @@ while true; do
         6)  # Rename Window
             read -p "Enter name old name: " window_old_name
             read -p "Enter name new name: " window_new_name
-            tmux rename-window "$window_old_name" "$window_new_name"
+            tmux rename-window -t "$window_old_name" "$window_new_name"
             ;;
         7)  # Move to Next Window
             tmux select-window -n
