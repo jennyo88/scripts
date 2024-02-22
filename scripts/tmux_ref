@@ -106,7 +106,7 @@ main_menu() {
             8) close_pane ;;
             9) rename_session ;;
             10) show_session_info ;;
-            11)
+            0)
                 echo "Exiting the tmux reference script. Goodbye!"
                 exit 0
                 ;;
