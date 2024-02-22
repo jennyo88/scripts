@@ -2,11 +2,82 @@
 
 # tmux reference interactive script
 
-echo "Welcome to the tmux reference script!"
-echo "Press Ctrl+C to exit at any time."
-
-while true; do
+# Function to print the header at the top of the menu
+print_header() {
+    clear
+    echo "==================== TMUX REFERENCE SCRIPT ===================="
+    echo "Press Ctrl+C to exit at any time."
     echo ""
+}
+
+# Function to check if currently inside a tmux session
+is_inside_session() {
+    [ -n "$TMUX" ]
+}
+
+# Function to create a new tmux session
+create_session() {
+    if is_inside_session; then
+        echo "Error: You are already inside a tmux session. Cannot create a new session."
+    else
+        read -p "Enter session name: " session_name
+        tmux new-session -s "$session_name"
+    fi
+}
+
+# Function to list existing tmux sessions
+list_sessions() {
+    tmux list-sessions
+}
+
+# Function to attach to a specific tmux session
+attach_session() {
+    if is_inside_session; then
+        echo "Error: You are already inside a tmux session. Cannot attach to another session."
+    else
+        read -p "Enter session name to attach: " session_name
+        tmux attach -t "$session_name"
+    fi
+}
+
+# Function to detach from the current tmux session
+detach_session() {
+    tmux detach
+}
+
+# Function to split the tmux pane horizontally
+split_horizontal() {
+    tmux split-window -h
+}
+
+# Function to split the tmux pane vertically
+split_vertical() {
+    tmux split-window -v
+}
+
+# Function to navigate between tmux panes
+navigate_panes() {
+    tmux select-pane -t :.+
+}
+
+# Function to close the current tmux pane
+close_pane() {
+    tmux kill-pane
+}
+
+# Function to rename the current tmux session
+rename_session() {
+    read -p "Enter new session name: " new_session_name
+    tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
+}
+
+# Function to display information about the current tmux session
+show_session_info() {
+    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+}
+
+# Function for the main menu loop
+main_menu() {
     PS3="Choose a tmux command (enter a number): "
 
     options=(
@@ -25,49 +96,16 @@ while true; do
 
     select opt in "${options[@]}"; do
         case $REPLY in
-            1)
-                read -p "Enter session name: " session_name
-                tmux new-session -s "$session_name"
-                break
-                ;;
-            2)
-                tmux list-sessions
-                break
-                ;;
-            3)
-                read -p "Enter session name to attach: " session_name
-                tmux attach -t "$session_name"
-                break
-                ;;
-            4)
-                tmux detach
-                break
-                ;;
-            5)
-                tmux split-window -h
-                break
-                ;;
-            6)
-                tmux split-window -v
-                break
-                ;;
-            7)
-                tmux select-pane -t :.+
-                break
-                ;;
-            8)
-                tmux kill-pane
-                break
-                ;;
-            9)
-                read -p "Enter new session name: " new_session_name
-                tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
-                break
-                ;;
-            10)
-                tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
-                break
-                ;;
+            1) create_session ;;
+            2) list_sessions ;;
+            3) attach_session ;;
+            4) detach_session ;;
+            5) split_horizontal ;;
+            6) split_vertical ;;
+            7) navigate_panes ;;
+            8) close_pane ;;
+            9) rename_session ;;
+            10) show_session_info ;;
             11)
                 echo "Exiting the tmux reference script. Goodbye!"
                 exit 0
@@ -77,4 +115,10 @@ while true; do
                 ;;
         esac
     done
+}
+
+# Main loop to display the header and run the main menu
+while true; do
+    print_header
+    main_menu
 done
