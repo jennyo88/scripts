@@ -108,7 +108,7 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-    ${YELLOW}PS3="        Choose a tmux command (enter a number): "${RESET}
+    PS3="        Choose a tmux command (enter a number): "
 
     options=(
         "Create a new session"
