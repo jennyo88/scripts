@@ -56,11 +56,11 @@ while true; do
             ;;
         5)  # Create New Window
             read -p "Enter name: " window_name
-            tmux new-window "$window_name"
+            tmux new-window -n "$window_name"
             ;;
         6)  # Rename Window
-            read -p "Enter name old name: " window_old_name
-            read -p "Enter name new name: " window_new_name
+            read -p "Enter name old name: " "window_old_name"
+            read -p "Enter name new name: " "window_new_name"
             tmux rename-window -t "$window_old_name" "$window_new_name"
             ;;
         7)  # Move to Next Window
