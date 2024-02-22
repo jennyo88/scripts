@@ -1,18 +1,37 @@
-# GitHub Scripts
+# Scripts Repository
 
-This repository contains several scripts that I use for various purposes.
+This repository contains several Bash scripts for various purposes. Below is a brief description of each script:
+
 
 ## cfiles
 
-The `cfiles` script is designed for file conversion. It has options for converting videos, managing subtitles, and cleaning up files.
+**Description:**
+A bash script for converting video files using ffmpeg.
+
+**Usage:**
+```bash
+./cfiles
 
 ## script
 
+**Description:**
+A bash script for performing system updates on Debian-based systems.
 The `script` script is a general-purpose script with a menu.
+
+**Usage:**
+sudo ./script
 
 ## update-debian
 
+**Description:**
+A prompted update script for Debian systems.
 The `update-debian` script is used to update Debian-based systems. It ensures that your Debian system is up-to-date with the latest packages.
+
+**Usage:**
+sudo ./update-debian
+
+**Options:**
+`-h` or `--help`: Display usage information.
 
 ## update-fedora
 
