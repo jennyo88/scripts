@@ -12,6 +12,7 @@ A collection of bash scripts for various file conversion and system update tasks
   - [update-fedora](#update-fedora)
   - [upinst](#upinst)
 - [Usage](#usage)
+- [Contributing](#contributing)
 - [License](#license)
 
 ## Description
@@ -25,7 +26,7 @@ This repository contains a set of bash scripts designed for different tasks. The
 A bash script for converting video files using ffmpeg.
 
 **Usage:**
-```
+```bash
 ./cfiles
 ```
 
@@ -35,7 +36,7 @@ A bash script for converting video files using ffmpeg.
 A bash script for performing system updates on Debian-based systems.
 
 **Usage:**
-```
+```bash
 ./script
 ```
 
@@ -45,7 +46,7 @@ A bash script for performing system updates on Debian-based systems.
 A prompted update script for Debian systems.
 
 **Usage:**
-```
+```bash
 sudo ./update-debian
 ```
 
@@ -59,7 +60,7 @@ sudo ./update-debian
 A prompted update script for Fedora systems.
 
 **Usage:**
-```
+```bash
 sudo ./update-fedora
 ```
 
@@ -74,7 +75,7 @@ sudo ./update-fedora
 A bash script with options for installing, updating, and managing Debian-based systems.
 
 **Usage:**
-```
+```bash
 sudo ./upinst [options]
 ```
 
@@ -89,7 +90,7 @@ sudo ./upinst [options]
 `-h`: Show help
 
 **Usage Examples:**
-```
+```bash
 # Install a package
 sudo ./upinst -i package_name
 
@@ -116,8 +117,13 @@ sudo ./upinst -h
 Refer to each script's individual section for specific usage instructions.
 Make sure to check the respective scripts for details on how to use them effectively.
 
+## Contributing
+
+If you have improvements, bug fixes, or new scripts to contribute, feel free to open a pull request.
+
 ## License
-This project is licensed under the MIT License.
+
+This project is licensed under the [MIT License] - see the [LICENSE.md](LICENSE.md) file for details.
 
 MIT License:
 ```
@@ -140,6 +146,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-``
-
 ```
