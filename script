@@ -144,8 +144,6 @@ show_menu_0() {
 		# Handling invalid options
         	*)
 			echo -e "Invalid option. Please enter a valid option." && sleep 1
-			clear
-            		show_menu_0  # Re-display the menu
             		;;
     	esac
 }
