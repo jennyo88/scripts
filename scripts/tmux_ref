@@ -108,7 +108,7 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-echo -e "\n \n"
+    echo "\n"  # Add a space before the menu
     PS3="Choose a tmux command (enter a number): "
 
     options=(
@@ -126,7 +126,6 @@ echo -e "\n \n"
         "Exit"
     )
 
-echo -e "\n \n"
     select opt in "${options[@]}"; do
         case $REPLY in
             1) create_session ;;
@@ -141,7 +140,7 @@ echo -e "\n \n"
             10) show_session_info ;;
             11) kill_session ;;
             12)
-                echo -e "${GREEN}Exiting the tmux reference script. Goodbye!${GREEN}"
+                echo -e "${GREEN}Exiting the tmux reference script. Goodbye!${RESET}"
                 exit 0
                 ;;
             *)
