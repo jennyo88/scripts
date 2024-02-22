@@ -7,61 +7,74 @@ echo "Press Ctrl+C to exit at any time."
 
 while true; do
     echo ""
-    echo "Choose a tmux command:"
-    echo " 1. Create a new session"
-    echo " 2. List sessions"
-    echo " 3. Attach to a session"
-    echo " 4. Detach from the current session"
-    echo " 5. Split pane horizontally"
-    echo " 6. Split pane vertically"
-    echo " 7. Navigate between panes"
-    echo " 8. Close current pane"
-    echo " 9. Rename session"
-    echo "10. Show session information"
-    echo " 0. Exit"
+    PS3="Choose a tmux command (enter a number): "
 
-    read -p "Enter your choice: " choice
+    options=(
+        "Create a new session"
+        "List sessions"
+        "Attach to a session"
+        "Detach from the current session"
+        "Split pane horizontally"
+        "Split pane vertically"
+        "Navigate between panes"
+        "Close current pane"
+        "Rename session"
+        "Show session information"
+        "Exit"
+    )
 
-    case $choice in
-        1)
-            read -p "Enter session name: " session_name
-            tmux new-session -s "$session_name"
-            ;;
-        2)
-            tmux list-sessions
-            ;;
-        3)
-            read -p "Enter session name to attach: " session_name
-            tmux attach -t "$session_name"
-            ;;
-        4)
-            tmux detach
-            ;;
-        5)
-            tmux split-window -h
-            ;;
-        6)
-            tmux split-window -v
-            ;;
-        7)
-            tmux select-pane -t :.+
-            ;;
-        8)
-            tmux kill-pane
-            ;;
-        9)
-            read -p "Enter new session name: " new_session_name
-            tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
-            ;;
-        10)
-            tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
-            ;;
-        0)
-            echo "Exiting the tmux reference script. Goodbye!"
-            exit 0
-            ;;
-        *)
-            echo "Invalid choice. Please enter a valid number."
-            ;;
-    esac
+    select opt in "${options[@]}"; do
+        case $REPLY in
+            1)
+                read -p "Enter session name: " session_name
+                tmux new-session -s "$session_name"
+                break
+                ;;
+            2)
+                tmux list-sessions
+                break
+                ;;
+            3)
+                read -p "Enter session name to attach: " session_name
+                tmux attach -t "$session_name"
+                break
+                ;;
+            4)
+                tmux detach
+                break
+                ;;
+            5)
+                tmux split-window -h
+                break
+                ;;
+            6)
+                tmux split-window -v
+                break
+                ;;
+            7)
+                tmux select-pane -t :.+
+                break
+                ;;
+            8)
+                tmux kill-pane
+                break
+                ;;
+            9)
+                read -p "Enter new session name: " new_session_name
+                tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
+                break
+                ;;
+            10)
+                tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+                break
+                ;;
+            11)
+                echo "Exiting the tmux reference script. Goodbye!"
+                exit 0
+                ;;
+            *)
+                echo "Invalid choice. Please enter a valid number."
+                ;;
+        esac
+    done
 done
