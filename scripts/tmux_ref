@@ -56,7 +56,7 @@ attach_session() {
 
 # Function to detach from the current tmux session
 detach_session() {
-    tmux detach
+    tmux detach 
 }
 
 # Function to split the tmux pane horizontally
