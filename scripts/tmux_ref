@@ -6,15 +6,13 @@
 RED='\033[1;31m'
 GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
-BLUE='\033[1;34m'
-CYAN='\033[1;36m'
 RESET='\033[0m'
 
-# Function to print the colored header at the top of the menu
+# Function to print the header at the top of the menu
 print_header() {
     clear
-    echo -e "${BLUE}==================== TMUX REFERENCE SCRIPT ====================${RESET}"
-    echo -e "${CYAN}Press Ctrl+C to exit at any time.${RESET}"
+    echo "==================== TMUX REFERENCE SCRIPT ===================="
+    echo "Press Ctrl+C to exit at any time."
     echo ""
 }
 
@@ -26,7 +24,7 @@ create_session() {
         return
     fi
 
-    read -p "$(echo -e "${YELLOW}Enter session name: ${RESET}")" session_name
+    read -p "Enter session name: " session_name
 
     # Check if the session already exists
     if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -44,7 +42,7 @@ list_sessions() {
 
 # Function to attach to a specific tmux session
 attach_session() {
-    read -p "$(echo -e "${YELLOW}Enter session name to attach: ${RESET}")" session_name
+    read -p "Enter session name to attach: " session_name
 
     # Check if the session exists before attempting to attach
     if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -86,18 +84,18 @@ close_pane() {
 
 # Function to rename the current tmux session
 rename_session() {
-    read -p "$(echo -e "${YELLOW}Enter new session name: ${RESET}")" new_session_name
+    read -p "Enter new session name: " new_session_name
     tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
 }
 
 # Function to display information about the current tmux session
 show_session_info() {
-    tmux display-message -p "$(echo -e "${GREEN}#{session_name} (#{session_id}): #{session_windows} windows${RESET}")"
+    tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
 }
 
 # Function to kill a tmux session
 kill_session() {
-    read -p "$(echo -e "${YELLOW}Enter session name to kill: ${RESET}")" session_name
+    read -p "Enter session name to kill: " session_name
 
     # Check if the session exists before attempting to kill
     if tmux has-session -t "$session_name" 2>/dev/null; then
@@ -110,7 +108,6 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
-    echo ""
     PS3="Choose a tmux command (enter a number): "
 
     options=(
@@ -128,7 +125,7 @@ main_menu() {
         "Exit"
     )
 
-    echo ""
+    echo "\n"
 
     select opt in "${options[@]}"; do
         case $REPLY in
@@ -144,19 +141,19 @@ main_menu() {
             10) show_session_info ;;
             11) kill_session ;;
             12)
-                echo -e "${BLUE}Exiting the tmux reference script. Goodbye!${RESET}"
+                echo "Exiting the tmux reference script. Goodbye!"
                 exit 0
                 ;;
             *)
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
+
     done
 }
 
-# Main loop to display the colored header and run the main menu
+# Main loop to display the header and run the main menu
 while true; do
     print_header
     main_menu
-    echo ""
 done
