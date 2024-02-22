@@ -85,6 +85,7 @@ display_miscellaneous() {
 # Main function to determine which section to display based on the user's choice.
 main() {
     while true; do
+        display_intro
         display_help
         read -p "Enter the number of the section you want to explore (q to quit): " choice
         case $choice in
