@@ -1,101 +1,67 @@
-#!/usr/bin/env bash
+#!/usr/bin/env_bash
 
-# Display introductory information about the script.
-display_intro() {
-    echo "TMUX QUICK REFERENCE"
-    echo "-------------------"
-    echo "This script provides an interactive quick reference for using tmux."
-    echo "Focus is on the most commonly used tmux commands."
-    echo ""
-}
+# tmux reference interactive script
 
-# Display the overall help message.
-display_help() {
-    echo "Options:"
-    echo "  1. Basics"
-    echo "  2. Windows and Panes"
-    echo "  3. Session Management"
-    echo "  4. Miscellaneous"
-    echo "  q. Quit"
-    echo ""
-}
+echo "Welcome to the tmux reference script!"
+echo "Press Ctrl+C to exit at any time."
 
-# Display basics section with the most commonly used tmux commands.
-display_basics() {
-    echo "1. BASICS"
-    echo "----------"
-    echo "a. Start a new session:"
-    echo "   tmux"
+while true; do
     echo ""
-    echo "b. Attach to an existing session:"
-    echo "   tmux attach | tmux a"
-    echo ""
-    echo "c. Detach from the current session:"
-    echo "   Press Ctrl-b, then release and press d"
-    echo ""
-    echo "d. List all sessions:"
-    echo "   tmux list-sessions | tmux ls"
-    echo ""
-}
+    echo "Choose a tmux command:"
+    echo " 1. Create a new session"
+    echo " 2. List sessions"
+    echo " 3. Attach to a session"
+    echo " 4. Detach from the current session"
+    echo " 5. Split pane horizontally"
+    echo " 6. Split pane vertically"
+    echo " 7. Navigate between panes"
+    echo " 8. Close current pane"
+    echo " 9. Rename session"
+    echo "10. Show session information"
+    echo " 0. Exit"
 
-# Display windows and panes section with the most commonly used tmux commands.
-display_windows_and_panes() {
-    echo "2. WINDOWS AND PANES"
-    echo "---------------------"
-    echo "a. Create a new window:"
-    echo "   Press Ctrl-b, then press c"
-    echo ""
-    echo "b. Switch between windows:"
-    echo "   Press Ctrl-b, then press the window number or use arrow keys"
-    echo ""
-    echo "c. Split the current pane horizontally:"
-    echo "   Press Ctrl-b, then press [%]"
-    echo ""
-    echo "d. Split the current pane vertically:"
-    echo "   Press Ctrl-b, then press " \"
-    echo ""
-}
+    read -p "Enter your choice: " choice
 
-# Display session management section with the most commonly used tmux commands.
-display_session_management() {
-    echo "3. SESSION MANAGEMENT"
-    echo "----------------------"
-    echo "a. List existing sessions:"
-    echo "   tmux list-sessions"
-    echo ""
-    echo "b. Kill the current session:"
-    echo "   tmux kill-session"
-    echo ""
-}
-
-# Display miscellaneous section with additional commonly used tmux commands.
-display_miscellaneous() {
-    echo "4. MISCELLANEOUS"
-    echo "----------------"
-    echo "a. Show tmux help:"
-    echo "   tmux -h"
-    echo ""
-    echo "b. Reload tmux configuration:"
-    echo "   Press Ctrl-b, then type :source-file ~/.tmux.conf"
-    echo ""
-}
-
-# Main function to determine which section to display based on the user's choice.
-main() {
-    display_intro
-    while true; do
-        display_help
-        read -p "Enter the number of the section you want to explore (q to quit): " choice
-        case $choice in
-            1) display_basics ;;
-            2) display_windows_and_panes ;;
-            3) display_session_management ;;
-            4) display_miscellaneous ;;
-            q) echo "Exiting. Goodbye!"; exit 0 ;;
-            *) echo "Invalid choice. Please enter a valid option." ;;
-        esac
-    done
-}
-
-# Call the main function to start the interactive mode.
-main
+    case $choice in
+        1)
+            read -p "Enter session name: " session_name
+            tmux new-session -s "$session_name"
+            ;;
+        2)
+            tmux list-sessions
+            ;;
+        3)
+            read -p "Enter session name to attach: " session_name
+            tmux attach -t "$session_name"
+            ;;
+        4)
+            tmux detach
+            ;;
+        5)
+            tmux split-window -h
+            ;;
+        6)
+            tmux split-window -v
+            ;;
+        7)
+            tmux select-pane -t :.+
+            ;;
+        8)
+            tmux kill-pane
+            ;;
+        9)
+            read -p "Enter new session name: " new_session_name
+            tmux rename-session -t "$(tmux display-message -p '#S')" "$new_session_name"
+            ;;
+        10)
+            tmux display-message -p "#{session_name} (#{session_id}): #{session_windows} windows"
+            ;;
+        0)
+            echo "Exiting the tmux reference script. Goodbye!"
+            exit 0
+            ;;
+        *)
+            echo "Invalid choice. Please enter a valid number."
+            ;;
+    esac
+done
