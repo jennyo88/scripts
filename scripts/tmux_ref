@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+display() {
+    echo "TMUX QUICK REFERENCE"
+    echo "-------------------"
+    echo "This script provides a quick reference for using tmux."
+    echo ""
+
+    case $1 in
+        1)
+            echo "1. BASICS"
+            echo "----------"
+            echo "a. Start a new session: tmux"
+            echo "b. Attach to an existing session: tmux attach-session -t SESSION_NAME"
+            echo "c. Detach from the current session: Press Ctrl-b, then release and press d"
+            ;;
+        2)
+            echo "2. WINDOWS AND PANES"
+            echo "---------------------"
+            echo "a. Create a new window: Press Ctrl-b, then press c"
+            echo "b. Switch between windows: Press Ctrl-b, then press the window number or use arrow keys"
+            echo "c. Split the current pane horizontally: Press Ctrl-b, then press %"
+            echo "d. Split the current pane vertically: Press Ctrl-b, then press \""
+            echo "e. Navigate between panes: Press Ctrl-b, then press arrow keys"
+            ;;
+        3)
+            echo "3. SESSION MANAGEMENT"
+            echo "----------------------"
+            echo "a. List existing sessions: tmux list-sessions"
+            echo "b. Create a new session with a name: tmux new-session -s SESSION_NAME"
+            echo "c. Kill a session: tmux kill-session -t SESSION_NAME"
+            ;;
+        4)
+            echo "4. MISCELLANEOUS"
+            echo "----------------"
+            echo "a. Show tmux help: tmux -h"
+            echo "b. Reload tmux configuration: Press Ctrl-b, then type :source-file ~/.tmux.conf"
+            ;;
+        *)
+            echo "Usage: $0 [option]"
+            echo "Options: 1 (Basics), 2 (Windows and Panes), 3 (Session Management), 4 (Miscellaneous)"
+            ;;
+    esac
+}
+
+display "$1"
