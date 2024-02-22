@@ -7,10 +7,10 @@ A collection of bash scripts for various file conversion and system update tasks
 - [Description](#description)
 - [Scripts](#scripts)
   - [convert](#convert)
+  - [tmux_ref](#tmux_ref)
   - [update-debian](#update-debian)
   - [update-fedora](#update-fedora)
   - [upinst](#upinst)
-- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -20,65 +20,22 @@ This repository contains a set of bash scripts designed for different tasks. The
 ## Scripts
 
 ### convert
+`convert` is a script with service menu for converting media files. Anything you might need for your videos and subtitles.
 
-**Description:**
-A bash script for performing system updates on Debian-based systems.
-
-**Usage:**
-```bash
-./convert
-```
+### tmux_ref
+`tmux_ref` is a bash script that serves as a quick reference guide for using tmux, a terminal multiplexer. It provides concise commands and tips for basic tmux operations, managing windows and panes, session management, and miscellaneous tasks. Customize your tmux experience with this handy script!
 
 ### update-debian
-
-**Description:**
-A prompted update script for Debian systems.
-
-**Usage:**
-```bash
-sudo ./update-debian
-```
-
-**Options:**
-
-`-h` or `--help`: Display usage information.
+`update-debian` is a prompted update script for Debian systems.
 
 ### update-fedora
-
-**Description:**
-A prompted update script for Fedora systems.
-
-**Usage:**
-```bash
-sudo ./update-fedora
-```
-
-**Options:**
-
-`-h` or `--help`: Display usage information.
-
+`update-fedora` is a prompted update script for Fedora systems.
 
 ### upinst
+`upinst` is a bash script with options for installing, updating, and managing Debian-based systems.
 
-**Description:**
-A bash script with options for installing, updating, and managing Debian-based systems.
 
-**Usage:**
-```bash
-sudo ./upinst [options]
-```
-
-**Options:**
-
-`-i`: Install
-`-u`: Update check
-`-U`: Upgrade
-`-r`: Uninstall
-`-R`: Reboot
-`-m`: Show interactive menu
-`-h`: Show help
-
-**Usage Examples:**
+***Usage Examples:***
 ```bash
 # Install a package
 sudo ./upinst -i package_name
@@ -101,10 +58,6 @@ sudo ./upinst -m
 # Display help
 sudo ./upinst -h
 ```
-
-## Usage
-Refer to each script's individual section for specific usage instructions.
-Make sure to check the respective scripts for details on how to use them effectively.
 
 ## Contributing
 
