@@ -108,6 +108,7 @@ kill_session() {
 
 # Function for the main menu loop
 main_menu() {
+echo -e "\n \n"
     PS3="Choose a tmux command (enter a number): "
 
     options=(
