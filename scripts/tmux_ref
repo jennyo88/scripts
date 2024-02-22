@@ -1,46 +1,92 @@
 #!/usr/bin/env bash
 
-display() {
-    echo "TMUX QUICK REFERENCE"
+display_intro() {
+    echo "TMUX REFERENCE"
     echo "-------------------"
     echo "This script provides a quick reference for using tmux."
     echo ""
+}
 
+display_help() {
+    echo "Usage: ./tmux_ref [option]"
+    echo ""
+    echo "Options:"
+    echo "  1. Basics"
+    echo "  2. Windows and Panes"
+    echo "  3. Session Management"
+    echo "  4. Miscellaneous"
+    echo ""
+}
+
+display_basics() {
+    echo "1. BASICS"
+    echo "----------"
+    echo "a. Start a new session:"
+    echo "   tmux"
+    echo ""
+    echo "b. Attach to an existing session:"
+    echo "   tmux attach-session -t SESSION_NAME"
+    echo ""
+    echo "c. Detach from the current session (inside tmux):"
+    echo "   Press Ctrl-b, then release and press d"
+    echo ""
+}
+
+display_windows_and_panes() {
+    echo "2. WINDOWS AND PANES"
+    echo "---------------------"
+    echo "a. Create a new window:"
+    echo "   Press Ctrl-b, then press c"
+    echo ""
+    echo "b. Switch between windows:"
+    echo "   Press Ctrl-b, then press the window number or use arrow keys"
+    echo ""
+    echo "c. Split the current pane horizontally:"
+    echo "   Press Ctrl-b, then press %"
+    echo ""
+    echo "d. Split the current pane vertically:"
+    echo "   Press Ctrl-b, then press \""
+    echo ""
+    echo "e. Navigate between panes:"
+    echo "   Press Ctrl-b, then press arrow keys"
+    echo ""
+}
+
+display_session_management() {
+    echo "3. SESSION MANAGEMENT"
+    echo "----------------------"
+    echo "a. List existing sessions:"
+    echo "   tmux list-sessions"
+    echo ""
+    echo "b. Create a new session with a name:"
+    echo "   tmux new-session -s SESSION_NAME"
+    echo ""
+    echo "c. Kill a session:"
+    echo "   tmux kill-session -t SESSION_NAME"
+    echo ""
+}
+
+display_miscellaneous() {
+    echo "4. MISCELLANEOUS"
+    echo "----------------"
+    echo "a. Show tmux help:"
+    echo "   tmux -h"
+    echo ""
+    echo "b. Reload tmux configuration:"
+    echo "   Press Ctrl-b, then type :source-file ~/.tmux.conf"
+    echo ""
+}
+
+main() {
+    display_intro
     case $1 in
-        1)
-            echo "1. BASICS"
-            echo "----------"
-            echo "a. Start a new session: tmux"
-            echo "b. Attach to an existing session: tmux attach-session -t SESSION_NAME"
-            echo "c. Detach from the current session: Press Ctrl-b, then release and press d"
-            ;;
-        2)
-            echo "2. WINDOWS AND PANES"
-            echo "---------------------"
-            echo "a. Create a new window: Press Ctrl-b, then press c"
-            echo "b. Switch between windows: Press Ctrl-b, then press the window number or use arrow keys"
-            echo "c. Split the current pane horizontally: Press Ctrl-b, then press %"
-            echo "d. Split the current pane vertically: Press Ctrl-b, then press \""
-            echo "e. Navigate between panes: Press Ctrl-b, then press arrow keys"
-            ;;
-        3)
-            echo "3. SESSION MANAGEMENT"
-            echo "----------------------"
-            echo "a. List existing sessions: tmux list-sessions"
-            echo "b. Create a new session with a name: tmux new-session -s SESSION_NAME"
-            echo "c. Kill a session: tmux kill-session -t SESSION_NAME"
-            ;;
-        4)
-            echo "4. MISCELLANEOUS"
-            echo "----------------"
-            echo "a. Show tmux help: tmux -h"
-            echo "b. Reload tmux configuration: Press Ctrl-b, then type :source-file ~/.tmux.conf"
-            ;;
-        *)
-            echo "Usage: $0 [option]"
-            echo "Options: 1 (Basics), 2 (Windows and Panes), 3 (Session Management), 4 (Miscellaneous)"
-            ;;
+        1) display_basics ;;
+        2) display_windows_and_panes ;;
+        3) display_session_management ;;
+        4) display_miscellaneous ;;
+        *) display_help ;;
     esac
 }
 
-display "$1"
+main "$1"
+
