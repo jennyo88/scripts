@@ -125,7 +125,6 @@ main_menu() {
         "Exit"
     )
 
-	echo -e "\n \n"
 
     select opt in "${options[@]}"; do
         case $REPLY in
@@ -148,7 +147,7 @@ main_menu() {
                 echo -e "${RED}Invalid choice. Please enter a valid number.${RESET}"
                 ;;
         esac
-
+	echo -e "\n \n"
     done
 }
 
