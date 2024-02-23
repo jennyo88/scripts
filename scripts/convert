@@ -431,10 +431,6 @@ m3u8() {
 	# printf "Source extension? : "
 	# read srcExt
 
-	# Prompt user for source web address
-	printf "Source web-address? : "
-	read srcAdd
-
 	# Prompt user for destination extension
 	printf "Destination extension? (default: ts): "
 	read -r destExt
@@ -444,6 +440,10 @@ m3u8() {
 	printf "Destination directory? (default: ts): "
 	read -r destDir
 	destDir=${destDir:-ts}
+
+	# Prompt user for source web address
+	printf "Source web-address? : "
+	read srcAdd
 
 	# Prompt user for movie details
 	printf "Movie name? (include periods between words) : "
