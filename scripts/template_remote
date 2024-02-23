@@ -1,17 +1,32 @@
 #!/usr/bin/env bash
 
-# This is a template for executing a remote script.
-# Copy everything inside COMMENT to create a new script
+# Prompt the user for GitHub username
+printf "Enter GitHub username (default: jennyo88): "
+read -r USERNAME
+USERNAME=${USERNAME:-jennyo88}
 
-: << 'COMMENT'
-#!/usr/bin/env bash
+# Prompt the user for repository name
+printf "Enter repository name (default: scripts): "
+read -r REPOSITORY
+REPOSITORY=${REPOSITORY:-scripts}
 
-# Specify the URL of the remote script on GitHub
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/username/repository/branch/env_script.sh"
+# Prompt the user for branch name
+printf "Enter branch name (default: main): "
+read -r BRANCH
+BRANCH=${BRANCH:-main}
+
+# Prompt the user for branch name
+printf "Enter branch name (default: scripts): "
+read -r FOLDER
+FOLDER=${FOLDER:-scripts}
+
+# Prompt the user for script name
+printf "Enter script name (default: convert): "
+read -r SCRIPT_NAME
+SCRIPT_NAME=${SCRIPT_NAME:-convert}
+
+# Construct the URL based on user input
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$FOLDER/$SCRIPT_NAME"
 
 # Download and execute the remote script using bash -c
 bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"
-COMMENT
-
-# Add your additional code below this line
-
