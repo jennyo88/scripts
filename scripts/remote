@@ -14,6 +14,17 @@ display_error() {
     echo "Error: $1"
 }
 
+# Function to get script path based on user's numeric choice
+get_script_path() {
+    case "$1" in
+        1) echo "scripts/convert" ;;
+        2) echo "scripts/remote" ;;
+        3) echo "scripts/tmux_ref" ;;
+        # Add more cases as needed
+        *) echo "Invalid choice" ;;
+    esac
+}
+
 # Prompt the user for GitHub username
 printf "Enter GitHub username (default: jennyo88): "
 read -r USERNAME
@@ -29,22 +40,19 @@ printf "Enter branch name (default: main): "
 read -r BRANCH
 BRANCH=${BRANCH:-main}
 
-# Prompt the user for script path or show available paths
-printf "Enter script path (default: scripts/convert) or type 'list' to show available paths (0 to exit): "
-read -r SCRIPT_PATH
+# Prompt the user to choose from the list of available paths
+show_available_paths
+printf "Choose a script by entering its number (0 to exit): "
+read -r CHOICE
 
 # Allow the user to exit by entering '0'
-if [ "$SCRIPT_PATH" == "0" ]; then
+if [ "$CHOICE" == "0" ]; then
     echo "Exiting the script."
     exit 0
 fi
 
-# Validate if the provided script path is a valid choice
-if [ "$SCRIPT_PATH" == "list" ]; then
-    show_available_paths
-    printf "Enter script path: "
-    read -r SCRIPT_PATH
-fi
+# Get the script path based on the user's numeric choice
+SCRIPT_PATH=$(get_script_path "$CHOICE")
 
 # Use the provided script path or the default value
 SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
