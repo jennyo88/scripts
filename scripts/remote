@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# Function to display available script paths
+show_available_paths() {
+    echo "Available script paths:"
+    echo "1. scripts/convert"
+    echo "2. scripts/another_script"
+    # Add more paths as needed
+}
+
 # Prompt the user for GitHub username
 printf "Enter GitHub username (default: jennyo88): "
 read -r USERNAME
@@ -15,10 +23,18 @@ printf "Enter branch name (default: main): "
 read -r BRANCH
 BRANCH=${BRANCH:-main}
 
-# Prompt the user for script path
-printf "Enter script name (default: scripts/convert): "
+# Prompt the user for script path or show available paths
+printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
 read -r SCRIPT_PATH
-SCRIPT_NAME=${SCRIPT_PATH:-scripts/convert}
+
+if [ "$SCRIPT_PATH" == "list" ]; then
+    show_available_paths
+    printf "Enter script path: "
+    read -r SCRIPT_PATH
+fi
+
+# Use the provided script path or the default value
+SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 
 # Construct the URL based on user input
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
