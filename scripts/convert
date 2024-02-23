@@ -382,21 +382,23 @@ x265() {
     	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
   	echo -e "${end}"
 
-	# Prompting the user for source extension (mkv, mp4, or avi)
+	# Prompt user for source extension (e.g. mkv, mp4, or avi)
 	printf "Source extension? (mkv, mp4, or avi) : "
 	read srcExt
 
-	# Prompting the user for destination extension (mkv or mp4)
-	printf "Destination extension? (mkv or mp4) : "
-	read destExt
+	# Prompt user for destination extension (mkv or mp4)
+	printf "Destination extension? (mkv or mp4; default: mp4) : "
+	read -r destExt
+	destExt=${destExt:-mp4}
 
-	# Prompting the user for source directory
+	# Prompt user for for source directory
 	printf "Source directory? : "
 	read srcDir
 
-	# Prompting the user for destination directory
-	printf "Destination directory? : "
-	read destDir
+	# Prompt user for for destination directory
+	printf "Destination directory? (default: DONE): "
+	read -r destDir
+	destDir=${destDir:-DONE}
 
 	# Loop through each file in the source directory with the specified source extension
 	for filename in "$srcDir"/*.$srcExt
@@ -429,15 +431,19 @@ m3u8() {
 	# printf "Source extension? : "
 	# read srcExt
 
-	# printf "Destination extension? : "
-	# read destExt
-
-	# printf "Destination directory? : "
-	# read destDir
-
 	# Prompt user for source web address
 	printf "Source web-address? : "
 	read srcAdd
+
+	# Prompt user for destination extension
+	printf "Destination extension? (default: ts): "
+	read -r destExt
+	destExt=${destExt:-ts}
+
+	# Prompt user for destination directory
+	printf "Destination directory? (default: ts): "
+	read -r destDir
+	destDir=${destDir:-ts}
 
 	# Prompt user for movie details
 	printf "Movie name? (include periods between words) : "
@@ -446,12 +452,14 @@ m3u8() {
 	printf "Movie release year? : "
 	read baseYear
 
-	printf "Scene/channel of the movie? (e.g., TCM) : "
-	read baseScene
+	printf "Scene/channel of the movie? (default: TCM) : "
+	read -r baseScene
+	baseScene=${baseScene:-TCM}
 
 	printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
 	echo -e "TCM is always 720p\a" 
-	read baseResolution
+	read -r baseResolution
+	baseResolution=${baseResolution:-720p}
 
 	# Prompt user for movie language (three-letter code)
 	validLanguageCode=false
@@ -477,7 +485,7 @@ m3u8() {
 	mv "$newname" ./DONE/
 
 	# Download M3U8 stream and convert to TS format using FFmpeg
-	ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language ts/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene".ts
+	ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
 }
@@ -501,15 +509,17 @@ ydl() {
 	fi
 
 	# Prompt user for platform (YouTube or other)
-	printf "Is it YouTube or other? (Enter 'youtube' or 'other'): "
+	printf "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): "
 	read -r platform
+	platform=${platform:-youtube}
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
+	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): "
 	    	read -r type
+		type=${type:-tv}
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
@@ -519,8 +529,9 @@ ydl() {
 	        	read -r show_name
 
 			# Prompt for season and episode range
-	        	printf "Enter the season number (two digits): "
+	        	printf "Enter the season number (two digits; default: 01): "
 	        	read -r season_number
+			season_number=${season_number:-01}
 
 	        	printf "Enter the first episode number: "
 	        	read -r first_episode
@@ -630,6 +641,7 @@ ydl() {
 
 	        	printf "Enter the season number (two digits): "
 	        	read -r season_number
+			season_number=${season_number:-01}
 
 	        	printf "Enter the first episode number (two digits): "
 	        	read -r first_episode
@@ -924,8 +936,9 @@ extract_srt() {
 	read srcExt
 
 	# Prompting the user for the destination extension (e.g., srt)
-	printf "Destination extension? : "
-	read destExt
+	printf "Destination extension? (default: srt): "
+	read -r destExt
+	destExt=${destExt:-srt}
 
 	# Prompting the user for the source directory
   	printf "Source directory? : "
@@ -933,7 +946,8 @@ extract_srt() {
 
 	# Prompting the user for the destination directory
   	printf "Destination directory? : "
-  	read destDir
+  	read -r destDir
+	destDir=${destDir:-srt}
 
 	# Loop through each file in the source directory with the specified source extension
   	for filename in "$srcDir"/*.$srcExt
@@ -962,12 +976,14 @@ convert_srt() {
   	echo -e "${end}"
 
 	# Prompting the user for the source directory
-  	printf "Source directory? : "
-  	read srcDir
+  	printf "Source directory? (default: vtt): "
+  	read -r srcDir
+	srcDir=${srcDir:-vtt}
 
 	# Prompting the user for the destination directory
-  	printf "Destination directory? : "
-  	read destDir
+  	printf "Destination directory? (default: srt): "
+  	read -r destDir
+	destDir=${destDir:-srt}
 
 	# Loop through each VTT file in the source directory
   	for filename in "$srcDir"/*.vtt
