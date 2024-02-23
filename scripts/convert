@@ -457,7 +457,6 @@ m3u8() {
 	baseScene=${baseScene:-TCM}
 
 	printf "Enter the resolution (e.g., 480p, 720p, 1080p; default: 720p): "
-	echo -e "TCM is always 720p\a" 
 	read -r baseResolution
 	baseResolution=${baseResolution:-720p}
 
