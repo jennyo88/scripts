@@ -456,7 +456,7 @@ m3u8() {
 	read -r baseScene
 	baseScene=${baseScene:-TCM}
 
-	printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
+	printf "Enter the resolution (e.g., 480p, 720p, 1080p; default: 720p): "
 	echo -e "TCM is always 720p\a" 
 	read -r baseResolution
 	baseResolution=${baseResolution:-720p}
@@ -466,7 +466,8 @@ m3u8() {
 	while [ "$validLanguageCode" = false ]
 	do
    		printf "Movie language? (Enter a three-letter language code, e.g., eng, spa, jpn, fre, zho): "
-    		read language
+    		read -r language
+		language=${language:-eng}
 
     		if [ ${#language} -eq 3 ]
 		then
