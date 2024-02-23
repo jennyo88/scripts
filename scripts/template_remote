@@ -15,18 +15,13 @@ printf "Enter branch name (default: main): "
 read -r BRANCH
 BRANCH=${BRANCH:-main}
 
-# Prompt the user for branch name
-printf "Enter branch name (default: scripts): "
-read -r FOLDER
-FOLDER=${FOLDER:-scripts}
-
-# Prompt the user for script name
-printf "Enter script name (default: convert): "
-read -r SCRIPT_NAME
-SCRIPT_NAME=${SCRIPT_NAME:-convert}
+# Prompt the user for script path
+printf "Enter script name (default: scripts/convert): "
+read -r SCRIPT_PATH
+SCRIPT_NAME=${SCRIPT_PATH:-scripts/convert}
 
 # Construct the URL based on user input
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$FOLDER/$SCRIPT_NAME"
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
 # Download and execute the remote script using bash -c
 bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"
