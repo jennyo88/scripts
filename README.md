@@ -8,6 +8,7 @@ A collection of bash scripts for various file conversion and system update tasks
 - [Scripts](#scripts)
   - [convert](#convert)
   - [tmux_ref](#tmux_ref)
+  - [remote](#remote)
   - [update-debian](#update-debian)
   - [update-fedora](#update-fedora)
   - [upinst](#upinst)
@@ -24,6 +25,9 @@ This repository contains a set of bash scripts designed for different tasks. The
 
 ### tmux_ref
 `tmux_ref` is a bash script that serves as a quick reference guide for using tmux, a terminal multiplexer. It provides concise commands and tips for basic tmux operations, managing windows and panes, session management, and miscellaneous tasks. Customize your tmux experience with this handy script!
+
+### remote
+`remote` is a bash script for seamlessly executing remote scripts from GitHub. Simply provide your GitHub username, repository name, and script path to effortlessly run scripts hosted on your repository. Customize execution parameters or use default values. Use with caution, and verify script sources for security.
 
 ### update-debian
 `update-debian` is a prompted update script for Debian systems.
