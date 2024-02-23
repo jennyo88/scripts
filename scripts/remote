@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-# Specify the URL of the remote script on GitHub
-# REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/username/repository/branch/env_script.sh"
-
-# Download and execute the remote script using bash -c
-# bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"

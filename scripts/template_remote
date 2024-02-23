@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# This is a template for executing a remote script.
+# Copy everything inside COMMENT to create a new script
+
+: << 'COMMENT'
+# Specify the URL of the remote script on GitHub
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/username/repository/branch/env_script.sh"
+
+# Download and execute the remote script using bash -c
+bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"
+COMMENT
+
+# Add your additional code below this line
+
