@@ -4,6 +4,8 @@
 # Copy everything inside COMMENT to create a new script
 
 : << 'COMMENT'
+#!/usr/bin/env bash
+
 # Specify the URL of the remote script on GitHub
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/username/repository/branch/env_script.sh"
 
