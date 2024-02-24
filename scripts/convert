@@ -23,34 +23,52 @@ load_colors() {
 # Calling the load_colors() function to set color variables
 load_colors # Only loaded once
 
+
 # Check if required commands are available
-check_commands() {
-    local commands=("youtube-dl" "yt-dlp" "ffmpeg")
+
+check_ydl() {
+    local commands=("youtube-dl" "yt-dlp")
+    local found=false
 
     for cmd in "${commands[@]}"; do
-        if ! command -v "$cmd" &> /dev/null; then
-            echo -e "${RED}Error: '$cmd' command not found.${RESET}"
-            echo "Please make sure '$cmd' is installed and available in your PATH."
-            exit 1
+        if command -v "$cmd" &> /dev/null; then
+            found=true
+            break
         fi
     done
+
+    if [ "$found" = false ]; then
+        print_error "Error: 'youtube-dl' or 'yt-dlp' command not found."
+        echo "Please make sure 'youtube-dl' or 'yt-dlp' is installed and available in your PATH."
+        exit 1
+    fi
+}
+
+check_ffmpeg() {
+    local command="ffmpeg"
+
+    if ! command -v "$command" &> /dev/null; then
+        print_error "Error: '$command' command not found."
+        echo "Please make sure '$command' is installed and available in your PATH."
+        exit 1
+    fi
 }
 
 # Function to pause and wait for user input
 pause() {
-    echo
-    read -rp "Press ENTER to continue..." fackEnterKey
+    	echo
+   	read -rp "Press ENTER to continue..." fackEnterKey
 }
 
 # Function to display goodbye message, reset colors, clear the screen, and exit
 goodbye() {
-    echo -e "${RESET}"
-    clear
-    exit
+    	echo -e "${RESET}"
+    	clear
+    	exit
 }
 
 # Function to display the main menu banner
-show_banner_0() {
+show_banner_main() {
     	clear
     	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
@@ -58,8 +76,8 @@ show_banner_0() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_1() {
-    	show_banner_0
+show_banner_videos() {
+    	show_banner_main
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
@@ -68,8 +86,8 @@ show_banner_1() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_2() {
-    	show_banner_0
+show_banner_subs() {
+    	show_banner_main
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
@@ -78,8 +96,8 @@ show_banner_2() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_3() {
-    	show_banner_0
+show_banner_clean() {
+    	show_banner_main
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
    	echo " ║                                                 ║ "
@@ -90,36 +108,33 @@ show_banner_3() {
 
 
 # Function for displaying the main menu
-show_menu_0() {
-    	show_banner_0
+show_menu_main() {
+    	show_banner_main
     	echo ""
     	echo ""
-	echo " 1) Videos"
-	echo " 2) Subs"
-	echo " 3) Clean-up"
-	echo -e "\n 0) Exit Menu \n"
+	echo " 1. Video scripts"
+	echo " 2. Subtitle scripts"
+	echo " 3. Clean-up scripts"
+    	echo ""
+    	echo ""
+	echo " 0. Exit script"
+    	echo ""
 
     	# Prompting the user to select an option
-	echo "${BLUE}"
-	read -rp "Select: " ans
+	echo -e "${BLUE}"
+	read -rp "Select: " ANS
 	echo "${RESET}"
 
-	# Displaying the menu banner
-    	show_banner_0
-
    	# Handling the user's choice using a case statement
-    	case $ans in
+    	case $ANS in
         	[vV]|[vV][iI][dD][eE][oO][sS]|"1")
-            		show_banner_1
-            		show_menu_1
+            		show_menu_videos
             		;;
         	[sS]|[sS][uU][bB][sS]|"2")
-            		show_banner_2
-            		show_menu_2
+            		show_menu_subs
            		;;
         	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
-            		show_banner_3
-            		show_menu_3
+            		show_menu_clean
             		;;
         	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
             		# Exiting the menu
@@ -127,59 +142,62 @@ show_menu_0() {
             		;;
         	# Hidden options
         	[xX][2][6][5]|[1][2])
-            		show_banner_1
+            		show_banner_videos
             		x265
             		;;
         	[mM][3][uU][8]|[1][3])
-            		show_banner_1
+            		show_banner_videos
             		m3u8
             		;;
         	[yY][dD][lL]|[1][4])
-            		show_banner_1
+            		show_banner_videos
             		ydl
             		;;
         	[tT][uU][bB][iI]|[1][5])
-            		show_banner_1
+            		show_banner_videos
             		tubi
             		;;
         	[mM][eE][tT][aA][dD][aA][tT][aA]|[1][6])
-            		show_banner_1
+            		show_banner_videos
             		metadata
             		;;
         	[pP][lL][eE][xX]|[1][7])
-            		show_banner_1
+            		show_banner_videos
             		plex
             		;;
         	[aA][lL][lL]|[1][8])
-            		show_banner_0
+            		show_banner_main
             		video_sub && sleep 1
             		c_all
             		;;
         	[eE][xX][tT][rR][aA][cC][tT]|[2][2])
-            		show_banner_2
+            		show_banner_subs
             		extract_srt
             		;;
         	[vV][tT][tT]|[2][3])
-            		show_banner_2
+            		show_banner_subs
             		convert_srt
             		;;
         	[cC][aA][lL][lL]|[3][4])
-            		show_banner_3
+            		show_banner_clean
             		c_all
             		;;
 		# Handling invalid options
         	*)
-			echo -e "Invalid option. Please enter a valid option." && sleep 1
+            		echo -e "Invalid option. Please enter a valid option."
+            		pause
+            		show_menu_main
             		;;
     	esac
 }
 
 
-# Function for displaying the first menu
-show_menu_1() {
-	# Displaying menu options with corresponding numbers
-  	echo -e
-  	echo " 1) Main Menu"
+# Function for displaying the VIDEOS menu
+show_menu_videos() {
+	show_banner_videos
+	echo ""
+  	echo " 1. Go back to Main Menu"
+	echo ""
   	echo " 2) Convert to x265"
   	echo " 3) Download m3u8"
 	echo " 4) Youtube-DL"
@@ -187,42 +205,43 @@ show_menu_1() {
 	echo " 6) Metadata"
 	echo " 7) Video ONLY"
 	echo " 8) Video & Subs"
-	echo " 9) Subs Menu"
-	echo "10) Cleanup Menu"
-  	echo -e "\n 0) Exit Menu \n"
+    	echo ""
+	echo " 9) Go to SUBS Menu"
+	echo "10) Go to CLEAN-UP Menu"
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+    	echo ""
 
-	# Prompting the user to select an option
- 	echo "${BLUE}"
-	read -rp "Select: " ans
-	echo "${RESET}"
-
-	# Displaying the menu banner
-    	show_banner_1
+   	# Prompting the user to select an option
+    	echo -e "${BLUE}"
+    	read -rp "Select: " ANS
+    	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-	case $ans in
+	case $ANS in
       		[mM][aA][iI][nN]|"1")
-			show_banner_0
-        		show_menu_0
+			show_banner_main
+        		show_menu_main
         		;;
       		[xX]|[xX][2][6][5]|"2")
-			show_banner_1
+			show_banner_videos
         		x265
         		;;
       		[mM]|[mM][3][uU][8]|"3")
-			show_banner_1
+			show_banner_videos
         		m3u8
         		;;
       		[yY]|[yY][dD][lL]|"4")
-        		show_banner_1
+        		show_banner_videos
 			ydl
         		;;
       		[tT]|[tT][uU][bI][iI]|"5")
-			show_banner_1
+			show_banner_videos
         		tubi
         		;;
 		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"6")
-			show_banner_1
+			show_banner_videos
 			metadata
 			;;
 		[vV]|[vI][iI][vV][eE][oO]|"7")
@@ -235,129 +254,141 @@ show_menu_1() {
 			c_mkv
 			;;
 		[sS]|[sS][uU][bB][sS]|"9")
-			show_banner_2
-			show_menu_2
+			show_banner_subs
+			show_menu_subs
 			;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"10")
-			show_banner_3
-			show_menu_3
+			show_banner_clean
+			show_menu_clean
 			;;
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         		goodbye
         		;;
 		# Handling invalid options
-      		*)
-			echo -e "Invalid option. Please enter a valid option." && sleep 1
+        	*)
+            		echo -e "Invalid option. Please enter a valid option."
+            		pause
+            		show_menu_videos
             		;;
     	esac
 }
 
-# Function for displaying the second menu
-show_menu_2() {
-	# Displaying menu options with corresponding numbers
-  	echo -e
-  	echo " 1) Main Menu"
-  	echo " 2) Extract subs"
-  	echo " 3) Convert subs"
-  	echo " 4) Videos Menu"
-	echo " 5) Cleanup Menu"
-  	echo -e "\n 0) Exit Menu \n"
+# Function for displaying the SUBS menu
+show_menu_subs() {
+	show_banner_subs
+    	echo ""
+    	echo ""
+    	echo " 1. Go back to Main Menu"
+    	echo ""
+  	echo " 2. Extract subtitles"
+  	echo " 3. Convert subtitles"
+	echo ""
+  	echo " 4. Go to VIDEOS Menu"
+	echo " 5. Go to CLEAN-UP Menu"
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+    	echo ""
 
 	# Prompting the user to select an option
   	echo "${BLUE}"
-	read -rp "Select: " ans
+	read -rp "Select: " ANS
 	echo "${RESET}"
 
-	# Displaying the menu banner
-    	show_banner_2
-
 	# Handling the user's choice using a case statement
-    	case $ans in
+    	case $ANS in
       		[mM][aA][iI][nN]|"1")
-        		show_banner_0
-        		show_menu_0
+        		show_banner_main
+        		show_menu_main
         		;;
       		[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
-			show_banner_2
+			show_banner_subs
         		extract_srt
         		;;
       		[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
-			show_banner_2
+			show_banner_subs
         		convert_srt
         		;;
       		[vV]|[vV][iI][dD][eE][oO][sS]|"4")
-			show_banner_1
-        		show_menu_1
+			show_banner_videos
+        		show_menu_videos
         		;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
-			show_banner_3
-			show_menu_3
+			show_banner_clean
+			show_menu_clean
 			;;
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         		goodbye
         		;;
 		# Handling invalid options
-      		*)
-			echo -e "Invalid option. Please enter a valid option." && sleep 1
+        	*)
+            		echo -e "Invalid option. Please enter a valid option."
+            		pause
+            		show_menu_subs
             		;;
     	esac
 }
 
 # Function for displaying the third menu
-show_menu_3() {
-	# Displaying menu options with corresponding numbers
-  	echo -e
-  	echo " 1) Main Menu"
-  	echo " 2) Clear folder ts"
-  	echo " 3) Clear folder mkv"
-	echo " 4) Clear all"
-	echo " 5) Videos Menu"
-	echo " 6) Subs Menu"
-  	echo -e "\n 0) Exit Menu \n"
+show_menu_clean() {
+	show_banner_clean
+    	echo ""
+    	echo ""
+    	echo " 1. Go back to Main Menu"
+    	echo ""
+  	echo " 2. Clear folder ts"
+  	echo " 3. Clear folder mkv"
+	echo " 4. Clear both folders"
+	echo ""
+	echo " 5. Go to VIDEOS Menu"
+	echo " 6. Go to SUBS Menu"
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+    	echo ""
 
 	# Prompting the user to select an option
   	echo "${BLUE}"
-	read -rp "Select: " ans
+	read -rp "Select: " ANS
 	echo "${RESET}"
 
-	# Displaying the menu banner
-    	show_banner_3
-
 	# Handling the user's choice using a case statement
-    	case $ans in
+    	case $ANS in
       		[mM][aA][iI][nN]|"1")
-        		show_banner_0
-        		show_menu_0
+        		show_banner_main
+        		show_menu_main
         		;;
       		[c][tT][sS]|"2")
-			show_banner_3
+			show_banner_clean
         		c_ts
         		;;
       		[c][mM][kK][vV]|"3")
-			show_banner_3
+			show_banner_clean
         		c_mkv
         		;;
 		[cC][aA][lL][lL]|"4")
-			show_banner_3
+			show_banner_clean
 			c_all
 			;;
       		[vV]|[vV][iI][dD][eE][oO][sS]|"5")
-			show_banner_1
-        		show_menu_1
+			show_banner_videos
+        		show_menu_videos
         		;;
 		[sS]|[sS][uU][bB][sS]|"6")
-			show_banner_2
-			show_menu_2
+			show_banner_subs
+			show_menu_subs
 			;;
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         		goodbye
         		;;
 		# Handling invalid options
-      		*)
-			echo -e "Invalid option. Please enter a valid option." && sleep 1
+        	*)
+            		echo -e "Invalid option. Please enter a valid option."
+            		pause
+            		show_menu_clean
             		;;
     	esac
 }
@@ -366,7 +397,7 @@ show_menu_3() {
 # Step #3: Formulas
 # ----------------------------------
 
-## MENU 1 FORMULAS
+## VIDEO FORMULAS
 
 
 # Function for converting video files to x265 format using FFmpeg
@@ -376,10 +407,11 @@ show_menu_3() {
 # it to x265 format with the specified destination extension.
 #
 x265() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                           			x265 Script   	"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                    x265 SCRIPT                  ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompt user for source extension (e.g. mkv, mp4, or avi)
 	printf "Source extension? (mkv, mp4, or avi) : "
@@ -409,8 +441,9 @@ x265() {
 		ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"
 	done
 
-	# Displaying a completion message with a beep sound
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
+	pause
+	show_menu_videos
 }
 
 # Function for converting M3U8 stream to TS format using FFmpeg
@@ -419,10 +452,12 @@ x265() {
 # downloads the M3U8 stream, renames the directory, and converts the stream to TS format.
 #
 m3u8() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                            M3U8 to TS Script         	       		    "
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- 	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                 M3U8 to TS SCRIPT               ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Uncomment the following lines if source extension, destination extension,
 	# and destination directory input is required
@@ -487,6 +522,8 @@ m3u8() {
 	ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
+	pause
+	show_menu_videos
 }
 
 # Function for downloading Movies & TV Shows from YouTube or Dailymotion using youtube-dl
@@ -495,17 +532,13 @@ m3u8() {
 # using youtube-dl and organizes them in a specific folder structure.
 #
 ydl() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""              Movies & TV Shows YOUTUBE-DL to MP4 Script              "
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- 	echo -e "${RESET}"
+	check_ydl && check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                 Movies & TV Shows               ║ "
+    	echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-	# Check if youtube-dl and ffmpeg are installed
-	if ! command -v youtube-dl &> /dev/null || ! command -v ffmpeg &> /dev/null
-	then
-	    echo "Please make sure youtube-dl and ffmpeg are installed."
-	    exit 1
-	fi
 
 	# Prompt user for platform (YouTube or other)
 	printf "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): "
@@ -708,6 +741,8 @@ ydl() {
 	    	printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
 	    	exit 1
 	fi
+	pause
+	show_menu_videos
 }
 
 # Function for converting video files and extracting subtitles
@@ -716,10 +751,12 @@ ydl() {
 # and then converts the resulting .mkv files to .mp4 with specific settings.
 #
 video_sub() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                          Video and Subs Script       		       		  "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                Video & Subs SCRIPT              ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Loop through each .ts file in the 'ts' directory
 	for filename in ts/*.ts
@@ -760,8 +797,9 @@ video_sub() {
 		ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4"
 	done
 
-	# Display a completion message with a beep sound
 	echo -e "Conversion complete!\a"
+	pause
+	show_menu_videos
 }
 
 # Function for downloading and merging video and audio files for Tubi episodes
@@ -771,10 +809,12 @@ video_sub() {
 # and saves the merged output file with a specific naming convention.
 #
 tubi() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                         	 For tubi Script          		     				  "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                   tubi SCRIPT                   ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Prompting the user for show details
 	printf "Enter the name of the show: "
@@ -816,6 +856,10 @@ tubi() {
 		# Removing downloaded video and audio files
 	    	rm "${video_file}" "${audio_file}"
 	done
+
+	echo -e "Download complete!\a"
+	pause
+	show_menu_videos
 }
 
 # Function to update language metadata in MP4 video files
@@ -824,10 +868,11 @@ tubi() {
 # and updates the metadata language using FFmpeg, saving the output files in a 'Metadata' folder.
 #
 metadata() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                     For Language Metadata Script     		            "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║          Encode Language Metadata SCRIPT        ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user to enter the folder path
 	read -p "Enter the folder path where the video files are located: " folder_path
@@ -869,6 +914,10 @@ metadata() {
 	else
 		echo "Folder not found."
 	fi
+
+	echo -e "Metadata has been encoded!\a"
+	pause
+	show_menu_videos
 }
 
 # Function to convert TS to MKV for PLEX compatibility
@@ -879,10 +928,12 @@ metadata() {
 # with the specified destination extension.
 #
 plex() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                          For PLEX TS to MKV Script       	          "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║               plex TS to MKV SCRIPT             ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Prompting the user for the source extension (e.g., ts)
   	printf "Source extension? : "
@@ -911,8 +962,9 @@ plex() {
     		ffmpeg -i $filename -map 0 -c copy "$destDir"/"$baseName"."$destExt"
   	done
 
-	# Displaying a completion message with a beep sound
   	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+	pause
+	show_menu_videos
 }
 
 ## MENU 2 FORMULAS
@@ -925,10 +977,12 @@ plex() {
 # with the specified destination extension.
 #
 extract_srt() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                             Extract SRT script                       "
-  	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║              Extract subtitles SCRIPT           ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Prompting the user for the source extension (e.g., mp4, mkv)
 	printf "Source extension? : "
@@ -959,8 +1013,9 @@ extract_srt() {
   		ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s "$destDir"/"$baseName".en."$destExt"
   	done
 
-	# Displaying a completion message with a beep sound
   	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+	pause
+	show_menu_subs
 }
 
 # Function to convert VTT subtitles to SRT format
@@ -969,10 +1024,11 @@ extract_srt() {
 # converting each to SRT format using FFmpeg and saving them in the destination directory.
 #
 convert_srt() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                             Convert SRT script                       "
- 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║              Convert Subtitles SCRIPT           ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for the source directory
   	printf "Source directory? (default: vtt): "
@@ -995,8 +1051,9 @@ convert_srt() {
   		ffmpeg -i $filename "$destDir"/"$baseName".srt
   	done
 
-	# Displaying a completion message with a beep sound
   	echo -e "Conversion from vtt to srt complete!\a"
+	pause
+	show_menu_subs
 }
 
 ## MENU 3 FORMULAS
@@ -1005,17 +1062,18 @@ convert_srt() {
 # This function prompts the user for confirmation and, if confirmed, removes all files with .ts extension in the 'ts' folder.
 #
 c_ts() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                             CLEAN UP script             		   	      "
-		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                CLEAN-UP ts SCRIPT               ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear ts folder (y/N)? '
-	read ans
+	read ANS
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ans" != "${ans#[Yy]}" ]
+	if [ "$ANS" != "${ANS#[Yy]}" ]
 	then
 		# Removing all files with .ts extension in the 'ts' folder
 		rm -r ./ts/*.ts
@@ -1024,23 +1082,26 @@ c_ts() {
 		echo -e "TS folder cleared!\a"
 		sleep 1
 	fi
+
+	pause
+	show_menu_clean
 }
 
 # Function to clean up 'mkv' folder
 # This function prompts the user for confirmation and, if confirmed, removes all files with .mkv extension in the 'mkv' folder.
 #
 c_mkv() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                             CLEAN UP script            		          "
-		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                CLEAN-UP mkv SCRIPT              ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear mkv folder (y/N)? '
-	read ans
+	read ANS
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ans" != "${ans#[Yy]}" ]
+	if [ "$ANS" != "${ANS#[Yy]}" ]
 	then
 		# Removing all files with .mkv extension in the 'mkv' folder
 		rm -r ./mkv/*.mkv
@@ -1049,23 +1110,25 @@ c_mkv() {
 		echo -e "MKV folder cleared!\a"
 		sleep 1
 	fi
+	pause
+	show_menu_clean
 }
 
 # Function to clean up all folders
 # This function prompts the user for confirmation and, if confirmed, removes all files in the 'ts' and 'mkv' folders.
 #
 c_all() {
-	# Displaying a header using colored text
-  	echo "${BLUE}""                             CLEAN UP script           			          "
- 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${RESET}"
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                Full CLEAN-UP SCRIPT             ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear all folders (y/N)? '
-	read ans
+	read ANS
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ans" != "${ans#[Yy]}" ]
+	if [ "$ANS" != "${ANS#[Yy]}" ]
 	then
 		# Removing all files with .ts extension in the 'ts' folder
  		rm -r ./ts/*.ts
@@ -1077,14 +1140,16 @@ c_all() {
 		echo -e "All folders cleared!\a"
 		sleep 1
 	fi
+	pause
+	show_menu_clean
 }
 
 # -----------------------------------
-# Step #4: Main logic - infinite loop
+# Main logic - infinite loop
 # ------------------------------------
 
 while true
 do
-	show_banner_0
-	show_menu_0
+	show_banner_main
+	show_menu_main
 done
