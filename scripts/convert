@@ -254,7 +254,7 @@ show_menu_videos() {
 	show_banner_main
 	show_banner_videos
 	echo ""
-  	echo -e "\n  	1. Go back to Main Menu\n
+  	echo -e "  	1. Go back to Main Menu\n
 			2. Convert video to x265"
 	echo ""
   	echo "  2. Convert video to x265"
