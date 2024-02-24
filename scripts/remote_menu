@@ -159,12 +159,11 @@ show_menu_1() {
     echo " 1. Go back to Main Menu"
     echo ""
     echo " 2. convert            - Converting files"
-    echo " 3. template_remote    - Open template to execute a script from GitHub"
-    echo " 4. tmux_ref           - Tmux reference"
-    echo " 5. test               - Payroll test script"
-    echo " 6. other"
+    echo " 3. tmux_ref           - tmux reference"
+    echo " 4. test               - Payroll TEST script"
+    echo " 5. other"
     echo ""
-    echo " 7. Go to OTHER SCRIPTS Menu"
+    echo " 6. Go to OTHER SCRIPTS Menu"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -185,18 +184,15 @@ show_menu_1() {
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
             ;;
         "3")
-            fetch -o - "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote"
-            ;;
-        "4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
             ;;
-        "5")
+        "4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
             ;;
-        "6")
+        "5")
             execute_bash_script
             ;;
-        "7")
+        "6")
             show_banner_2
             show_menu_2
             ;;
