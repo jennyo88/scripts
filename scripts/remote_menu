@@ -35,8 +35,35 @@ goodbye() {
     exit
 }
 
+# Function to display the main menu banner
+show_banner_0() {
+    clear
+    echo -e "${BLUE}"
+    echo " -------------------------------------------- "
+    echo "        Execute Remote Scripts                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
+# Function to display the jennyo88 scripts menu banner
+show_banner_1() {
+    clear
+    echo -e "${BLUE}"
+    echo "        JENNYO88 SCRIPTS                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
+# Function to display the other scripts menu banner
+show_banner_2() {
+    clear
+    echo -e "${BLUE}"
+    echo "        OTHER SCRIPTS                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
 # Function for displaying the main menu
 show_menu_0() {
+    show_banner_0
+
     echo -e
     echo "Press Ctrl+C to exit at any time."
     echo ""
@@ -78,8 +105,10 @@ show_menu_0() {
     esac
 }
 
-# Function to display the jennyo88 scripts menu
+# Function for displaying the jennyo88 scripts menu
 show_menu_1() {
+    show_banner_1
+
     echo -e
     echo "Press Ctrl+C to go back to the main menu."
     echo ""
@@ -141,8 +170,10 @@ show_menu_1() {
     esac
 }
 
-# Function to display the other scripts menu
+# Function for displaying the other scripts menu
 show_menu_2() {
+    show_banner_2
+
     echo -e
     echo "Press Ctrl+C to go back to the main menu."
     echo ""
@@ -191,6 +222,7 @@ show_menu_2() {
 # Function to download and execute a Bash script
 execute_bash_script() {
     check_commands
+    show_banner_2
     printf "Enter the URL of the Bash script: " 
     read -r REMOTE_SCRIPT_URL
 
@@ -205,6 +237,7 @@ execute_bash_script() {
 # Function to execute a remote Python script
 execute_python_script() {
     check_commands
+    show_banner_2
     printf "Enter the GitHub URL of the script: "
     read -r GITHUB_URL
 
