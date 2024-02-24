@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-# Script Name: remote
-# Description: Download and execute a remote script from GitHub.
+# Script Name: execute_remote_script.sh
+# Description: Download and execute a remote script (Bash or Python) from GitHub.
 # Author: Your Name
 # Date: February 23, 2024
-# Version: 1.9
+# Version: 2.2
 
-# Usage: ./remote
+# Usage: ./execute_remote_script.sh
 # Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
 # It constructs a URL based on the user's input and attempts to download and execute a remote script (Bash or Python) from GitHub.
 
@@ -31,7 +31,7 @@ display_error() {
 # Function to get the shebang line from a script
 get_shebang() {
     local script_content=$1
-    local shebang=$(echo "$script_content" | sed -n '1s|^#!/usr/bin/env \?\(bash\|python3\)$|\1|p')
+    local shebang=$(echo "$script_content" | sed -n '1s|^#!\s*\(/usr/bin/env \?\(bash\|python3\)\|/bin/bash\)$|\1|p')
 
     if [ -n "$shebang" ]; then
         echo "$shebang"
@@ -82,12 +82,25 @@ SHEBANG=$(get_shebang "$SCRIPT_CONTENTS")
 
 # Debug: Print the shebang and script contents
 echo "Shebang: $SHEBANG"
-echo "Script Contents: $SCRIPT_CONTENTS"
+echo "Script Contents:"
+echo "$SCRIPT_CONTENTS"
+
+# Save the script to a file
+echo "$SCRIPT_CONTENTS" > remote_script
 
 # Execute the script based on its shebang
 case $SHEBANG in
-    "bash" | "python3")
-        if eval "$SHEBANG -c \"$SCRIPT_CONTENTS\""; then
+    "/usr/bin/env bash" | "/bin/bash")
+        # Execute the Bash script
+        if bash remote_script; then
+            echo "Script execution successful."
+        else
+            display_error "Failed to execute the remote script."
+        fi
+        ;;
+    "/usr/bin/python3")
+        # Execute the Python script
+        if python3 remote_script; then
             echo "Script execution successful."
         else
             display_error "Failed to execute the remote script."
