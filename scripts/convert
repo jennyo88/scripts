@@ -608,7 +608,7 @@ youtube-dl() {
 
 
 	# Prompt user for platform (YouTube or other)
-	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
+	prompt "\nIs it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): \n" platform "youtube"
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
