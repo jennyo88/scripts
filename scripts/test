@@ -81,12 +81,14 @@ gross_pay=$(calculate_gross_pay $hours_worked $hourly_rate)
 # Define federal withholding tax brackets for different filing statuses
 # Each entry in the array represents: lower_limit, upper_limit, tax_rate
 tax_brackets_single=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 609350 35 609351 37)
-tax_brackets_head_of_household=(0 13850 10 13851 52800 12)
-tax_brackets_married_filing_jointly=(0 23200 10 23201 87000 12)
+tax_brackets_head_of_household=(0 16550 10 16551 63100 12 63101 100500 22 100501 191950 24 191951 243700 32 243701 609350 35 609351 37)
+tax_brackets_married_filing_separately=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 365600 35 365601 37)
+tax_brackets_married_filing_jointly=(0 23200 10 23201 94300 12 94301 201050 22 201051 383900 24 383901 487450 32 487451 731200 35 731200 37)
 
 # Define state withholding tax brackets for different filing statuses
 state_tax_brackets_single=(0 10000 5 10001 30000 7)
 state_tax_brackets_head_of_household=(0 12000 5 12001 35000 7)
+state_tax_brackets_married_filing_separately=(0 20000 5 20001 60000 7)
 state_tax_brackets_married_filing_jointly=(0 20000 5 20001 60000 7)
 
 # Replace the following placeholder values with your actual rates
@@ -115,6 +117,10 @@ case "$filing_status" in
     "married_filing_jointly")
         federal_withholding=$(calculate_federal_withholding $gross_pay "${tax_brackets_married_filing_jointly[@]}")
         state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets_married_filing_jointly[@]}")
+        ;;
+    "married_filing_separately")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${tax_brackets_married_filing_separately[@]}")
+        state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets_married_filing_separately[@]}")
         ;;
     *)
         echo "Invalid filing status"
