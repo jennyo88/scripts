@@ -23,12 +23,13 @@ execute_bash_script() {
 
     echo "Executing Bash script from: $bash_script_url"
 
-    if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
+    if output=$(bash -c "$(curl -fsSL "$bash_script_url")" 2>&1); then
         echo "Script execution successful."
     else
         echo "Script execution failed. Error message: $output"
     fi
 }
+
 
 
 # Function to execute a Python script
