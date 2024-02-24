@@ -8,15 +8,15 @@ RESET='\033[0m'
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
-    echo "{RED}1. scripts/convert{RESET}"
+    echo -e "${GREEN}1. scripts/convert${RESET}"
     echo " - - - (converting files)"
-    echo "2. scripts/convert_remote"
+    echo -e "${GREEN}2. scripts/convert_remote${RESET}"
     echo " - - - (uses yt-dlp instead of youtube-dl)"
-    echo "2. scripts/template_remote"
+    echo -e "${GREEN}3. scripts/template_remote${RESET}"
     echo " - - - (template to execute a script from github)"
-    echo "3. scripts/tmux_ref"
+    echo -e "${GREEN}4. scripts/tmux_ref${RESET}"
     echo " - - - (tmux reference)"
-    echo "4. scripts/test"
+    echo -e "${GREEN}5. scripts/test${RESET}"
     echo " - - - (payroll test script)"
     # Add more paths as needed
 }
@@ -65,7 +65,7 @@ SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
 # Download and execute the remote script using bash -c
-if bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"; then
+if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
     echo "Script execution successful."
 else
     display_error "Failed to execute the remote script."
