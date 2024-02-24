@@ -188,7 +188,7 @@ show_menu_0() {
         	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
             		show_menu_3
             		;;
-        	[eE]|[eE][xX][iI][tT]|"0")
+        	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
             		# Exiting script
             		goodbye
             		;;
