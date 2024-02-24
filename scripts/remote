@@ -1,112 +1,75 @@
 #!/usr/bin/env bash
 
-# Script Name: execute_remote_script.sh
-# Description: Download and execute a remote script (Bash or Python) from GitHub.
+# Script Name: loader.sh
+# Description: Prompt the user to choose between Python and Bash scripts and execute the selected script.
 # Author: Your Name
 # Date: February 23, 2024
-# Version: 2.2
-
-# Usage: ./execute_remote_script.sh
-# Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
-# It constructs a URL based on the user's input and attempts to download and execute a remote script (Bash or Python) from GitHub.
+# Version: 1.0
 
 # Functions:
-
-# Function to display available script paths
-show_available_paths() {
-    echo "Available script paths:"
-    echo "1. scripts/convert        - Converting files"
-    echo "2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
-    echo "3. scripts/template_remote - Template to execute a script from GitHub"
-    echo "4. scripts/tmux_ref       - Tmux reference"
-    echo "5. scripts/test           - Payroll test script"
-    # Add more paths as needed
-}
 
 # Function to display an error message
 display_error() {
     echo "Error: $1"
 }
 
-# Function to get the shebang line from a script
-get_shebang() {
-    local script_content=$1
-    local shebang=$(echo "$script_content" | sed -n '1s|^#!\s*\(/usr/bin/env \?\(bash\|python3\)\|/bin/bash\)$|\1|p')
+# Function to download and execute a remote script
+execute_remote_script() {
+    local username=$1
+    local repository=$2
+    local branch=$3
+    local script_path=$4
 
-    if [ -n "$shebang" ]; then
-        echo "$shebang"
+    # Construct the URL based on user input
+    local remote_script_url="https://raw.githubusercontent.com/$username/$repository/$branch/$script_path"
+
+    # Download the remote script using curl
+    local script_contents=$(curl -fsSL "$remote_script_url")
+
+    # Save the script to a file
+    echo "$script_contents" > remote_script
+
+    # Execute the script
+    if bash remote_script; then
+        echo "Script execution successful."
     else
-        echo ""
+        display_error "Failed to execute the remote script."
     fi
 }
 
 # Main Script:
 
-# Prompt the user for GitHub username
-printf "Enter GitHub username (default: jennyo88): "
-read -r USERNAME
-USERNAME=${USERNAME:-jennyo88}
+# Prompt the user to choose between Python and Bash scripts
+echo "Choose the type of script:"
+echo "1. Python"
+echo "2. Bash"
 
-# Prompt the user for repository name
-printf "Enter repository name (default: scripts): "
-read -r REPOSITORY
-REPOSITORY=${REPOSITORY:-scripts}
+read -p "Enter your choice (1 or 2): " choice
 
-# Prompt the user for branch name
-printf "Enter branch name (default: main): "
-read -r BRANCH
-BRANCH=${BRANCH:-main}
-
-# Prompt the user for script path or show available paths
-printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
-read -r SCRIPT_PATH
-
-# Validate if the provided script path is a valid choice
-if [ "$SCRIPT_PATH" == "list" ]; then
-    show_available_paths
-    printf "Enter script path: "
-    read -r SCRIPT_PATH
-fi
-
-# Use the provided script path or the default value
-SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
-
-# Construct the URL based on user input
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
-
-# Download the remote script using curl
-SCRIPT_CONTENTS=$(curl -fsSL $REMOTE_SCRIPT_URL)
-
-# Get the shebang line from the script
-SHEBANG=$(get_shebang "$SCRIPT_CONTENTS")
-
-# Debug: Print the shebang and script contents
-echo "Shebang: $SHEBANG"
-echo "Script Contents:"
-echo "$SCRIPT_CONTENTS"
-
-# Save the script to a file
-echo "$SCRIPT_CONTENTS" > remote_script
-
-# Execute the script based on its shebang
-case $SHEBANG in
-    "/usr/bin/env bash" | "/bin/bash")
-        # Execute the Bash script
-        if bash remote_script; then
-            echo "Script execution successful."
-        else
-            display_error "Failed to execute the remote script."
-        fi
+case $choice in
+    1)
+        # User chose Python script
+        echo "You selected Python script."
+        # Additional prompts for Python script details (GitHub username, repository, branch, script path)
         ;;
-    "/usr/bin/python3")
-        # Execute the Python script
-        if python3 remote_script; then
-            echo "Script execution successful."
-        else
-            display_error "Failed to execute the remote script."
-        fi
+    2)
+        # User chose Bash script
+        echo "You selected Bash script."
+        # Additional prompts for Bash script details (GitHub username, repository, branch, script path)
         ;;
     *)
-        display_error "Unsupported shebang or missing shebang in the remote script."
+        display_error "Invalid choice. Exiting."
+        exit 1
         ;;
 esac
+
+# You can now add additional prompts based on the user's choice to get details like GitHub username, repository, branch, and script path.
+
+# For simplicity, let's assume the details are provided directly here:
+USERNAME="your_username"
+REPOSITORY="your_repository"
+BRANCH="main"
+SCRIPT_PATH="your_script_path"
+
+# Execute the remote script based on the user's choice
+execute_remote_script "$USERNAME" "$REPOSITORY" "$BRANCH" "$SCRIPT_PATH"
