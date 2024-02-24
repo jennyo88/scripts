@@ -11,39 +11,39 @@ main_menu="0"
 ## ----------------------
 
 show_banner_0() {
-    clear
-    echo -e "${BLUE}"
-    echo " -------------------------------------------- "
-    echo "        Execute Remote Scripts                "
-    echo " -------------------------------------------- ""${RESET}"
+    	clear
+    	echo -e "${BLUE}"
+    	echo " -------------------------------------------- "
+    	echo "        Execute Remote Scripts                "
+    	echo " -------------------------------------------- ""${RESET}"
 }
 
 show_banner_1() {
-    clear
-    echo -e "${BLUE}"
-    echo "        JENNYO88 SCRIPTS                "
-    echo " -------------------------------------------- ""${RESET}"
+    	clear
+    	echo -e "${BLUE}"
+    	echo "        JENNYO88 SCRIPTS                "
+    	echo " -------------------------------------------- ""${RESET}"
 }
 
 show_banner_2() {
-    clear
-    echo -e "${BLUE}"
-    echo "        OTHER SCRIPTS                "
-    echo " -------------------------------------------- ""${RESET}"
+    	clear
+    	echo -e "${BLUE}"
+    	echo "        OTHER SCRIPTS                "
+    	echo " -------------------------------------------- ""${RESET}"
 }
 
 # Function for displaying the main menu
 show_menu_0() {
 
-  	echo -e
-    echo "Press Ctrl+C to exit at any time."
-    echo ""
-    echo ""
-    echo " 1. Execute jennyo88 scripts"
-    echo " 2. Execute scripts in other repositories"
-    echo ""
+	echo -e
+    	echo "Press Ctrl+C to exit at any time."
+    	echo ""
+    	echo ""
+    	echo " 1. Execute jennyo88 scripts"
+    	echo " 2. Execute scripts in other repositories"
+    	echo ""
 	echo -e "\n 0. Exit script \n"
-    echo "==================================================="
+   	echo "==================================================="
 
 
     # Prompting the user to select an option
@@ -54,46 +54,46 @@ show_menu_0() {
    	# Handling the user's choice using a case statement
     	case $ans in
         	"1")
-                show_banner_1
-            	show_menu_1
-            	;;
+                	show_banner_1
+            		show_menu_1
+            		;;
         	"2")
-            	show_banner_2
-            	show_menu_2
+            		show_banner_2
+            		show_menu_2
            		;;
         	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
-            	# Exiting the menu
-            	goodbye
-            	;;
+            		# Exiting the menu
+            		goodbye
+            		;;
         	# Hidden options
         	[cC][oO][nN][vV][eE][rR][tT]|[1][1])
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
-            	;;
-		    # Handling invalid options
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            		;;
+		 # Handling invalid options
         	*)
-			    echo -e "Invalid option. Please enter a valid option."
-                pause
-            	;;
+			echo -e "Invalid option. Please enter a valid option."
+                	pause
+            		;;
     	esac
 }
 
 show_menu_1() {
 
   	echo -e
-    echo "Press Ctrl+C to go back to the main menu."
-    echo ""
-    echo ""
-    echo " 1. Go back to Main Menu"
-    echo " 2. convert        - Converting files"
-    echo " 3. convert_remote - Uses yt-dlp instead of youtube-dl"
-    echo " 4. template_remote - Open template to execute a script from GitHub"
-    echo " 5. tmux_ref       - Tmux reference"
-    echo " 6. test           - Payroll test script"
-    echo " 7. other"
-    echo " 8. Go to OTHER SCRIPTS Menu"
-    echo ""
+    	echo "Press Ctrl+C to go back to the main menu."
+    	echo ""
+    	echo ""
+    	echo " 1. Go back to Main Menu"
+    	echo " 2. convert        - Converting files"
+    	echo " 3. convert_remote - Uses yt-dlp instead of youtube-dl"
+    	echo " 4. template_remote - Open template to execute a script from GitHub"
+    	echo " 5. tmux_ref       - Tmux reference"
+    	echo " 6. test           - Payroll test script"
+    	echo " 7. other"
+    	echo " 8. Go to OTHER SCRIPTS Menu"
+    	echo ""
 	echo -e "\n 0. Exit script \n"
-    echo "======================================================="
+    	echo "======================================================="
 
 	# Prompting the user to select an option
  	echo "${BLUE}"
@@ -107,35 +107,35 @@ show_menu_1() {
         		show_menu_0
         		;;
         	"2")
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
-            	;;
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            		;;
         	"3")
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)"
-            	;;
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)"
+            		;;
         	"4")
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote)"
-            	;;
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote)"
+            		;;
         	"5")
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
-            	;;
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
+            		;;
         	"6")
-            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
-            	;;
+            		bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
+            		;;
         	"7")
-            	execute_bash_script
-                ;;
-            "8")
-                show_banner_2
-                show_menu_2
+            		execute_bash_script
+                	;;
+            	"8")
+                	show_banner_2
+                	show_menu_2
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
-			    # Exiting the menu
+			# Exiting the menu
         		goodbye
         		;;
-		    # Handling invalid options
+		# Handling invalid options
       		*)
-			    echo -e "Invalid option. Please enter a valid option."
-                pause
-            	;;
+			echo -e "Invalid option. Please enter a valid option."
+                	pause
+            		;;
     	esac
 }
 
