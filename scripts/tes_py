@@ -12,18 +12,6 @@ read -r GITHUB_URL
 # Download the remote script content
 REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
 
-# Check if pip3 is installed
-if ! command -v pip3 &> /dev/null; then
-    display_error "pip3 is not installed. Please install pip3 and try again."
-    exit 1
-fi
-
-# Check if sympy is installed, if not, install it
-if ! python3 -c "import sympy" &> /dev/null; then
-    echo "Installing sympy..."
-    pip3 install sympy
-fi
-
 # Execute the remote script using the same Python interpreter
 if echo "$REMOTE_SCRIPT_CONTENT" | python3 -; then
     echo "Script execution successful."
