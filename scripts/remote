@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+# Script Name: execute_remote_script.sh
+# Description: Download and execute a remote script from GitHub.
+# Author: Your Name
+# Date: February 23, 2024
+# Version: 1.0
+
+# Usage: ./execute_remote_script.sh
+# Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
+# It constructs a URL based on the user's input and attempts to download and execute a remote script from GitHub.
+
+# Functions:
+
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
@@ -15,6 +27,8 @@ show_available_paths() {
 display_error() {
     echo "Error: $1"
 }
+
+# Main Script:
 
 # Prompt the user for GitHub username
 printf "Enter GitHub username (default: jennyo88): "
@@ -34,12 +48,6 @@ BRANCH=${BRANCH:-main}
 # Prompt the user for script path or show available paths
 printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
 read -r SCRIPT_PATH
-
-# Allow the user to exit by entering '0'
-if [ "$SCRIPT_PATH" == "0" ]; then
-    echo "Exiting the script."
-    exit 0
-fi
 
 # Validate if the provided script path is a valid choice
 if [ "$SCRIPT_PATH" == "list" ]; then
