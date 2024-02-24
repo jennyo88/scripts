@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# Remote Script Loader
-
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
@@ -34,30 +32,23 @@ read -r BRANCH
 BRANCH=${BRANCH:-main}
 
 # Prompt the user for script path or show available paths
-while true; do
-    echo "------------------------"
-    echo "Remote Script Loader Menu"
-    echo "------------------------"
-    printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
-    read -r SCRIPT_PATH
+printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
+read -r SCRIPT_PATH
 
-    # Validate if the provided script path is a valid choice
-    if [ "$SCRIPT_PATH" == "list" ]; then
-        show_available_paths
-    else
-        break
-    fi
-done
-
-# Use the provided script path or the default value
-SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
-
-# Construct the URL based on user input
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
-
-# Download and execute the remote script using bash -c
-if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
-    echo "Script execution successful."
+# Validate if the provided script path is a valid choice
+if [ "$SCRIPT_PATH" == "list" ]; then
+    show_available_paths
 else
-    display_error "Failed to execute the remote script. Please check your inputs and try again."
+    # Use the provided script path or the default value
+    SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
+
+    # Construct the URL based on user input
+    REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
+
+    # Download and execute the remote script using bash -c
+    if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script. Please check your inputs and try again."
+    fi
 fi
