@@ -288,7 +288,6 @@ show_menu_videos() {
         		;;
 		"5")
 			clear
-			show_banner_videos
 			for script_url in "${REMOTE_SCRIPTS[@]}"; do
 				source_remote_script "$script_url"
     			done
