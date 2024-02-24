@@ -185,7 +185,7 @@ show_menu_1() {
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
             ;;
         "3")
-            curl -s "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" | cat
+            curl -s "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" | printf "%s\n"
             ;;
         "4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
