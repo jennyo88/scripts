@@ -70,7 +70,6 @@ show_banner_1() {
 
 # Function to display the other scripts menu banner
 show_banner_2() {
-    clear
     show_banner_0
     echo "${BLUE}"
     echo " ╔═════════════════════════════════════════════════╗ "
