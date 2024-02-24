@@ -285,7 +285,7 @@ show_menu_videos() {
         		;;
 		"5")
 			clear
-			"$ytdlp"
+			source_remote_script "$ytdlp"
 			;;
       		[tT]|[tT][uU][bI][iI]|"6")
 			clear
