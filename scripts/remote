@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/bash
 
 # Script Name: remote
 # Description: Download and execute a remote script from GitHub.
@@ -31,7 +31,7 @@ display_error() {
 # Function to get the shebang line from a script
 get_shebang() {
     local script_content=$1
-    local shebang=$(echo "$script_content" | grep -E '^#!/usr/bin/env (bash|python3)')
+    local shebang=$(echo "$script_content" | grep -E '^#!/usr/bin/(bash|python3)')
 
     if [ -n "$shebang" ]; then
         echo "$shebang"
