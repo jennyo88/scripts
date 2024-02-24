@@ -5,6 +5,9 @@ execute_remote_bash_script() {
     local script_url=$1
     echo "Executing script: $script_url"
 
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $script_url)\""
+
     if output=$(bash -c "$(curl -fsSL $script_url)" 2>&1); then
         echo "Script execution successful."
     else
@@ -16,6 +19,9 @@ execute_remote_bash_script() {
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
     echo "Downloading and executing Bash script from: $bash_script_url"
+
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $bash_script_url)\""
 
     if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
         echo "Script execution successful."
@@ -29,6 +35,9 @@ execute_python_script() {
     local python_script_url="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tes_py"
     
     echo "Executing Python script from: $python_script_url"
+    
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $python_script_url)\""
     
     if output=$(bash -c "$(curl -fsSL $python_script_url)" 2>&1); then
         echo "Script execution successful."
