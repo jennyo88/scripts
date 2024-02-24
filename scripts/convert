@@ -300,12 +300,12 @@ show_menu_1() {
       		[yY]|[yY][dD][lL]|[dD][3]|"3")
 			clear
         		show_banner_1
-			youtube-dl
+			ydl
         		;;
 		[yY][tT]|[dD][4]|"4")
 			clear
 			show_banner_1
-			yt-dlp
+			ytdl
 			;;
       		[tT]|[tT][uU][bI][iI]|[dD][5]|"5")
 			clear
@@ -600,7 +600,7 @@ m3u8() {
 # such as show name, season, episode, and resolution. It then downloads videos and subtitles
 # using youtube-dl or yt-dlp and organizes them in a specific folder structure.
 #
-youtube-dl() {
+ydl() {
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
@@ -805,7 +805,7 @@ youtube-dl() {
 	fi
 }
 
-yt-dlp() {
+ytdl() {
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
