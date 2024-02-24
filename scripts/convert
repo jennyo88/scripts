@@ -71,10 +71,14 @@ check_wget() {
 prompt() {
     local prompt="$1"
     local variable="$2"
+    local default_value="$3"
 
     while true; do
         printf "$prompt"
+
+        # Set the default value if user presses Enter
         read -r "$variable"
+        [ -z "${!variable}" ] && eval "$variable=\"$default_value\""
 
         # Check if the user wants to abort
         if [ "${!variable}" == "abort" ]; then
@@ -88,6 +92,8 @@ prompt() {
         [ -n "${!variable}" ] && break
     done
 }
+
+
 
 # -----------------------------------
 # PAUSE & GOODBYE
@@ -540,12 +546,10 @@ m3u8() {
 	# prompt "\nSource extension? : " srcExt
 
 	# Prompt user for destination extension
-	prompt "\nDestination extension? (default: ts): " destExt
-	destExt=${destExt:-ts}
+	prompt "\nDestination extension? (default: ts): " destExt "ts"
 
 	# Prompt user for destination directory
-	prompt "\nDestination directory? (default: ts): " destDir
-	destDir=${destDir:-ts}
+	prompt "\nDestination directory? (default: ts): " destDir "ts"
 
 	# Prompt user for source web address
 	prompt "\nSource web-address? : " srcAdd
@@ -555,18 +559,15 @@ m3u8() {
 
 	prompt "\nMovie release year? : " baseYear
 
-	prompt "\nScene/channel of the movie? (default: TCM) : " baseScene
-	baseScene=${baseScene:-TCM}
+	prompt "\nScene/channel of the movie? (default: TCM) : " baseScene "TCM"
 
-	prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p; default: 720p): " baseResolution
-	baseResolution=${baseResolution:-720p}
+	prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p; default: 720p): " baseResolution "720p"
 
 	# Prompt user for movie language (three-letter code)
 	validLanguageCode=false
 	while [ "$validLanguageCode" = false ]
 	do
-   		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language
-		language=${language:-eng}
+   		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language "eng"
 
     		if [ ${#language} -eq 3 ]
 		then
@@ -607,15 +608,13 @@ youtube-dl() {
 
 
 	# Prompt user for platform (YouTube or other)
-	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform
-	platform=${platform:-youtube}
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type
-		type=${type:-tv}
+	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
@@ -624,8 +623,7 @@ youtube-dl() {
 	       		prompt "Enter the show name (include periods between words): " show_name
 
 			# Prompt for season and episode range
-	        	prompt "Enter the season number (two digits; default: 01): " season_number
-			season_number=${season_number:-01}
+	        	prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
 	        	prompt "Enter the first episode number: " first_episode
 
@@ -723,8 +721,7 @@ youtube-dl() {
 
 			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-	        	prompt "Enter the season number (two digits): " season_number
-			season_number=${season_number:-01}
+	        	prompt "Enter the season number (two digits): " season_number "01"
 
 	        	prompt "Enter the first episode number (two digits): " first_episode
 
@@ -799,15 +796,13 @@ yt-dlp() {
 
 
 	# Prompt user for platform (YouTube or other)
-	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform
-	platform=${platform:-youtube}
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type
-		type=${type:-tv}
+	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
@@ -816,8 +811,7 @@ yt-dlp() {
 	       		prompt "Enter the show name (include periods between words): " show_name
 
 			# Prompt for season and episode range
-	        	prompt "Enter the season number (two digits; default: 01): " season_number
-			season_number=${season_number:-01}
+	        	prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
 	        	prompt "Enter the first episode number: " first_episode
 
@@ -915,8 +909,7 @@ yt-dlp() {
 
 			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-	        	prompt "Enter the season number (two digits): " season_number
-			season_number=${season_number:-01}
+	        	prompt "Enter the season number (two digits): " season_number "01"
 
 	        	prompt "Enter the first episode number (two digits): " first_episode
 
