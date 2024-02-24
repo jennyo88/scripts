@@ -14,8 +14,8 @@ execute_bash_script() {
     fi
 }
 
-function execute_remote_python_script() {
-    # Prompt the user for the GitHub URL of the script
+# Function to execute a remote Python script
+execute_remote_python_script() {
     printf "Enter the GitHub URL of the script: "
     read -r GITHUB_URL
 
