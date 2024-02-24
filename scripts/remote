@@ -6,6 +6,11 @@ execute_remote_script() {
     echo "Executing script: $script_url"
     # Replace the following line with the command to execute your remote script
     # Example: bash -c "$(curl -fsSL $script_url)"
+    if bash -c "$(curl -fsSL $script_url)"; then
+        echo "Script execution successful."
+    else
+        echo "Script execution failed."
+    fi
 }
 
 # Function to download and execute a Bash script
@@ -53,17 +58,22 @@ jennyo88_scripts_menu() {
     echo " 0. Go back to Main Menu"
     echo "======================================================="
 
-    read -p "Enter your choice (0-5): " choice
+    read -p "Enter your choice (0-6): " choice
+
+    # Validate that the input is a number between 0 and 6
+    if [[ ! $choice =~ ^[0-6]$ ]]; then
+        echo "Invalid choice. Please enter a number between 0 and 6."
+        jennyo88_scripts_menu
+    fi
 
     case $choice in
         1) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
-        2) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/" ;;
-        3) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/scripts/convert_remote" ;;
+        2) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
+        3) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
         4) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
         5) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
         6) execute_bash_script ;;
         0) main_menu ;;
-        *) echo "Invalid choice. Please enter a number between 0 and 6." ;;
     esac
 }
 
@@ -81,11 +91,16 @@ other_scripts_menu() {
 
     read -p "Enter your choice (0-2): " choice
 
+    # Validate that the input is a number between 0 and 2
+    if [[ ! $choice =~ ^[0-2]$ ]]; then
+        echo "Invalid choice. Please enter a number between 0 and 2."
+        other_scripts_menu
+    fi
+
     case $choice in
         1) execute_bash_script ;;
         2) execute_python_script ;;
         0) main_menu ;;
-        *) echo "Invalid choice. Please enter a number between 0 and 2." ;;
     esac
 }
 
@@ -103,11 +118,16 @@ main_menu() {
 
     read -p "Enter your choice (0-2): " choice
 
+    # Validate that the input is a number between 0 and 2
+    if [[ ! $choice =~ ^[0-2]$ ]]; then
+        echo "Invalid choice. Please enter a number between 0 and 2."
+        main_menu
+    fi
+
     case $choice in
         1) jennyo88_scripts_menu ;;
         2) other_scripts_menu ;;
         0) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid choice. Please enter a number between 0 and 2." ;;
     esac
 }
 
