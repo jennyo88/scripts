@@ -2,9 +2,9 @@
 
 # Script Name: remote
 # Description: Download and execute a remote script from GitHub.
-# Author: Jennifer Romero
+# Author: Your Name
 # Date: February 23, 2024
-# Version: 1.7
+# Version: 1.9
 
 # Usage: ./remote
 # Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
@@ -31,7 +31,7 @@ display_error() {
 # Function to get the shebang line from a script
 get_shebang() {
     local script_content=$1
-    local shebang=$(echo "$script_content" | sed -n '1s/^#!\s*\([[:alnum:]/]\+\).*/\1/p')
+    local shebang=$(echo "$script_content" | sed -n '1s|^#!/usr/bin/env \?\(bash\|python3\)$|\1|p')
 
     if [ -n "$shebang" ]; then
         echo "$shebang"
@@ -86,8 +86,8 @@ echo "Script Contents: $SCRIPT_CONTENTS"
 
 # Execute the script based on its shebang
 case $SHEBANG in
-    "/usr/bin/env bash" | "/bin/bash" | "/usr/bin/python3")
-        if eval "$SHEBANG" -c "$SCRIPT_CONTENTS"; then
+    "bash" | "python3")
+        if eval "$SHEBANG -c \"$SCRIPT_CONTENTS\""; then
             echo "Script execution successful."
         else
             display_error "Failed to execute the remote script."
