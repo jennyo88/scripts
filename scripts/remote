@@ -4,12 +4,13 @@
 execute_remote_script() {
     local script_url=$1
     echo "Executing script: $script_url"
+    
     # Replace the following line with the command to execute your remote script
     # Example: bash -c "$(curl -fsSL $script_url)"
-    if bash -c "$(curl -fsSL $script_url)"; then
+    if output=$(bash -c "$(curl -fsSL $script_url)" 2>&1); then
         echo "Script execution successful."
     else
-        echo "Script execution failed."
+        echo "Script execution failed. Error message: $output"
     fi
 }
 
@@ -19,10 +20,10 @@ execute_bash_script() {
     echo "Downloading and executing Bash script from: $bash_script_url"
     
     # Download and execute the remote script using bash -c
-    if bash -c "$(curl -fsSL $bash_script_url)"; then
+    if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
         echo "Script execution successful."
     else
-        echo "Script execution failed."
+        echo "Script execution failed. Error message: $output"
     fi
 }
 
@@ -35,10 +36,10 @@ execute_python_script() {
     
     # Replace the following line with the command to execute your Python script
     # Example: bash -c "$(curl -fsSL $python_script_url)"
-    if bash -c "$(curl -fsSL $python_script_url)"; then
+    if output=$(bash -c "$(curl -fsSL $python_script_url)" 2>&1); then
         echo "Script execution successful."
     else
-        echo "Script execution failed."
+        echo "Script execution failed. Error message: $output"
     fi
 }
 
