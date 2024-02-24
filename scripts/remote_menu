@@ -19,10 +19,10 @@ execute_bash_script() {
 
 # Download and execute the remote script using bash -c
     if bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"; then
-    echo "Script execution successful."
-else
-    display_error "Failed to execute the remote script."
-fi
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script."
+    fi
 }
 
 
