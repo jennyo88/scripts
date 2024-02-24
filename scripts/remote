@@ -6,6 +6,7 @@ show_available_paths() {
     echo "1. scripts/convert"
     echo "2. scripts/remote"
     echo "3. scripts/tmux_ref"
+    echo "4. scripts/test"
     # Add more paths as needed
 }
 
