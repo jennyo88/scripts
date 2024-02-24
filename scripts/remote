@@ -13,25 +13,9 @@ show_available_paths() {
     # Add more paths as needed
 }
 
-# Function to display script menu
-display_menu() {
-    echo "Script Menu:"
-    echo "1. Execute script with custom parameters"
-    echo "2. Show available script paths"
-    echo "0. Exit"
-}
-
-# Function to execute the script
-execute_script() {
-    # Construct the URL based on user input
-    REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
-
-    # Download and execute the remote script using bash -c
-    if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
-        echo "Script execution successful."
-    else
-        display_error "Failed to execute the remote script. Please check your inputs and try again."
-    fi
+# Function to display an error message
+display_error() {
+    echo "Error: $1"
 }
 
 # Prompt the user for GitHub username
@@ -54,25 +38,26 @@ while true; do
     echo "------------------------"
     echo "Remote Script Loader Menu"
     echo "------------------------"
-    display_menu
-    read -r OPTION
+    printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
+    read -r SCRIPT_PATH
 
-    case $OPTION in
-        1)
-            printf "Enter script path (default: scripts/convert): "
-            read -r SCRIPT_PATH
-            SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
-            execute_script
-            ;;
-        2)
-            show_available_paths
-            ;;
-        0)
-            echo "Exiting the script."
-            exit 0
-            ;;
-        *)
-            echo "Invalid option. Please choose a valid option."
-            ;;
-    esac
+    # Validate if the provided script path is a valid choice
+    if [ "$SCRIPT_PATH" == "list" ]; then
+        show_available_paths
+    else
+        break
+    fi
 done
+
+# Use the provided script path or the default value
+SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
+
+# Construct the URL based on user input
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
+
+# Download and execute the remote script using bash -c
+if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
+    echo "Script execution successful."
+else
+    display_error "Failed to execute the remote script. Please check your inputs and try again."
+fi
