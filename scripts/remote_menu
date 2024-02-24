@@ -65,13 +65,13 @@ show_banner_2() {
 # Function for displaying the main menu
 show_menu_0() {
     show_banner_0
-    echo -e
     echo ""
     echo ""
     echo " 1. Execute jennyo88 scripts"
     echo " 2. Execute scripts in other repositories"
     echo ""
-    echo -e "\n 0. Exit script \n"
+    echo ""
+    echo " 0. Exit script"
     echo -e "${BLUE}"
     echo " ═════════════════════════════════════════"
 
@@ -105,20 +105,21 @@ show_menu_0() {
 # Function for displaying the jennyo88 scripts menu
 show_menu_1() {
     show_banner_1
-
-    echo -e
     echo ""
     echo ""
     echo " 1. Go back to Main Menu"
+    echo ""
     echo " 2. convert            - Converting files"
     echo " 3. convert_remote     - Uses yt-dlp instead of youtube-dl"
     echo " 4. template_remote    - Open template to execute a script from GitHub"
     echo " 5. tmux_ref           - Tmux reference"
     echo " 6. test               - Payroll test script"
     echo " 7. other"
+    echo ""
     echo " 8. Go to OTHER SCRIPTS Menu"
     echo ""
-    echo -e "\n 0. Exit script \n"
+    echo ""
+    echo " 0. Exit script"
     echo -e "${BLUE}"
     echo " ═════════════════════════════════════════"
 
@@ -168,15 +169,17 @@ show_menu_1() {
 # Function for displaying the other scripts menu
 show_menu_2() {
     show_banner_2
-    echo -e
     echo ""
     echo ""
     echo " 1. Go back to Main Menu"
+    echo ""
     echo " 2. Execute Another Bash Script"
     echo " 3. Execute Python Script"
+    echo ""
     echo " 4. Go to JENNYO88 SCRIPTS Menu"
     echo ""
-    echo -e "\n 0. Exit script \n"
+    echo ""
+    echo " 0. Exit script"
     echo -e "${BLUE}"
     echo " ═════════════════════════════════════════"
 
