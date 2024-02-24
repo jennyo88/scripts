@@ -23,19 +23,16 @@ load_colors() {
 # Calling the load_colors() function to set color variables
 load_colors # Only loaded once
 
-# List of remote script URLs
-REMOTE_SCRIPTS=(
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
-  "https://example.com/script2.sh"
-  "https://example.com/script3.sh"
-)
-
-# Function to source a remote script
 source_remote_script() {
   local script_url=$1
   echo "Sourcing script: $script_url"
   bash -c "$(curl -fsSL $script_url)"
 }
+# LIST OF SCRIPTS
+ytdlp="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
+script_to_source="https://example.com/script3.sh"
+script_to_source="https://example.com/script3.sh"
+script_to_source="https://example.com/script3.sh"
 
 # Check if required commands are available
 
@@ -288,9 +285,7 @@ show_menu_videos() {
         		;;
 		"5")
 			clear
-			for script_url in "${REMOTE_SCRIPTS[@]}"; do
-				source_remote_script "$script_url"
-    			done
+			"$ytdlp"
 			;;
       		[tT]|[tT][uU][bI][iI]|"6")
 			clear
