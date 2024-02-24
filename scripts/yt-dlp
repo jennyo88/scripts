@@ -27,20 +27,22 @@ load_colors # Only loaded once
 # Check if required commands are available
 
 check_ydl() {
-    local commands=("yt-dlp")
-    local found=false
+    if command -v youtube-dl &> /dev/null; then
+        echo "youtube-dl is installed."
+        return 0  # Success
+    else
+        echo "Error: youtube-dl is not installed. Please install it before running this script."
+        return 1  # Failure
+    fi
+}
 
-    for cmd in "${commands[@]}"; do
-        if command -v "$cmd" &> /dev/null; then
-            found=true
-            break
-        fi
-    done
-
-    if [ "$found" = false ]; then
-        print_error "Error: 'yt-dlp' command not found."
-        echo "Please make sure 'yt-dlp' is installed and available in your PATH."
-        exit 1
+check_ffmpeg() {
+    if command -v ffmpeg &> /dev/null; then
+        echo "ffmpeg is installed."
+        return 0  # Success
+    else
+        echo "Error: ffmpeg is not installed. Please install it before running this script."
+        return 1  # Failure
     fi
 }
 
@@ -95,7 +97,6 @@ show_banner_videos() {
 # using "$downloader" and organizes them in a specific folder structure.
 #
 ydl() {
-	show_banner_videos
 	check_ydl && check_ffmpeg
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
