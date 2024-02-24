@@ -178,7 +178,7 @@ show_menu_2() {
     echo ""
     echo -e "\n 0. Exit script \n"
     echo -e "${BLUE}"
-    echo "==================================================="
+    echo "═══════════════════════════════════════"
 
     # Prompting the user to select an option
     read -rp "Select: " ans
