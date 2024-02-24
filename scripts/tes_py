@@ -24,8 +24,8 @@ if ! python3 -c "import sympy" &> /dev/null; then
     pip3 install sympy
 fi
 
-# Execute the remote script
-if echo "$REMOTE_SCRIPT_CONTENT" | python3; then
+# Execute the remote script using the same Python interpreter
+if echo "$REMOTE_SCRIPT_CONTENT" | python3 -; then
     echo "Script execution successful."
 else
     display_error "Failed to execute the remote script."
