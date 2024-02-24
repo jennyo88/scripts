@@ -1,29 +1,19 @@
 #!/usr/bin/env bash
 
-# ANSI color codes
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-RESET=$(tput sgr0)
-
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
-    echo -e "${GREEN}1. scripts/convert${RESET}"
-    echo " - - - (converting files)"
-    echo -e "${GREEN}2. scripts/convert_remote${RESET}"
-    echo " - - - (uses yt-dlp instead of youtube-dl)"
-    echo -e "${GREEN}3. scripts/template_remote${RESET}"
-    echo " - - - (template to execute a script from github)"
-    echo -e "${GREEN}4. scripts/tmux_ref${RESET}"
-    echo " - - - (tmux reference)"
-    echo -e "${GREEN}5. scripts/test${RESET}"
-    echo " - - - (payroll test script)"
+    echo "1. scripts/convert        - Converting files"
+    echo "2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
+    echo "3. scripts/template_remote - Template to execute a script from GitHub"
+    echo "4. scripts/tmux_ref       - Tmux reference"
+    echo "5. scripts/test           - Payroll test script"
     # Add more paths as needed
 }
 
 # Function to display an error message
 display_error() {
-    echo -e "${RED}Error: $1${RESET}"
+    echo "Error: $1"
 }
 
 # Prompt the user for GitHub username
@@ -42,21 +32,23 @@ read -r BRANCH
 BRANCH=${BRANCH:-main}
 
 # Prompt the user for script path or show available paths
-printf "Enter script path (default: scripts/convert) or type 'list' to show available paths (0 to exit): "
-read -r SCRIPT_PATH
-
-# Allow the user to exit by entering '0'
-if [ "$SCRIPT_PATH" == "0" ]; then
-    echo "Exiting the script."
-    exit 0
-fi
-
-# Validate if the provided script path is a valid choice
-if [ "$SCRIPT_PATH" == "list" ]; then
-    show_available_paths
-    printf "Enter script path: "
+while true; do
+    printf "Enter script path (default: scripts/convert) or type 'list' to show available paths (0 to exit): "
     read -r SCRIPT_PATH
-fi
+
+    # Allow the user to exit by entering '0'
+    if [ "$SCRIPT_PATH" == "0" ]; then
+        echo "Exiting the script."
+        exit 0
+    fi
+
+    # Validate if the provided script path is a valid choice
+    if [ "$SCRIPT_PATH" == "list" ]; then
+        show_available_paths
+    else
+        break
+    fi
+done
 
 # Use the provided script path or the default value
 SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
