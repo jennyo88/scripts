@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # ANSI color codes
-RED='\033[1;31m'
-GREEN='\033[1;32m'
-RESET='\033[0m'
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+RESET=$(tput sgr0)
 
 # Function to display available script paths
 show_available_paths() {
@@ -23,7 +23,7 @@ show_available_paths() {
 
 # Function to display an error message
 display_error() {
-    echo "Error: $1"
+    echo -e "${RED}Error: $1${RESET}"
 }
 
 # Prompt the user for GitHub username
@@ -68,5 +68,5 @@ REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRAN
 if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
     echo "Script execution successful."
 else
-    display_error "Failed to execute the remote script."
+    display_error "Failed to execute the remote script. Please check your inputs and try again."
 fi
