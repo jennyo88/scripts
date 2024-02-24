@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Script Menu Header
+
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
@@ -11,9 +13,25 @@ show_available_paths() {
     # Add more paths as needed
 }
 
-# Function to display an error message
-display_error() {
-    echo "Error: $1"
+# Function to display script menu
+display_menu() {
+    echo "Script Menu:"
+    echo "1. Execute script with custom parameters"
+    echo "2. Show available script paths"
+    echo "0. Exit"
+}
+
+# Function to execute the script
+execute_script() {
+    # Construct the URL based on user input
+    REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
+
+    # Download and execute the remote script using bash -c
+    if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script. Please check your inputs and try again."
+    fi
 }
 
 # Prompt the user for GitHub username
@@ -33,32 +51,25 @@ BRANCH=${BRANCH:-main}
 
 # Prompt the user for script path or show available paths
 while true; do
-    printf "Enter script path (default: scripts/convert) or type 'list' to show available paths (0 to exit): "
-    read -r SCRIPT_PATH
+    display_menu
+    read -r OPTION
 
-    # Allow the user to exit by entering '0'
-    if [ "$SCRIPT_PATH" == "0" ]; then
-        echo "Exiting the script."
-        exit 0
-    fi
-
-    # Validate if the provided script path is a valid choice
-    if [ "$SCRIPT_PATH" == "list" ]; then
-        show_available_paths
-    else
-        break
-    fi
+    case $OPTION in
+        1)
+            printf "Enter script path (default: scripts/convert): "
+            read -r SCRIPT_PATH
+            SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
+            execute_script
+            ;;
+        2)
+            show_available_paths
+            ;;
+        0)
+            echo "Exiting the script."
+            exit 0
+            ;;
+        *)
+            echo "Invalid option. Please choose a valid option."
+            ;;
+    esac
 done
-
-# Use the provided script path or the default value
-SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
-
-# Construct the URL based on user input
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
-
-# Download and execute the remote script using bash -c
-if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
-    echo "Script execution successful."
-else
-    display_error "Failed to execute the remote script. Please check your inputs and try again."
-fi
