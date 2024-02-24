@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Script Menu Header
+# Remote Script Loader
 
 # Function to display available script paths
 show_available_paths() {
@@ -51,6 +51,9 @@ BRANCH=${BRANCH:-main}
 
 # Prompt the user for script path or show available paths
 while true; do
+    echo "------------------------"
+    echo "Remote Script Loader Menu"
+    echo "------------------------"
     display_menu
     read -r OPTION
 
