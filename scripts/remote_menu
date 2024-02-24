@@ -48,11 +48,11 @@ show_menu_0() {
 
     # Prompting the user to select an option
 	echo "${BLUE}"
-	read -rp "Select: " ans
+	read -rp "Select: " ANS
 	echo "${RESET}"
 
    	# Handling the user's choice using a case statement
-    	case $ans in
+    	case $ANS in
         	"1")
                 	show_banner_1
             		show_menu_1
@@ -97,11 +97,11 @@ show_menu_1() {
 
 	# Prompting the user to select an option
  	echo "${BLUE}"
-	read -rp "Select: " ans
+	read -rp "Select: " ANS
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-	case $ans in
+	case $ANS in
       		[mM][aA][iI][nN]|"1")
         		show_banner_0
         		show_menu_0
