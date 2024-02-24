@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# Remote Script Executor
+# Author: Jennifer Romero
+# Description: This script provides a menu-driven interface to execute remote Bash and Python scripts. Use with caution and ensure scripts are from trusted sources.
+# Version: 2.0
+# Last Updated: Feb 24, 2024
+# GitHub Repository: https://github.com/jennyo88/scripts
+
+# -----------------------------------
+# User defined functions
+# -----------------------------------
+
 # Color definitions
 load_colors() {
     BLUE=$'\e[38;5;39m'	    # Blue color
@@ -7,7 +18,9 @@ load_colors() {
     RED=$'\e[1;31m'		    # Red color (bold)
     RESET=$'\e[0m'		    # Reset color attributes
 }
-load_colors
+
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
 
 # Check if required commands are available
 check_commands() {
@@ -218,6 +231,10 @@ show_menu_2() {
     esac
 }
 
+# -----------------------------------
+# Scripts
+# -----------------------------------
+
 # Function to download and execute a Bash script
 execute_bash_script() {
     check_commands
@@ -267,7 +284,10 @@ execute_python_script() {
     fi
 }
 
-# Main loop
+# -----------------------------------
+# Main logic - infinite loop
+# -----------------------------------
+
 while true
 do
     show_banner_0
