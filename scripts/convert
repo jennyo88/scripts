@@ -638,8 +638,7 @@ youtube-dl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-				printf "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-				read -rp episode_url
+				read -rp "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
