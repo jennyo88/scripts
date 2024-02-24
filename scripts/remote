@@ -1,76 +1,56 @@
 #!/usr/bin/env bash
 
-# Script Name: loader.sh
-# Description: Prompt the user to choose between Python and Bash scripts and execute the selected script.
-# Author: Your Name
-# Date: February 23, 2024
-# Version: 2.0
-
-# Functions:
+# Function to display available script paths
+show_available_paths() {
+    echo "Available script paths:"
+    echo "1. scripts/convert        - Converting files"
+    echo "2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
+    echo "3. scripts/template_remote - Template to execute a script from GitHub"
+    echo "4. scripts/tmux_ref       - Tmux reference"
+    echo "5. scripts/test           - Payroll test script"
+    # Add more paths as needed
+}
 
 # Function to display an error message
 display_error() {
     echo "Error: $1"
 }
 
-# Function to download and execute a remote script
-execute_remote_script() {
-    local username=$1
-    local repository=$2
-    local branch=$3
-    local script_path=$4
+# Prompt the user for GitHub username
+printf "Enter GitHub username (default: jennyo88): "
+read -r USERNAME
+USERNAME=${USERNAME:-jennyo88}
 
-    # Construct the URL based on user input
-    local remote_script_url="https://raw.githubusercontent.com/$username/$repository/$branch/$script_path"
+# Prompt the user for repository name
+printf "Enter repository name (default: scripts): "
+read -r REPOSITORY
+REPOSITORY=${REPOSITORY:-scripts}
 
-    # Download the remote script using curl
-    local script_contents=$(curl -fsSL "$remote_script_url")
+# Prompt the user for branch name
+printf "Enter branch name (default: main): "
+read -r BRANCH
+BRANCH=${BRANCH:-main}
 
-    # Save the script to a file
-    echo "$script_contents" > remote_script
+# Prompt the user for script path or show available paths
+printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
+read -r SCRIPT_PATH
 
-    # Execute the script
-    if bash remote_script; then
-        echo "Script execution successful."
-    else
-        display_error "Failed to execute the remote script."
-    fi
-}
+# Validate if the provided script path is a valid choice
+if [ "$SCRIPT_PATH" == "list" ]; then
+    show_available_paths
+    printf "Enter script path: "
+    read -r SCRIPT_PATH
+fi
 
-# Function to prompt user for script details
-prompt_for_script_details() {
-    read -p "Enter your GitHub username: " USERNAME
-    read -p "Enter your repository name: " REPOSITORY
-    read -p "Enter the branch (default: main): " BRANCH
-    BRANCH=${BRANCH:-main}
-    read -p "Enter the path to the script: " SCRIPT_PATH
-}
+# Use the provided script path or the default value
+SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 
-# Main Script:
+# Construct the URL based on user input
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
-# Prompt the user to choose between Python and Bash scripts
-echo "Choose the type of script:"
-echo "1. Python"
-echo "2. Bash"
-
-read -p "Enter your choice (1 or 2): " choice
-
-case $choice in
-    1)
-        # User chose Python script
-        echo "You selected Python script."
-        prompt_for_script_details
-        ;;
-    2)
-        # User chose Bash script
-        echo "You selected Bash script."
-        prompt_for_script_details
-        ;;
-    *)
-        display_error "Invalid choice. Exiting."
-        exit 1
-        ;;
-esac
-
-# Execute the remote script based on the user's choice and provided details
-execute_remote_script "$USERNAME" "$REPOSITORY" "$BRANCH" "$SCRIPT_PATH"
+# Download and execute the remote script using bash -c
+if bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"; then
+    echo "Script execution successful."
+else
+    display_error "Failed to execute the remote script."
+fi
