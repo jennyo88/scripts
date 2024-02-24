@@ -4,9 +4,15 @@
 show_available_paths() {
     echo "Available script paths:"
     echo "1. scripts/convert"
-    echo "2. scripts/remote"
+    echo " - - - (converting files)"
+    echo "2. scripts/convert_remote"
+    echo " - - - (uses yt-dlp instead of youtube-dl)"
+    echo "2. scripts/template_remote"
+    echo " - - - (template to execute a script from github)"
     echo "3. scripts/tmux_ref"
+    echo " - - - (tmux reference)"
     echo "4. scripts/test"
+    echo " - - - (payroll test script)"
     # Add more paths as needed
 }
 
