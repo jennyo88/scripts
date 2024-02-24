@@ -87,7 +87,7 @@ prompt() {
             		sleep 1
             		echo "Abort..."
             		# Add exit actions here if needed
-            		show_menu_main
+            		show_menu_0
         	fi
 
         	# Break the loop if input is not empty
@@ -159,7 +159,7 @@ show_banner_3() {
 # -----------------------------------
 
 # Function for displaying the main menu
-show_menu_main() {
+show_menu_0() {
     	show_banner_0
     	echo ""
     	echo ""
@@ -180,13 +180,13 @@ show_menu_main() {
    	# Handling the user's choice using a case statement
     	case $ans in
         	[vV]|[vV][iI][dD][eE][oO][sS]|"1")
-            		show_menu_videos
+            		show_menu_1
             		;;
         	[sS]|[sS][uU][bB][sS]|"2")
-            		show_menu_subs
+            		show_menu_2
            		;;
         	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
-            		show_menu_clean
+            		show_menu_3
             		;;
         	[eE]|[eE][xX][iI][tT]|"0")
             		# Exiting script
@@ -248,14 +248,14 @@ show_menu_main() {
         	*)
             		echo -e "Invalid option. Please enter a valid option."
             		sleep 1
-            		show_menu_main
+            		show_menu_0
             		;;
     	esac
 }
 
 
 # Function for displaying the VIDEOS menu
-show_menu_videos() {
+show_menu_1() {
 	show_banner_0
 	show_banner_1
 	echo ""
@@ -351,13 +351,13 @@ show_menu_videos() {
         	*)
             		echo -e "Invalid option. Please enter a valid option."
             		sleep 1
-            		show_menu_videos
+            		show_menu_1
             		;;
     	esac
 }
 
 # Function for displaying the SUBS menu
-show_menu_subs() {
+show_menu_2() {
 	show_banner_0
 	show_banner_2
     	echo ""
@@ -397,11 +397,11 @@ show_menu_subs() {
         		;;
       		[vV]|[vV][iI][dD][eE][oO][sS]|"4")
 			show_banner_1
-        		show_menu_videos
+        		show_menu_1
         		;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
 			show_banner_3
-			show_menu_clean
+			show_menu_3
 			;;
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
@@ -411,13 +411,13 @@ show_menu_subs() {
         	*)
             		echo -e "Invalid option. Please enter a valid option."
             		sleep 1
-            		show_menu_subs
+            		show_menu_2
             		;;
     	esac
 }
 
 # Function for displaying the CLEAN-UP menu
-show_menu_clean() {
+show_menu_3() {
 	show_banner_0
 	show_banner_3
     	echo ""
@@ -526,7 +526,7 @@ x265() {
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
 	sleep 1
-	show_menu_videos
+	show_menu_1
 }
 
 # Function for converting M3U8 stream to TS format using FFmpeg
@@ -592,7 +592,7 @@ m3u8() {
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
 	sleep 1
-	show_menu_videos
+	show_menu_1
 }
 
 # Function for downloading Movies & TV Shows from YouTube or Dailymotion using "$downloader"
@@ -1042,7 +1042,7 @@ video_sub() {
 
 	echo -e "Conversion complete!\a"
 	pause
-	show_menu_videos
+	show_menu_1
 }
 
 # Function for downloading and merging video and audio files for Tubi episodes
@@ -1098,7 +1098,7 @@ tubi() {
 
 	echo -e "Download complete!\a"
 	pause
-	show_menu_videos
+	show_menu_1
 }
 
 # Function to update language metadata in MP4 video files
@@ -1156,7 +1156,7 @@ metadata() {
 
 	echo -e "Metadata has been encoded!\a"
 	pause
-	show_menu_videos
+	show_menu_1
 }
 
 # Function to convert TS to MKV for PLEX compatibility
@@ -1199,7 +1199,7 @@ plex() {
 
   	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
 	pause
-	show_menu_videos
+	show_menu_1
 }
 
 # -----------------------------------
@@ -1248,7 +1248,7 @@ extract_srt() {
 
   	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
 	pause
-	show_menu_subs
+	show_menu_2
 }
 
 # Function to convert VTT subtitles to SRT format
@@ -1284,7 +1284,7 @@ convert_srt() {
 
   	echo -e "Conversion from vtt to srt complete!\a"
 	pause
-	show_menu_subs
+	show_menu_2
 }
 
 # -----------------------------------
@@ -1312,7 +1312,7 @@ c_ts() {
 
 		echo -e "TS folder cleared!\a"
 		sleep 1
-		show_menu_clean
+		show_menu_3
 	fi
 }
 
@@ -1336,7 +1336,7 @@ c_mkv() {
 
 		echo -e "MKV folder cleared!\a"
 		sleep 1
-		show_menu_clean
+		show_menu_3
 	fi
 }
 
@@ -1363,7 +1363,7 @@ c_all() {
 
 		echo -e "All folders cleared!\a"
 		sleep 1
-		show_menu_clean
+		show_menu_3
 	fi
 }
 
