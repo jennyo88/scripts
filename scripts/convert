@@ -13,10 +13,10 @@
 # -----------------------------------
 
 load_colors() {
-    BLUE=$'\e[38;5;39m'	    	# Blue color
-    ORANGE=$'\e[38;5;208m'	# Orange color
-    RED=$'\e[1;31m'		# Red color (bold)
-    RESET=$'\e[0m'		# Reset color attributes
+	BLUE=$'\e[38;5;39m'	    	# Blue color
+	ORANGE=$'\e[38;5;208m'	# Orange color
+	RED=$'\e[1;31m'		# Red color (bold)
+	RESET=$'\e[0m'		# Reset color attributes
 }
 
 # Calling the load_colors() function to set color variables
@@ -29,38 +29,38 @@ load_colors # Only loaded once
 # Check if required commands are available
 
 check_youtube-dl() {
-    if command -v youtube-dl &> /dev/null; then
-        return 0  # Success
-    else
-        echo "Error: youtube-dl is not installed. Please install it before running this script."
-        return 1  # Failure
-    fi
+	if command -v youtube-dl &> /dev/null; then
+		return 0  # Success
+   	else
+        	echo "Error: youtube-dl is not installed. Please install it before running this script."
+        	return 1  # Failure
+    	fi
 }
 
 check_yt-dlp() {
-    if command -v yt-dlp &> /dev/null; then
-        return 0  # Success
-    else
-        echo "Error: yt-dlp is not installed. Please install it before running this script."
-        return 1  # Failure
+    	if command -v yt-dlp &> /dev/null; then
+        	return 0  # Success
+    	else
+        	echo "Error: yt-dlp is not installed. Please install it before running this script."
+        	return 1  # Failure
     fi
 }
 
 check_ffmpeg() {
-    if command -v ffmpeg &> /dev/null; then
-        return 0  # Success
-    else
-        echo "Error: ffmpeg is not installed. Please install it before running this script."
-        return 1  # Failure
-    fi
+    	if command -v ffmpeg &> /dev/null; then
+        	return 0  # Success
+    	else
+        	echo "Error: ffmpeg is not installed. Please install it before running this script."
+        	return 1  # Failure
+    	fi
 }
 
 check_wget() {
-    if command -v wget &> /dev/null; then
-        return 0  # Success
-    else
-        echo "Error: wget is not installed. Please install it before running this script."
-        return 1  # Failure
+    	if command -v wget &> /dev/null; then
+        	return 0  # Success
+    	else
+        	echo "Error: wget is not installed. Please install it before running this script."
+        	return 1  # Failure
     fi
 }
 
@@ -69,28 +69,28 @@ check_wget() {
 # -----------------------------------
 
 prompt() {
-    local prompt="$1"
-    local variable="$2"
-    local default_value="$3"
+	local prompt="$1"
+    	local variable="$2"
+    	local default_value="$3"
 
-    while true; do
-        printf "$prompt"
+    	while true; do
+        	printf "$prompt"
 
-        # Set the default value if user presses Enter
-        read -r "$variable"
-        [ -z "${!variable}" ] && eval "$variable=\"$default_value\""
+        	# Set the default value if user presses Enter
+        	read -r "$variable"
+        	[ -z "${!variable}" ] && eval "$variable=\"$default_value\""
 
-        # Check if the user wants to abort
-        if [ "${!variable}" == "abort" ]; then
-            sleep 1
-            echo "Abort..."
-            # Add exit actions here if needed
-            show_menu_main
-        fi
+        	# Check if the user wants to abort
+        	if [ "${!variable}" == "abort" ]; then
+            		sleep 1
+            		echo "Abort..."
+            		# Add exit actions here if needed
+            		show_menu_main
+        	fi
 
-        # Break the loop if input is not empty
-        [ -n "${!variable}" ] && break
-    done
+        	# Break the loop if input is not empty
+        	[ -n "${!variable}" ] && break
+    	done
 }
 
 
@@ -101,15 +101,15 @@ prompt() {
 
 # Function to pause and wait for user input
 pause() {
-    	echo
-   	read -rp "Press ENTER to continue..." fackEnterKey
+	echo
+	read -rp "Press ENTER to continue..." fackEnterKey
 }
 
 # Function to display goodbye message and exit
 goodbye() {
-    	echo -e "${RESET}"
-    	clear
-    	exit
+	echo -e "${RESET}"
+	clear
+	exit
 }
 
 # -----------------------------------
@@ -118,7 +118,7 @@ goodbye() {
 
 # Function to display the main menu banner
 show_banner_main() {
-    	clear
+	clear
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║          Converting Files - Service Menu        ║ "
@@ -614,10 +614,10 @@ youtube-dl() {
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
 		# Process based on the chosen type (tv or movie)
-	    	if [ "$type" == "tv" ]
+		if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
 	       		prompt "\nEnter the show name (include periods between words): " show_name
@@ -639,7 +639,7 @@ youtube-dl() {
 
 				# Prompt for episode URL (skipping if blank)
 				printf "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-				read -r episode_url
+				read -rp episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
@@ -738,7 +738,7 @@ youtube-dl() {
 
 				# Prompt for episode URL (skipping if blank)
 	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-				read -r episode_url
+				read -rp episode_url
 
 	            		if [ -z "$episode_url" ]; then
 	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
@@ -784,6 +784,7 @@ youtube-dl() {
 	    	printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
 	    	exit 1
 	fi
+
 	pause
 	show_menu_videos
 }
@@ -829,7 +830,7 @@ yt-dlp() {
 
 				# Prompt for episode URL (skipping if blank)
 	            		printf "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-				read -r episode_url
+				read -rp episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
@@ -928,7 +929,7 @@ yt-dlp() {
 
 				# Prompt for episode URL (skipping if blank)
 	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-				read -r episode_url
+				read -rp episode_url
 
 	            		if [ -z "$episode_url" ]; then
 	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
