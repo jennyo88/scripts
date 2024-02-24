@@ -27,7 +27,7 @@ load_colors # Only loaded once
 # Check if required commands are available
 
 check_ydl() {
-    local commands=("$downloader" "yt-dlp")
+    local commands=("youtube-dl" "yt-dlp")
     local found=false
 
     for cmd in "${commands[@]}"; do
@@ -38,8 +38,8 @@ check_ydl() {
     done
 
     if [ "$found" = false ]; then
-        print_error "Error: '"$downloader"' or 'yt-dlp' command not found."
-        echo "Please make sure '"$downloader"' or 'yt-dlp' is installed and available in your PATH."
+        print_error "Error: 'youtube-dl' or 'yt-dlp' command not found."
+        echo "Please make sure 'youtube-dl' or 'yt-dlp' is installed and available in your PATH."
         exit 1
     fi
 }
