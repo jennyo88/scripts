@@ -1,52 +1,13 @@
 #!/usr/bin/env bash
 
-# Function to display available script paths
-show_available_paths() {
-    echo "Available script paths:"
-    echo "1. scripts/convert        - Converting files"
-    echo "2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
-    echo "3. scripts/template_remote - Template to execute a script from GitHub"
-    echo "4. scripts/tmux_ref       - Tmux reference"
-    echo "5. scripts/test           - Payroll test script"
-    # Add more paths as needed
-}
-
 # Function to display an error message
 display_error() {
     echo "Error: $1"
 }
 
-# Prompt the user for GitHub username
-printf "Enter GitHub username (default: jennyo88): "
-read -r USERNAME
-USERNAME=${USERNAME:-jennyo88}
-
-# Prompt the user for repository name
-printf "Enter repository name (default: scripts): "
-read -r REPOSITORY
-REPOSITORY=${REPOSITORY:-scripts}
-
-# Prompt the user for branch name
-printf "Enter branch name (default: main): "
-read -r BRANCH
-BRANCH=${BRANCH:-main}
-
-# Prompt the user for script path or show available paths
-printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
-read -r SCRIPT_PATH
-
-# Validate if the provided script path is a valid choice
-if [ "$SCRIPT_PATH" == "list" ]; then
-    show_available_paths
-    printf "Enter script path: "
-    read -r SCRIPT_PATH
-fi
-
-# Use the provided script path or the default value
-SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
-
-# Construct the URL based on user input
-REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
+# Prompt the user for the GitHub URL of the script
+printf "Enter the GitHub URL of the script: "
+read -r GITHUB_URL
 
 # Install required dependencies
 if ! command -v pip3 &> /dev/null; then
@@ -54,10 +15,11 @@ if ! command -v pip3 &> /dev/null; then
     exit 1
 fi
 
+# Install required Python modules
 pip3 install sympy
 
 # Download and execute the remote script using python3
-if python3 <(curl -fsSL $REMOTE_SCRIPT_URL); then
+if curl -fsSL "$GITHUB_URL" | python3; then
     echo "Script execution successful."
 else
     display_error "Failed to execute the remote script."
