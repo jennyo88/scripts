@@ -59,7 +59,6 @@ show_banner_0() {
 
 # Function to display the jennyo88 scripts menu banner
 show_banner_1() {
-    clear
     show_banner_0
     echo "${BLUE}"
     echo " ║                                                 ║ "
