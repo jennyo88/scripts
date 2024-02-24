@@ -9,10 +9,9 @@
 
 
 # -----------------------------------
-# User defined functions
+# COLORS
 # -----------------------------------
 
-# Color definitions
 load_colors() {
     BLUE=$'\e[38;5;39m'	    	# Blue color
     ORANGE=$'\e[38;5;208m'	# Orange color
@@ -23,19 +22,12 @@ load_colors() {
 # Calling the load_colors() function to set color variables
 load_colors # Only loaded once
 
-source_remote_script() {
-  local script_url=$1
-  bash -c "$(curl -fsSL $script_url)"
-}
-# LIST OF SCRIPTS
-ytdlp="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
-tmux_ref="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref"
-script_to_source="https://example.com/script3.sh"
-script_to_source="https://example.com/script3.sh"
+# -----------------------------------
+# REQUIREMENTS
+# -----------------------------------
 
 # Check if required commands are available
 
-# Function to check if youtube-dl is installed
 check_youtube-dl() {
     if command -v youtube-dl &> /dev/null; then
         return 0  # Success
@@ -72,6 +64,10 @@ check_wget() {
     fi
 }
 
+# -----------------------------------
+# ABORT
+# -----------------------------------
+
 prompt() {
     local prompt="$1"
     local variable="$2"
@@ -93,18 +89,26 @@ prompt() {
     done
 }
 
+# -----------------------------------
+# PAUSE AND GOODBYE
+# -----------------------------------
+
 # Function to pause and wait for user input
 pause() {
     	echo
    	read -rp "Press ENTER to continue..." fackEnterKey
 }
 
-# Function to display goodbye message, reset colors, clear the screen, and exit
+# Function to display goodbye message and exit
 goodbye() {
     	echo -e "${RESET}"
     	clear
     	exit
 }
+
+# -----------------------------------
+# BANNERS
+# -----------------------------------
 
 # Function to display the main menu banner
 show_banner_main() {
@@ -142,6 +146,9 @@ show_banner_clean() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
+# -----------------------------------
+# MENUS
+# -----------------------------------
 
 # Function for displaying the main menu
 show_menu_main() {
@@ -468,10 +475,8 @@ show_menu_clean() {
 }
 
 # ----------------------------------
-# Step #3: Formulas
+# VIDEO FORMULAS
 # ----------------------------------
-
-## VIDEO FORMULAS
 
 
 # Function for converting video files to x265 format using FFmpeg
@@ -1190,7 +1195,9 @@ plex() {
 	show_menu_videos
 }
 
-## MENU 2 FORMULAS
+# -----------------------------------
+# SUBTITLE FORMULAS
+# -----------------------------------
 
 # Function to extract subtitles from video files and save as SRT
 # This function prompts the user for source and destination directories,
@@ -1273,7 +1280,9 @@ convert_srt() {
 	show_menu_subs
 }
 
-## MENU 3 FORMULAS
+# -----------------------------------
+# CLEAN-UP FORMULAS
+# -----------------------------------
 
 # Function to clean up 'ts' folder
 # This function prompts the user for confirmation and, if confirmed, removes all files with .ts extension in the 'ts' folder.
@@ -1352,8 +1361,8 @@ c_all() {
 }
 
 # -----------------------------------
-# Main logic - infinite loop
-# ------------------------------------
+# INFINITE LOOP
+# -----------------------------------
 
 while true
 do
