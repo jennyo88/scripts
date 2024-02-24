@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+u#!/usr/bin/env bash
 
 
 # Function to download and execute a Bash script
@@ -69,7 +69,7 @@ other_scripts_menu() {
     echo "================ OTHER SCRIPTS MENU ================"
     echo "Press Ctrl+C to go back to the main menu."
     echo ""
-    echo " 1. Execute Other Bash Script"
+    echo " 1. Execute Another Bash Script"
     echo " 2. Execute Python Script"
     echo ""
     echo " 0. Go back to Main Menu"
@@ -95,8 +95,8 @@ main_menu() {
     echo "==================== MAIN MENU ===================="
     echo "Press Ctrl+C to exit at any time."
     echo ""
-    echo " 1. Jennyo88 Scripts Menu"
-    echo " 2. Other Scripts Menu"
+    echo " 1. Execute jennyo88 scripts"
+    echo " 2. Execute scripts in other repositories"
     echo ""
     echo " 0. Exit"
     echo "==================================================="
