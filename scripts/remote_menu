@@ -1,35 +1,49 @@
 #!/usr/bin/env bash
 
-# Function to execute a remote script
-execute_remote_script() {
+# Function to execute a Bash script from a remote URL
+execute_remote_bash_script() {
     local script_url=$1
     echo "Executing script: $script_url"
-    
-    # Download the script using curl
-    if script_content=$(curl -fsSL $script_url); then
-        # If download successful, execute the script using bash
-        if output=$(bash -c "$script_content" 2>&1); then
-            echo "Script execution successful."
-        else
-            echo "Script execution failed. Error message: $output"
-        fi
+
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $script_url)\""
+
+    if output=$(bash -c "$(curl -fsSL $script_url)" 2>&1); then
+        echo "Script execution successful."
     else
-        echo "Failed to download script from $script_url. Please check the URL and try again."
+        echo "Script execution failed. Error message: $output"
     fi
 }
 
 # Function to download and execute a Bash script
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
-    execute_remote_script "$bash_script_url"
+    echo "Downloading and executing Bash script from: $bash_script_url"
+
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $bash_script_url)\""
+
+    if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
+        echo "Script execution successful."
+    else
+        echo "Script execution failed. Error message: $output"
+    fi
 }
 
 # Function to execute a Python script
 execute_python_script() {
-    # Specify the Python script URL
     local python_script_url="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tes_py"
     
-    execute_remote_script "$python_script_url"
+    echo "Executing Python script from: $python_script_url"
+    
+    # Add this line to print the command being executed
+    echo "Command to execute: bash -c \"\$(curl -fsSL $python_script_url)\""
+    
+    if output=$(bash -c "$(curl -fsSL $python_script_url)" 2>&1); then
+        echo "Script execution successful."
+    else
+        echo "Script execution failed. Error message: $output"
+    fi
 }
 
 # Function to display and handle the jennyo88 scripts menu
@@ -50,19 +64,18 @@ jennyo88_scripts_menu() {
 
     read -p "Enter your choice (0-6): " choice
 
-    # Validate that the input is a number between 0 and 6
     if [[ ! $choice =~ ^[0-6]$ ]]; then
         echo "Invalid choice. Please enter a number between 0 and 6."
         jennyo88_scripts_menu
     fi
 
     case $choice in
-        1) execute_bash_script ;;
-        2) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
-        3) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
-        4) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
-        5) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
-        6) execute_bash_script ;;  # Example, you can replace this with a different function for "other"
+        1) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
+        2) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
+        3) open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
+        4) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
+        5) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
+        6) execute_bash_script ;;
         0) main_menu ;;
     esac
 }
@@ -81,7 +94,6 @@ other_scripts_menu() {
 
     read -p "Enter your choice (0-2): " choice
 
-    # Validate that the input is a number between 0 and 2
     if [[ ! $choice =~ ^[0-2]$ ]]; then
         echo "Invalid choice. Please enter a number between 0 and 2."
         other_scripts_menu
@@ -108,7 +120,6 @@ main_menu() {
 
     read -p "Enter your choice (0-2): " choice
 
-    # Validate that the input is a number between 0 and 2
     if [[ ! $choice =~ ^[0-2]$ ]]; then
         echo "Invalid choice. Please enter a number between 0 and 2."
         main_menu
