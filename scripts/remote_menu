@@ -20,6 +20,9 @@ execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
     echo "Downloading and executing Bash script from: $bash_script_url"
 
+    # Add this line to print the entered URL
+    echo "URL entered: $bash_script_url"
+
     # Add this line to print the command being executed
     echo "Command to execute: bash -c \"\$(curl -fsSL $bash_script_url)\""
 
