@@ -31,9 +31,48 @@ calculate_federal_withholding() {
     done
 }
 
-# Function to calculate state withholding based on tax brackets
-calculate_state_withholding() {
-    taxable_income=$1
+# Function to calculate state withholding based on tax brackets and payroll period
+calculate_state_withholding_logic() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    case "$payroll_period" in
+        "daily")
+            state_withholding=$(calculate_state_withholding_daily $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "weekly")
+            state_withholding=$(calculate_state_withholding_weekly $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "biweekly")
+            state_withholding=$(calculate_state_withholding_biweekly $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "semi-monthly")
+            state_withholding=$(calculate_state_withholding_semi_monthly $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "monthly")
+            state_withholding=$(calculate_state_withholding_monthly $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "quarterly")
+            state_withholding=$(calculate_state_withholding_quarterly $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "semi-annual")
+            state_withholding=$(calculate_state_withholding_semi_annual $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        "annual")
+            state_withholding=$(calculate_state_withholding_annual $gross_pay "${state_tax_brackets[@]}")
+            ;;
+        *)
+            echo "Invalid payroll period"
+            exit 1
+            ;;
+    esac
+
+    echo $state_withholding
+}
+
+# Function to calculate state withholding for daily payroll period
+calculate_state_withholding_daily() {
+    gross_pay=$1
     state_tax_brackets=("${@:2}")
 
     for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
@@ -41,41 +80,194 @@ calculate_state_withholding() {
         upper_limit=${state_tax_brackets[i+1]}
         tax_rate=${state_tax_brackets[i+2]}
 
-        if [ "$taxable_income" -le "$upper_limit" ]; then
-            if [ "$taxable_income" -le "$lower_limit" ]; then
-                withholding=0
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
             else
-                excess=$(echo "$taxable_income - $lower_limit" | bc)
-                withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
             fi
-            echo $withholding
+            echo $state_withholding
             return
         fi
     done
+    # If no bracket is matched, return 0
+    echo 0
 }
 
-# Function to calculate other payroll items
-calculate_other_payroll_items() {
+# Function to calculate state withholding for weekly payroll period
+calculate_state_withholding_weekly() {
     gross_pay=$1
-    medicare_employer_rate=$2
-    medicare_employee_rate=$3
-    social_security_employer_rate=$4
-    social_security_employee_rate=$5
-    ca_withholding_rate=$6
-    ca_sdi_rate=$7
-    ca_unemployment_company_rate=$8
-    ca_employment_training_tax_rate=$9
+    state_tax_brackets=("${@:2}")
 
-    medicare_employer=$(echo "$gross_pay * ($medicare_employer_rate / 100)" | bc)
-    medicare_employee=$(echo "$gross_pay * ($medicare_employee_rate / 100)" | bc)
-    social_security_employer=$(echo "$gross_pay * ($social_security_employer_rate / 100)" | bc)
-    social_security_employee=$(echo "$gross_pay * ($social_security_employee_rate / 100)" | bc)
-    ca_withholding=$(echo "$gross_pay * ($ca_withholding_rate / 100)" | bc)
-    ca_sdi=$(echo "$gross_pay * ($ca_sdi_rate / 100)" | bc)
-    ca_unemployment_company=$(echo "$gross_pay * ($ca_unemployment_company_rate / 100)" | bc)
-    ca_employment_training_tax=$(echo "$gross_pay * ($ca_employment_training_tax_rate / 100)" | bc)
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
 
-    echo $medicare_employer $medicare_employee $social_security_employer $social_security_employee $ca_withholding $ca_sdi $ca_unemployment_company $ca_employment_training_tax
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for biweekly payroll period
+calculate_state_withholding_biweekly() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for semi-monthly payroll period
+calculate_state_withholding_semi_monthly() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for monthly payroll period
+calculate_state_withholding_monthly() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for quarterly payroll period
+calculate_state_withholding_quarterly() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for semi-annual payroll period
+calculate_state_withholding_semi_annual() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
+}
+
+# Function to calculate state withholding for annual payroll period
+calculate_state_withholding_annual() {
+    gross_pay=$1
+    state_tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#state_tax_brackets[@]}; i+=3)); do
+        lower_limit=${state_tax_brackets[i]}
+        upper_limit=${state_tax_brackets[i+1]}
+        tax_rate=${state_tax_brackets[i+2]}
+
+        if [ "$gross_pay" -le "$upper_limit" ]; then
+            if [ "$gross_pay" -le "$lower_limit" ]; then
+                state_withholding=0
+            else
+                excess=$(echo "$gross_pay - $lower_limit" | bc)
+                state_withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $state_withholding
+            return
+        fi
+    done
+    # If no bracket is matched, return 0
+    echo 0
 }
 
 # Function to calculate net pay
@@ -83,9 +275,8 @@ calculate_net_pay() {
     gross_pay=$1
     federal_withholding=$2
     state_withholding=$3
-    other_payroll_items=${@:4}
 
-    total_withholdings=$(echo "$federal_withholding + $state_withholding + $other_payroll_items" | bc)
+    total_withholdings=$(echo "$federal_withholding + $state_withholding" | bc)
     net_pay=$(echo "$gross_pay - $total_withholdings" | bc)
     echo $net_pay
 }
@@ -93,8 +284,7 @@ calculate_net_pay() {
 # Input variables
 read -p "Enter hours worked: " hours_worked
 read -p "Enter hourly rate: " hourly_rate
-read -p "Enter frequency (annual, daily, quarterly, semi-annual, semi-monthly, monthly, weekly, biweekly): " frequency
-read -p "Enter filing status (single, dual_income_married, unmarried_head_of_household, married): " filing_status
+read -p "Enter payroll period (daily, weekly, biweekly, semi-monthly, monthly, quarterly, semi-annual, annual): " payroll_period
 
 # Validate input
 if ! [[ "$hours_worked" =~ ^[0-9]+(\.[0-9]+)?$ && "$hourly_rate" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
@@ -106,68 +296,97 @@ fi
 gross_pay=$(calculate_gross_pay $hours_worked $hourly_rate)
 
 # Define federal withholding tax brackets for different filing statuses
-# Each entry in the array represents: lower_limit, upper_limit, tax_rate
 federal_tax_brackets_single=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 609350 35 609351 37)
-federal_tax_brackets_head_of_household=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 365600 35 365601 37)
-federal_tax_brackets_married_filing_separately=(0 16550 10 16551 63100 12 63101 100500 22 100501 191950 24 191951 243700 32 243701 609350 35 609350 37)
-federal_tax_brackets_married_filing_jointly=(0 16550 10 16551 63100 12 63101 100500 22 100501 191950 24 191951 243700 32 243701 609350 35 609350 37)
+federal_tax_brackets_head_of_household=(0 16550 10 16551 63100 12 63101 100500 22 100501 191950 24 191951 243700 32 243701 609350 35 609351 37)
+federal_tax_brackets_married_filing_separately=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 365600 35 365601 37)
+federal_tax_brackets_married_filing_jointly=(0 23200 10 23201 94300 12 94301 201050 22 201051 383900 24 383901 487450 32 487451 731200 35 731200 37)
 
-# Define state withholding tax brackets for different filing statuses and frequencies
-state_tax_brackets_single_daily=(0 500 1.1 501 1000 2.2)
-state_tax_brackets_single_weekly=(0 3500 1.1 3501 7000 2.2)
-state_tax_brackets_single_biweekly=(0 7000 1.1 7001 14000 2.2)
-# Add more brackets for other frequencies and filing statuses as needed
-
-# Select the appropriate state tax brackets based on frequency and filing status
-case "$frequency" in
-    "daily")
-        state_tax_brackets=("${state_tax_brackets_single_${frequency}[@]}")
-        ;;
-    "weekly")
-        state_tax_brackets=("${state_tax_brackets_single_${frequency}[@]}")
-        ;;
-    "biweekly")
-        state_tax_brackets=("${state_tax_brackets_single_${frequency}[@]}")
-        ;;
-    # Add cases for other frequencies here
-    *)
-        echo "Invalid frequency"
-        exit 1
-        ;;
-esac
-
-# Calculate federal withholding based on the appropriate tax bracket
-# For example, if the user selects "Single," use federal_tax_brackets_single
-# You can extend this logic to include other filing statuses.
-federal_withholding=$(calculate_federal_withholding $gross_pay "${federal_tax_brackets_$filing_status[@]}")
-state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets[@]}")
+# Define state withholding tax brackets for different filing statuses and payroll periods
+state_tax_brackets_single_daily=(0 40 1.1 41 95 2.2 96 150 4.4 151 210 8.8 211 265 10.23)
+state_tax_brackets_head_of_household_daily=(0 12000 5 12001 35000 7)
+state_tax_brackets_married_filing_separately_daily=(0 20000 5 20001 60000 7)
+state_tax_brackets_married_filing_jointly_daily=(0 20000 5 20001 60000 7)
+state_tax_brackets_single_weekly=(0 10000 5 10001 30000 7)
+state_tax_brackets_head_of_household_weekly=(0 12000 5 12001 35000 7)
+state_tax_brackets_married_filing_separately_weekly=(0 20000 5 20001 60000 7)
+state_tax_brackets_married_filing_jointly_weekly=(0 20000 5 20001 60000 7)
+state_tax_brackets_single_biweekly=(0 20000 5 20001 60000 7)
+state_tax_brackets_head_of_household_biweekly=(0 24000 5 24001 70000 7)
+state_tax_brackets_married_filing_separately_biweekly=(0 40000 5 40001 120000 7)
+state_tax_brackets_married_filing_jointly_biweekly=(0 40000 5 40001 120000 7)
+state_tax_brackets_single_semi_monthly=(0 2166 1.1 2167 5000 2.2 5001 8417 4.4 8418 11083 8.8 11084 13834 10.23)
+state_tax_brackets_head_of_household_semi_monthly=(0 6500 5 6501 19000 7)
+state_tax_brackets_married_filing_separately_semi_monthly=(0 10833 5 10834 32500 7)
+state_tax_brackets_married_filing_jointly_semi_monthly=(0 10833 5 10834 32500 7)
+state_tax_brackets_single_monthly=(0 4333 1.1 4334 10000 2.2 10001 16834 4.4 16835 22167 8.8 22168 27700 10.23)
+state_tax_brackets_head_of_household_monthly=(0 13000 5 13001 38000 7)
+state_tax_brackets_married_filing_separately_monthly=(0 21667 5 21668 65000 7)
+state_tax_brackets_married_filing_jointly_monthly=(0 21667 5 21668 65000 7)
+state_tax_brackets_single_quarterly=(0 13000 5 13001 38000 7)
+state_tax_brackets_head_of_household_quarterly=(0 39000 5 39001 114000 7)
+state_tax_brackets_married_filing_separately_quarterly=(0 65000 5 65001 195000 7)
+state_tax_brackets_married_filing_jointly_quarterly=(0 65000 5 65001 195000 7)
+state_tax_brackets_single_semi_annual=(0 26000 5 26001 76000 7)
+state_tax_brackets_head_of_household_semi_annual=(0 78000 5 78001 228000 7)
+state_tax_brackets_married_filing_separately_semi_annual=(0 130000 5 130001 390000 7)
+state_tax_brackets_married_filing_jointly_semi_annual=(0 130000 5 130001 390000 7)
+state_tax_brackets_single_annual=(0 52000 5 52001 152000 7)
+state_tax_brackets_head_of_household_annual=(0 156000 5 156001 456000 7)
+state_tax_brackets_married_filing_separately_annual=(0 260000 5 260001 780000 7)
+state_tax_brackets_married_filing_jointly_annual=(0 260000 5 260001 780000 7)
 
 # Replace the following placeholder values with your actual rates
 medicare_employer_rate=1.45
 medicare_employee_rate=1.45
 social_security_employer_rate=6.2
 social_security_employee_rate=6.2
-ca_withholding_rate=8
-ca_sdi_rate=1.1
 ca_unemployment_company_rate=2.9
 ca_employment_training_tax_rate=0.1
 
+# Calculate federal withholding based on the appropriate tax bracket
+filing_status="single"  # Replace with user input
+case "$filing_status" in
+    "single")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${federal_tax_brackets_single[@]}")
+        state_withholding=$(calculate_state_withholding_logic $gross_pay "${state_tax_brackets_single_@$payroll_period}")
+        ;;
+    "head_of_household")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${federal_tax_brackets_head_of_household[@]}")
+        state_withholding=$(calculate_state_withholding_logic $gross_pay "${state_tax_brackets_head_of_household_@$payroll_period}")
+        ;;
+    "married_filing_jointly")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${federal_tax_brackets_married_filing_jointly[@]}")
+        state_withholding=$(calculate_state_withholding_logic $gross_pay "${state_tax_brackets_married_filing_jointly_@$payroll_period}")
+        ;;
+    "married_filing_separately")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${federal_tax_brackets_married_filing_separately[@]}")
+        state_withholding=$(calculate_state_withholding_logic $gross_pay "${state_tax_brackets_married_filing_separately_@$payroll_period}")
+        ;;
+    *)
+        echo "Invalid filing status"
+        exit 1
+        ;;
+esac
+
 # Calculate other payroll items
-other_payroll_items=$(calculate_other_payroll_items $gross_pay $medicare_employer_rate $medicare_employee_rate $social_security_employer_rate $social_security_employee_rate $ca_withholding_rate $ca_sdi_rate $ca_unemployment_company_rate $ca_employment_training_tax_rate)
+medicare_employer=$(echo "$gross_pay * ($medicare_employer_rate / 100)" | bc)
+medicare_employee=$(echo "$gross_pay * ($medicare_employee_rate / 100)" | bc)
+social_security_employer=$(echo "$gross_pay * ($social_security_employer_rate / 100)" | bc)
+social_security_employee=$(echo "$gross_pay * ($social_security_employee_rate / 100)" | bc)
+ca_unemployment_company=$(echo "$gross_pay * ($ca_unemployment_company_rate / 100)" | bc)
+ca_employment_training_tax=$(echo "$gross_pay * ($ca_employment_training_tax_rate / 100)" | bc)
 
 # Calculate net pay
-net_pay=$(calculate_net_pay $gross_pay $federal_withholding $state_withholding $other_payroll_items)
+net_pay=$(calculate_net_pay $gross_pay $federal_withholding $state_withholding)
 
 # Display results with formatted output
 printf "Gross Pay: $%.2f\n" $gross_pay
 printf "Federal Withholding: $%.2f\n" $federal_withholding
 printf "State Withholding: $%.2f\n" $state_withholding
-printf "Medicare Employer: $%.2f\n" $other_payroll_items[0]
-printf "Medicare Employee: $%.2f\n" $other_payroll_items[1]
-printf "Social Security Employer: $%.2f\n" $other_payroll_items[2]
-printf "Social Security Employee: $%.2f\n" $other_payroll_items[3]
-printf "CA Withholding: $%.2f\n" $other_payroll_items[4]
-printf "CA SDI: $%.2f\n" $other_payroll_items[5]
-printf "CA Unemployment Company: $%.2f\n" $other_payroll_items[6]
-printf "CA Employment Training Tax: $%.2f\n" $other_payroll_items[7]
+printf "Medicare Employer: $%.2f\n" $medicare_employer
+printf "Medicare Employee: $%.2f\n" $medicare_employee
+printf "Social Security Employer: $%.2f\n" $social_security_employer
+printf "Social Security Employee: $%.2f\n" $social_security_employee
+printf "CA Unemployment Company: $%.2f\n" $ca_unemployment_company
+printf "CA Employment Training Tax: $%.2f\n" $ca_employment_training_tax
 printf "Net Pay: $%.2f\n" $net_pay
