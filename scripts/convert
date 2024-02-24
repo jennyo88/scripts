@@ -162,7 +162,7 @@ show_menu_main() {
     	echo ""
 
     	# Prompting the user to select an option
-	echo -e \n"${BLUE}"
+	echo -e "${BLUE}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -250,25 +250,25 @@ show_menu_videos() {
 	echo ""
   	echo " 1. Go back to Main Menu"
 	echo ""
-  	echo " 2) Convert to x265"
-  	echo " 3) Download m3u8"
-	echo " 4) Youtube-DL"
-	echo " 5) Tubi"
-	echo " 6) Metadata"
-	echo " 7) Video ONLY"
-	echo " 8) Video & Subs"
+  	echo " 2. Convert video to x265"
+  	echo " 3. Download m3u8 playlist"
+	echo " 4. Download using youtube-DL"
+	echo " 5. Download from tubi"
+	echo " 6. Encode metadata"
+	echo " 7. Convert ONLY video"
+	echo " 8. Convert video & subtitles"
     	echo ""
-	echo " 9) Go to SUBS Menu"
-	echo "10) Go to CLEAN-UP Menu"
+	echo " 9. Go to SUBS Menu"
+	echo "10. Go to CLEAN-UP Menu"
     	echo ""
     	echo ""
     	echo " 0. Exit script"
     	echo ""
 
    	# Prompting the user to select an option
-    	echo -e \n"${BLUE}"
-    	prompt "Select: " ans
-    	echo "${RESET}"
+	echo -e "${BLUE}"
+	prompt "Select: " ans
+	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
 	case $ans in
@@ -355,7 +355,7 @@ show_menu_subs() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo -e \n"${BLUE}"
+  	echo -e "${BLUE}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -396,7 +396,7 @@ show_menu_subs() {
     	esac
 }
 
-# Function for displaying the third menu
+# Function for displaying the CLEAN-UP menu
 show_menu_clean() {
 	show_banner_main
 	show_banner_clean
@@ -416,7 +416,7 @@ show_menu_clean() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo -e \n"${BLUE}"
+  	echo -e "${BLUE}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
