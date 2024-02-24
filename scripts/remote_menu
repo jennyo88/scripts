@@ -39,9 +39,9 @@ goodbye() {
 show_banner_0() {
     clear
     echo -e "${BLUE}"
-    echo " -------------------------------------------- "
-    echo "        Execute Remote Scripts                "
-    echo " -------------------------------------------- ""${RESET}"
+    echo " ╔════════════════════════════════════════╗ "
+    echo " ║       Execute Remote Scripts          ║ "
+    echo " ╚════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the jennyo88 scripts menu banner
