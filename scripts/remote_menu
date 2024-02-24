@@ -231,7 +231,7 @@ show_menu_2() {
 
     # Handling the user's choice using a case statement
     case $ans in
-        [mM][aA][iI][nN]|"1")
+        [mM][mM][aA][iI][nN]|"1")
             show_banner_0
             show_menu_0
             ;;
