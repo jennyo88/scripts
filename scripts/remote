@@ -1,10 +1,10 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # Script Name: remote
 # Description: Download and execute a remote script from GitHub.
-# Author: Your Name
+# Author: Jennifer Romero
 # Date: February 23, 2024
-# Version: 1.4
+# Version: 1.7
 
 # Usage: ./remote
 # Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
@@ -31,7 +31,7 @@ display_error() {
 # Function to get the shebang line from a script
 get_shebang() {
     local script_content=$1
-    local shebang=$(echo "$script_content" | grep -E '^#!/usr/bin/(bash|python3)')
+    local shebang=$(echo "$script_content" | sed -n '1s/^#!\s*\([[:alnum:]/]\+\).*/\1/p')
 
     if [ -n "$shebang" ]; then
         echo "$shebang"
@@ -80,21 +80,20 @@ SCRIPT_CONTENTS=$(curl -fsSL $REMOTE_SCRIPT_URL)
 # Get the shebang line from the script
 SHEBANG=$(get_shebang "$SCRIPT_CONTENTS")
 
+# Debug: Print the shebang and script contents
+echo "Shebang: $SHEBANG"
+echo "Script Contents: $SCRIPT_CONTENTS"
+
 # Execute the script based on its shebang
-if [ "$SHEBANG" == "#!/usr/bin/env bash" ]; then
-    # Execute the Bash script
-    if bash -c "$SCRIPT_CONTENTS"; then
-        echo "Script execution successful."
-    else
-        display_error "Failed to execute the remote script."
-    fi
-elif [ "$SHEBANG" == "#!/usr/bin/env python3" ]; then
-    # Execute the Python script
-    if python3 -c "$SCRIPT_CONTENTS"; then
-        echo "Script execution successful."
-    else
-        display_error "Failed to execute the remote script."
-    fi
-else
-    display_error "Unsupported script type or missing shebang in the remote script."
-fi
+case $SHEBANG in
+    "/usr/bin/env bash" | "/bin/bash" | "/usr/bin/python3")
+        if eval "$SHEBANG" -c "$SCRIPT_CONTENTS"; then
+            echo "Script execution successful."
+        else
+            display_error "Failed to execute the remote script."
+        fi
+        ;;
+    *)
+        display_error "Unsupported shebang or missing shebang in the remote script."
+        ;;
+esac
