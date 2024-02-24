@@ -15,7 +15,13 @@ execute_remote_bash_script() {
 # Function to download and execute a Bash script
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
-    echo "Downloading and executing Bash script from: $bash_script_url"
+
+    if [[ -z $bash_script_url ]]; then
+        echo "URL is empty. Please enter a valid URL."
+        return
+    fi
+
+    echo "Executing Bash script from: $bash_script_url"
 
     if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
         echo "Script execution successful."
@@ -23,6 +29,7 @@ execute_bash_script() {
         echo "Script execution failed. Error message: $output"
     fi
 }
+
 
 # Function to execute a Python script
 execute_python_script() {
