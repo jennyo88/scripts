@@ -139,7 +139,7 @@ show_menu_1() {
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)"
             ;;
         "4")
-            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote)"
+            open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote"
             ;;
         "5")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
