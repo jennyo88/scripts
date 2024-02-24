@@ -23,44 +23,50 @@ load_colors() {
 # Calling the load_colors() function to set color variables
 load_colors # Only loaded once
 
+# List of remote script URLs
+REMOTE_SCRIPTS=(
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
+  "https://example.com/script2.sh"
+  "https://example.com/script3.sh"
+)
+
+# Function to source a remote script
+source_remote_script() {
+  local script_url=$1
+  echo "Sourcing script: $script_url"
+  bash -c "$(curl -fsSL $script_url)"
+}
 
 # Check if required commands are available
 
+# Function to check if youtube-dl is installed
 check_ydl() {
-    local commands=("youtube-dl" "yt-dlp")
-    local found=false
-
-    for cmd in "${commands[@]}"; do
-        if command -v "$cmd" &> /dev/null; then
-            found=true
-            break
-        fi
-    done
-
-    if [ "$found" = false ]; then
-        print_error "Error: 'youtube-dl' or 'yt-dlp' command not found."
-        echo "Please make sure 'youtube-dl' or 'yt-dlp' is installed and available in your PATH."
-        exit 1
+    if command -v youtube-dl &> /dev/null; then
+        echo "youtube-dl is installed."
+        return 0  # Success
+    else
+        echo "Error: youtube-dl is not installed. Please install it before running this script."
+        return 1  # Failure
     fi
 }
 
 check_ffmpeg() {
-    local command="ffmpeg"
-
-    if ! command -v "$command" &> /dev/null; then
-        print_error "Error: '$command' command not found."
-        echo "Please make sure '$command' is installed and available in your PATH."
-        exit 1
+    if command -v ffmpeg &> /dev/null; then
+        echo "ffmpeg is installed."
+        return 0  # Success
+    else
+        echo "Error: ffmpeg is not installed. Please install it before running this script."
+        return 1  # Failure
     fi
 }
 
 check_wget() {
-    local command="wget"
-
-    if ! command -v "$command" &> /dev/null; then
-        print_error "Error: '$command' command not found."
-        echo "Please make sure '$command' is installed and available in your PATH."
-        exit 1
+    if command -v wget &> /dev/null; then
+        echo "wget is installed."
+        return 0  # Success
+    else
+        echo "Error: wget is not installed. Please install it before running this script."
+        return 1  # Failure
     fi
 }
 
@@ -239,14 +245,15 @@ show_menu_videos() {
 	echo ""
   	echo " 2. Convert video to x265"
   	echo " 3. Download m3u8 playlist"
-	echo " 4. Download using youtube-DL"
-	echo " 5. Download from tubi"
-	echo " 6. Encode metadata"
-	echo " 7. Convert ONLY video"
-	echo " 8. Convert video & subtitles"
+	echo " 4. Download using youtube-dl"
+	echo " 5. Download using yt-dlp"
+	echo " 6. Download from tubi"
+	echo " 7. Encode metadata"
+	echo " 8. Convert ONLY video"
+	echo " 9. Convert video & subtitles"
     	echo ""
-	echo " 9. Go to SUBS Menu"
-	echo "10. Go to CLEAN-UP Menu"
+	echo " 10. Go to SUBS Menu"
+	echo "11. Go to CLEAN-UP Menu"
     	echo ""
     	echo ""
     	echo " 0. Exit script"
@@ -279,34 +286,41 @@ show_menu_videos() {
         		show_banner_videos
 			ydl
         		;;
-      		[tT]|[tT][uU][bI][iI]|"5")
+		"5")
+			clear
+			show_banner_videos
+			for script_url in "${REMOTE_SCRIPTS[@]}"; do
+				source_remote_script "$script_url"
+    			done
+			;;
+      		[tT]|[tT][uU][bI][iI]|"6")
 			clear
 			show_banner_videos
         		tubi
         		;;
-		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"6")
+		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"7")
 			clear
 			show_banner_videos
 			metadata
 			;;
-		[vV]|[vI][iI][vV][eE][oO]|"7")
+		[vV]|[vI][iI][vV][eE][oO]|"8")
 			clear
 			show_banner_main
 			plex
 			c_ts
 			;;
-		[aA]|[aA][lL][lL]|"8")
+		[aA]|[aA][lL][lL]|"9")
 			clear
 			show_banner_main
 			video_sub && sleep 1
 			c_ts
 			c_mkv
 			;;
-		[sS]|[sS][uU][bB][sS]|"9")
+		[sS]|[sS][uU][bB][sS]|"10")
 			show_banner_subs
 			show_menu_subs
 			;;
-		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"10")
+		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"11")
 			show_banner_clean
 			show_menu_clean
 			;;
