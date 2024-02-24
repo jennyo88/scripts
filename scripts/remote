@@ -8,7 +8,7 @@ execute_remote_script() {
     # Example: bash -c "$(curl -fsSL $script_url)"
 }
 
-# Function to download and execute a bash script
+# Function to download and execute a Bash script
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
     echo "Downloading and executing Bash script from: $bash_script_url"
@@ -37,25 +37,33 @@ execute_python_script() {
     fi
 }
 
-# Function to display and handle the main menu
-main_menu() {
+# Function to display and handle the jennyo88 scripts menu
+jennyo88_scripts_menu() {
     clear
-    echo "==================== MAIN MENU ===================="
-    echo "Press Ctrl+C to exit at any time."
+    echo "================ JENNYO88 SCRIPTS MENU ================"
+    echo "Press Ctrl+C to go back to the main menu."
     echo ""
-    echo " 1. Jennyo88 Scripts Menu"
-    echo " 2. Other Scripts Menu"
+    echo " 1. scripts/convert        - Converting files"
+    echo " 2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
+    echo " 3. scripts/template_remote - Template to execute a script from GitHub"
+    echo " 4. scripts/tmux_ref       - Tmux reference"
+    echo " 5. scripts/test           - Payroll test script"
+    echo " 6. other"
     echo ""
-    echo " 0. Exit"
-    echo "==================================================="
+    echo " 0. Go back to Main Menu"
+    echo "======================================================="
 
-    read -p "Enter your choice (0-2): " choice
+    read -p "Enter your choice (0-5): " choice
 
     case $choice in
-        1) jennyo88_scripts_menu ;;
-        2) other_scripts_menu ;;
-        0) echo "Exiting..."; exit 0 ;;
-        *) echo "Invalid choice. Please enter a number between 0 and 2." ;;
+        1) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
+        2) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/" ;;
+        3) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/scripts/convert_remote" ;;
+        4) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
+        5) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
+        6) execute_bash_script ;;
+        0) main_menu ;;
+        *) echo "Invalid choice. Please enter a number between 0 and 6." ;;
     esac
 }
 
@@ -77,6 +85,28 @@ other_scripts_menu() {
         1) execute_bash_script ;;
         2) execute_python_script ;;
         0) main_menu ;;
+        *) echo "Invalid choice. Please enter a number between 0 and 2." ;;
+    esac
+}
+
+# Function to display and handle the main menu
+main_menu() {
+    clear
+    echo "==================== MAIN MENU ===================="
+    echo "Press Ctrl+C to exit at any time."
+    echo ""
+    echo " 1. Jennyo88 Scripts Menu"
+    echo " 2. Other Scripts Menu"
+    echo ""
+    echo " 0. Exit"
+    echo "==================================================="
+
+    read -p "Enter your choice (0-2): " choice
+
+    case $choice in
+        1) jennyo88_scripts_menu ;;
+        2) other_scripts_menu ;;
+        0) echo "Exiting..."; exit 0 ;;
         *) echo "Invalid choice. Please enter a number between 0 and 2." ;;
     esac
 }
