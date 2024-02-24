@@ -638,7 +638,8 @@ youtube-dl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		prompt "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
+				printf "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
@@ -736,7 +737,8 @@ youtube-dl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		prompt "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
+	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
 	            		if [ -z "$episode_url" ]; then
 	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
@@ -826,7 +828,8 @@ yt-dlp() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		prompt "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
+	            		printf "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
@@ -924,7 +927,8 @@ yt-dlp() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		prompt "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
+	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
 	            		if [ -z "$episode_url" ]; then
 	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
