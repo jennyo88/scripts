@@ -139,43 +139,53 @@ show_menu_main() {
             		;;
         	# Hidden options
         	[xX][2][6][5]|[1][2])
+			clear
             		show_banner_videos
             		x265
             		;;
         	[mM][3][uU][8]|[1][3])
+			clear
             		show_banner_videos
             		m3u8
             		;;
         	[yY][dD][lL]|[1][4])
+			clear
             		show_banner_videos
             		ydl
             		;;
         	[tT][uU][bB][iI]|[1][5])
+			clear
             		show_banner_videos
             		tubi
             		;;
         	[mM][eE][tT][aA][dD][aA][tT][aA]|[1][6])
+			clear
             		show_banner_videos
             		metadata
             		;;
         	[pP][lL][eE][xX]|[1][7])
+			clear
             		show_banner_videos
             		plex
             		;;
         	[aA][lL][lL]|[1][8])
-            		show_banner_main
+			clear
+            		show_banner_videos
             		video_sub && sleep 1
             		c_all
             		;;
         	[eE][xX][tT][rR][aA][cC][tT]|[2][2])
+			clear
             		show_banner_subs
             		extract_srt
             		;;
         	[vV][tT][tT]|[2][3])
+			clear
             		show_banner_subs
             		convert_srt
             		;;
         	[cC][aA][lL][lL]|[3][4])
+			clear
             		show_banner_clean
             		c_all
             		;;
@@ -219,34 +229,44 @@ show_menu_videos() {
 	# Handling the user's choice using a case statement
 	case $ANS in
       		[mM][aA][iI][nN]|"1")
+			clear
 			show_banner_main
         		show_menu_main
         		;;
       		[xX]|[xX][2][6][5]|"2")
+			clear
 			show_banner_videos
         		x265
         		;;
       		[mM]|[mM][3][uU][8]|"3")
+			clear
 			show_banner_videos
         		m3u8
         		;;
       		[yY]|[yY][dD][lL]|"4")
+			clear
         		show_banner_videos
 			ydl
         		;;
       		[tT]|[tT][uU][bI][iI]|"5")
+			clear
 			show_banner_videos
         		tubi
         		;;
 		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"6")
+			clear
 			show_banner_videos
 			metadata
 			;;
 		[vV]|[vI][iI][vV][eE][oO]|"7")
+			clear
+			show_banner_main
 			plex
 			c_ts
 			;;
 		[aA]|[aA][lL][lL]|"8")
+			clear
+			show_banner_main
 			video_sub && sleep 1
 			c_ts
 			c_mkv
@@ -302,10 +322,12 @@ show_menu_subs() {
         		show_menu_main
         		;;
       		[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
+			clear
 			show_banner_subs
         		extract_srt
         		;;
       		[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
+			clear
 			show_banner_subs
         		convert_srt
         		;;
@@ -361,14 +383,17 @@ show_menu_clean() {
         		show_menu_main
         		;;
       		[c][tT][sS]|"2")
+			clear
 			show_banner_clean
         		c_ts
         		;;
       		[c][mM][kK][vV]|"3")
+			clear
 			show_banner_clean
         		c_mkv
         		;;
 		[cC][aA][lL][lL]|"4")
+			clear
 			show_banner_clean
 			c_all
 			;;
