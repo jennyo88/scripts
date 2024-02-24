@@ -54,6 +54,26 @@ check_ffmpeg() {
     fi
 }
 
+prompt() {
+    local prompt="$1"
+    local variable="$2"
+
+    while true; do
+        printf "$prompt"
+        read -r "$variable"
+
+        # Check if the user wants to exit
+        if [ "${!variable}" == "exit" ]; then
+            echo "Exiting..."
+            # Add exit actions here if needed
+            show_menu_main
+        fi
+
+        # Break the loop if input is not empty
+        [ -n "${!variable}" ] && break
+    done
+}
+
 # Function to pause and wait for user input
 pause() {
     	echo
@@ -119,7 +139,7 @@ show_menu_main() {
 
     	# Prompting the user to select an option
 	echo -e "${BLUE}"
-	read -rp "Select: " ANS
+	prompt "Select: " ANS
 	echo "${RESET}"
 
    	# Handling the user's choice using a case statement
@@ -133,8 +153,8 @@ show_menu_main() {
         	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
             		show_menu_clean
             		;;
-        	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
-            		# Exiting the menu
+        	"0")
+            		# Exiting script
             		goodbye
             		;;
         	# Hidden options
@@ -279,7 +299,7 @@ show_menu_videos() {
 			show_banner_clean
 			show_menu_clean
 			;;
-      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      		"0")
 			# Exiting the menu
         		goodbye
         		;;
@@ -405,7 +425,7 @@ show_menu_clean() {
 			show_banner_subs
 			show_menu_subs
 			;;
-      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      		"0")
 			# Exiting the menu
         		goodbye
         		;;
@@ -439,21 +459,17 @@ x265() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompt user for source extension (e.g. mkv, mp4, or avi)
-	printf "Source extension? (mkv, mp4, or avi) : "
-	read srcExt
+	prompt "Source extension? (mkv, mp4, or avi) : " srcExt
 
 	# Prompt user for destination extension (mkv or mp4)
-	printf "Destination extension? (mkv or mp4; default: mp4) : "
-	read -r destExt
+	prompt "Destination extension? (mkv or mp4; default: mp4) : " destExt
 	destExt=${destExt:-mp4}
 
 	# Prompt user for for source directory
-	printf "Source directory? : "
-	read srcDir
+	prompt "Source directory? : " srcDir
 
 	# Prompt user for for destination directory
-	printf "Destination directory? (default: DONE): "
-	read -r destDir
+	prompt "Destination directory? (default: DONE): " destDir
 	destDir=${destDir:-DONE}
 
 	# Loop through each file in the source directory with the specified source extension
