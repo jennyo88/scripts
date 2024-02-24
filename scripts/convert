@@ -38,8 +38,8 @@ check_ydl() {
     done
 
     if [ "$found" = false ]; then
-        print_error "Error: '$downloader' or 'yt-dlp' command not found."
-        echo "Please make sure '$downloader' or 'yt-dlp' is installed and available in your PATH."
+        print_error "Error: '"$downloader"' or 'yt-dlp' command not found."
+        echo "Please make sure '"$downloader"' or 'yt-dlp' is installed and available in your PATH."
         exit 1
     fi
 }
@@ -64,7 +64,7 @@ check_wget() {
     fi
 }
 
-# Function to download using either $downloader or yt-dlp
+# Function to download using either "$downloader" or yt-dlp
 downloader() {
     local downloader
     if command -v "$downloader" &> /dev/null; then
@@ -72,7 +72,7 @@ downloader() {
     elif command -v "yt-dlp" &> /dev/null; then
         downloader="yt-dlp"
     else
-        echo "Error: Neither $downloader nor yt-dlp is installed. Please install either of them."
+        echo "Error: Neither "$downloader" nor yt-dlp is installed. Please install either of them."
         exit 1
     fi
 }
@@ -582,10 +582,10 @@ m3u8() {
 	show_menu_videos
 }
 
-# Function for downloading Movies & TV Shows from YouTube or Dailymotion using $downloader
+# Function for downloading Movies & TV Shows from YouTube or Dailymotion using "$downloader"
 # This function prompts the user for platform, type (tv or movie), and other details
 # such as show name, season, episode, and resolution. It then downloads videos and subtitles
-# using $downloader and organizes them in a specific folder structure.
+# using "$downloader" and organizes them in a specific folder structure.
 #
 ydl() {
 	check_ydl && check_ffmpeg
@@ -641,11 +641,11 @@ ydl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-	            		$downloader -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
+	            		"$downloader" -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
 
 				 # Download subtitles and convert to SRT format
 	            		printf "\nDownloading subtitles for %s...\n" "$filename"
-	            		$downloader --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
+	            		"$downloader" --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
 
 				printf "\nConverting subtitles to SRT format...\n"
 	        		vtt_files=("${filename%.*}"*.vtt)
@@ -676,11 +676,11 @@ ydl() {
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-	        	$downloader -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+	        	"$downloader" -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
 			# Download subtitles and convert to SRT format
 			printf "\nDownloading subtitles for %s.\n" "$filename"
-			$downloader --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+			"$downloader" --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
 			
 			printf "\nConverting subtitles to SRT format...\n"
 			vtt_files=("${filename%.*}"*.vtt)
@@ -739,7 +739,7 @@ ydl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-	            		$downloader -f best "$episode_url" --add-metadata -o "$filename"
+	            		"$downloader" -f best "$episode_url" --add-metadata -o "$filename"
 
 	            		printf "\nDownloaded %s.\n" "$filename"
 	        	done
@@ -760,7 +760,7 @@ ydl() {
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-	        	$downloader -f best "$movie_url" --add-metadata -o "$filename"
+	        	"$downloader" -f best "$movie_url" --add-metadata -o "$filename"
 
 	        	printf "\nDownloaded %s.\n" "$filename"
 
