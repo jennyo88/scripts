@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
+# ANSI color codes
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+RESET='\033[0m'
+
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
-    echo "1. scripts/convert"
+    echo "{RED}1. scripts/convert{RESET}"
     echo " - - - (converting files)"
     echo "2. scripts/convert_remote"
     echo " - - - (uses yt-dlp instead of youtube-dl)"
