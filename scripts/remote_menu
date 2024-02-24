@@ -1,5 +1,219 @@
 u#!/usr/bin/env bash
 
+## ----------------------
+## Execute Functions
+## ----------------------
+
+main_menu="0"
+
+## ----------------------
+# Step #2: User defined functions
+## ----------------------
+
+show_banner_0() {
+    clear
+    echo -e "${BLUE}"
+    echo " -------------------------------------------- "
+    echo "        Execute Remote Scripts                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
+show_banner_1() {
+    clear
+    echo -e "${BLUE}"
+    echo "        JENNYO88 SCRIPTS                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
+show_banner_2() {
+    clear
+    echo -e "${BLUE}"
+    echo "        OTHER SCRIPTS                "
+    echo " -------------------------------------------- ""${RESET}"
+}
+
+# Function for displaying the main menu
+show_menu_0() {
+
+  	echo -e
+    echo "Press Ctrl+C to exit at any time."
+    echo ""
+    echo ""
+    echo " 1. Execute jennyo88 scripts"
+    echo " 2. Execute scripts in other repositories"
+    echo ""
+	echo -e "\n 0. Exit script \n"
+    echo "==================================================="
+
+
+    # Prompting the user to select an option
+	echo "${BLUE}"
+	read -rp "Select: " ans
+	echo "${RESET}"
+
+   	# Handling the user's choice using a case statement
+    	case $ans in
+        	"1")
+                show_banner_1
+            	show_menu_1
+            	;;
+        	"2")
+            	show_banner_2
+            	show_menu_2
+           		;;
+        	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+            	# Exiting the menu
+            	goodbye
+            	;;
+        	# Hidden options
+        	[cC][oO][nN][vV][eE][rR][tT]|[1][1])
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            	;;
+		    # Handling invalid options
+        	*)
+			    echo -e "Invalid option. Please enter a valid option."
+                pause
+            	;;
+    	esac
+}
+
+show_menu_1() {
+
+  	echo -e
+    echo "Press Ctrl+C to go back to the main menu."
+    echo ""
+    echo ""
+    echo " 1. Go back to Main Menu"
+    echo " 2. convert        - Converting files"
+    echo " 3. convert_remote - Uses yt-dlp instead of youtube-dl"
+    echo " 4. template_remote - Open template to execute a script from GitHub"
+    echo " 5. tmux_ref       - Tmux reference"
+    echo " 6. test           - Payroll test script"
+    echo " 7. other"
+    echo " 8. Go to OTHER SCRIPTS Menu"
+    echo ""
+	echo -e "\n 0. Exit script \n"
+    echo "======================================================="
+
+	# Prompting the user to select an option
+ 	echo "${BLUE}"
+	read -rp "Select: " ans
+	echo "${RESET}"
+
+	# Handling the user's choice using a case statement
+	case $ans in
+      		[mM][aA][iI][nN]|"1")
+        		show_banner_0
+        		show_menu_0
+        		;;
+        	"2")
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            	;;
+        	"3")
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)"
+            	;;
+        	"4")
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote)"
+            	;;
+        	"5")
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
+            	;;
+        	"6")
+            	bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
+            	;;
+        	"7")
+            	execute_bash_script
+                ;;
+            "8")
+                show_banner_2
+                show_menu_2
+      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+			    # Exiting the menu
+        		goodbye
+        		;;
+		    # Handling invalid options
+      		*)
+			    echo -e "Invalid option. Please enter a valid option."
+                pause
+            	;;
+    	esac
+}
+
+show_menu_2() {
+
+  	echo -e
+    echo "Press Ctrl+C to go back to the main menu."
+    echo ""
+    echo ""
+    echo " 1. Go back to Main Menu"
+    echo " 2. Execute Another Bash Script"
+    echo " 3. Execute Python Script"
+    echo " 4. Go to JENNYO88 SCRIPTS Menu"
+    echo ""
+	echo -e "\n 0. Exit script \n"
+    echo "======================================================="
+
+	# Prompting the user to select an option
+ 	echo "${BLUE}"
+	read -rp "Select: " ans
+	echo "${RESET}"
+
+	# Handling the user's choice using a case statement
+	case $ans in
+      		[mM][aA][iI][nN]|"1")
+        		show_banner_0
+        		show_menu_0
+        		;;
+        	"2")
+            	execute_bash_script
+                ;;
+        	"3")
+            	execute_python_script
+            	;;
+        	"4")
+                show_banner_1
+                show_menu_1
+      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+			    # Exiting the menu
+        		goodbye
+        		;;
+		    # Handling invalid options
+      		*)
+			    echo -e "Invalid option. Please enter a valid option."
+                pause
+            	;;
+    	esac
+}
+
+# Function to pause and wait for user input
+pause() {
+  	echo
+	read -rp "Press ENTER to continue..." fackEnterKey
+}
+
+# Function to display goodbye message, reset colors, clear the screen, and exit
+goodbye() {
+  	echo -e "${end}"
+  	clear
+	exit
+}
+
+# Function to load colors using ANSI escape codes
+load_colors() {
+  	BLUE=$'\e[38;5;39m'	    # Blue color
+  	ORANGE=$'\e[38;5;208m'	# Orange color
+  	RED=$'\e[1;31m'		    # Red color (bold)
+  	RESET=$'\e[0m'		    # Reset color attributes
+}
+
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
+
+# ----------------------------------
+# Step #3: Formulas
+# ----------------------------------
+
+
 
 # Function to download and execute a Bash script
 execute_bash_script() {
@@ -15,7 +229,7 @@ execute_bash_script() {
 }
 
 # Function to execute a remote Python script
-execute_remote_python_script() {
+execute_python_script() {
     printf "Enter the GitHub URL of the script: "
     read -r GITHUB_URL
 
@@ -46,108 +260,11 @@ execute_remote_python_script() {
     fi
 }
 
+# -----------------------------------
+# Step #4: Main logic - infinite loop
+# ------------------------------------
 
-# Function to execute a Python script
-execute_python_script() {
-    local python_script_url="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tes_py"
-    
-    echo "Executing Python script from: $python_script_url"
-    
-    if output=$(bash -c "$(curl -fsSL $python_script_url)" 2>&1); then
-        echo "Script execution successful."
-    else
-        echo "Script execution failed. Error message: $output"
-    fi
-}
-
-# Function to display and handle the jennyo88 scripts menu
-jennyo88_scripts_menu() {
-    clear
-    echo "================ JENNYO88 SCRIPTS MENU ================"
-    echo "Press Ctrl+C to go back to the main menu."
-    echo ""
-    echo " 1. scripts/convert        - Converting files"
-    echo " 2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
-    echo " 3. scripts/template_remote - Open template to execute a script from GitHub"
-    echo " 4. scripts/tmux_ref       - Tmux reference"
-    echo " 5. scripts/test           - Payroll test script"
-    echo " 6. other"
-    echo ""
-    echo " 0. Go back to Main Menu"
-    echo "======================================================="
-
-    read -p "Enter your choice (0-6): " choice
-
-    # Validate that the input is a number between 0 and 6
-    if [[ ! $choice =~ ^[0-6]$ ]]; then
-        echo "Invalid choice. Please enter a number between 0 and 6."
-        jennyo88_scripts_menu
-    fi
-
-    case $choice in
-        1) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)" ;;
-        2) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)" ;;
-        3) open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
-        4) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)" ;;
-        5) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)" ;;
-        6) execute_bash_script ;;
-        0) main_menu ;;
-    esac
-}
-
-# Function to display and handle the other scripts menu
-other_scripts_menu() {
-    clear
-    echo "================ OTHER SCRIPTS MENU ================"
-    echo "Press Ctrl+C to go back to the main menu."
-    echo ""
-    echo " 1. Execute Another Bash Script"
-    echo " 2. Execute Python Script"
-    echo " 3. Execute Remote Script"
-    echo ""
-    echo " 0. Go back to Main Menu"
-    echo "======================================================="
-
-    read -p "Enter your choice (0-3): " choice
-
-    if [[ ! $choice =~ ^[0-3]$ ]]; then
-        echo "Invalid choice. Please enter a number between 0 and 3."
-        other_scripts_menu
-    fi
-
-    case $choice in
-        1) execute_bash_script ;;
-        2) execute_python_script ;;
-        3) execute_remote_python_script ;;
-        0) main_menu ;;
-    esac
-}
-
-# Function to display and handle the main menu
-main_menu() {
-    clear
-    echo "==================== MAIN MENU ===================="
-    echo "Press Ctrl+C to exit at any time."
-    echo ""
-    echo " 1. Execute jennyo88 scripts"
-    echo " 2. Execute scripts in other repositories"
-    echo ""
-    echo " 0. Exit"
-    echo "==================================================="
-
-    read -p "Enter your choice (0-2): " choice
-
-    if [[ ! $choice =~ ^[0-2]$ ]]; then
-        echo "Invalid choice. Please enter a number between 0 and 2."
-        main_menu
-    fi
-
-    case $choice in
-        1) jennyo88_scripts_menu ;;
-        2) other_scripts_menu ;;
-        0) echo "Exiting..."; exit 0 ;;
-    esac
-}
-
-# Start with the main menu
-main_menu
+while true
+do
+	show_banner_0 && show_menu_${main_menu}
+done
