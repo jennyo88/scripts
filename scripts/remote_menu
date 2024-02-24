@@ -18,14 +18,15 @@ execute_remote_bash_script() {
 # Function to download and execute a Bash script
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
-    echo "Downloading and executing Bash script from: $bash_script_url"
+    echo "Downloading and attempting to execute Bash script from: $bash_script_url"
 
     # Add these lines for debugging
     echo "Command to execute: bash -c \"\$(curl -fsSL $bash_script_url)\""
     echo "Script content:"
     curl -fsSL $bash_script_url
 
-    if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
+    # Run the script in debug mode
+    if output=$(bash -x -c "$(curl -fsSL $bash_script_url)" 2>&1); then
         echo "Script execution successful."
     else
         echo "Script execution failed. Error message: $output"
@@ -56,7 +57,7 @@ jennyo88_scripts_menu() {
     echo ""
     echo " 1. scripts/convert        - Converting files"
     echo " 2. scripts/convert_remote - Uses yt-dlp instead of youtube-dl"
-    echo " 3. scripts/template_remote - open template to execute a script from GitHub (Open URL)"
+    echo " 3. scripts/template_remote - Open template to execute a script from GitHub"
     echo " 4. scripts/tmux_ref       - Tmux reference"
     echo " 5. scripts/test           - Payroll test script"
     echo " 6. other"
@@ -74,7 +75,7 @@ jennyo88_scripts_menu() {
     case $choice in
         1) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
         2) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
-        3) open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;; # Modify this line
+        3) open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
         4) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
         5) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
         6) execute_bash_script ;;
