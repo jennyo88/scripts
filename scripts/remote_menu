@@ -22,30 +22,27 @@ execute_remote_python_script() {
     # Download the remote script content
     REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
 
-    # Function to install Python dependencies
-    install_dependencies() {
-        if command -v pip3 &> /dev/null; then
-            pip3 install --upgrade "$@"
-        else
-            display_error "pip3 is not installed. Please install pip3 and try again."
-            exit 1
-        fi
-    }
-
     # Save the remote script content to a file
     echo "$REMOTE_SCRIPT_CONTENT" > remote_script.py
 
-    # Check for imports in the remote script and install dependencies
-    IMPORTS=$(grep -E '^import|^from' remote_script.py | awk '{print $2}')
-    if [ -n "$IMPORTS" ]; then
-        install_dependencies $IMPORTS
+    # Save the requirements.txt content to a file if present
+    grep -E '^import |^from ' remote_script.py | awk '{print $2}' > requirements.txt
+
+    # Check if there is a requirements.txt file and install dependencies
+    if [ -s requirements.txt ]; then
+        if command -v pip3 &> /dev/null; then
+            pip3 install --upgrade -r requirements.txt
+        else
+            echo "Error: pip3 is not installed. Please install pip3 and try again."
+            exit 1
+        fi
     fi
 
     # Execute the saved script using the Python interpreter locally
     if python3 remote_script.py; then
         echo "Script execution successful."
     else
-        display_error "Failed to execute the remote script."
+        echo "Failed to execute the remote script."
     fi
 }
 
