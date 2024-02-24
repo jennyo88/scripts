@@ -28,23 +28,12 @@ source_remote_script() {
   bash -c "$(curl -fsSL $script_url)"
 }
 # LIST OF SCRIPTS
-ytdlp="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
-tmux_ref="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref"
+yt-dlp="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/videos/yt-dlp"
+youtube-dl="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/videos/youtube-dl"
 script_to_source="https://example.com/script3.sh"
 script_to_source="https://example.com/script3.sh"
 
 # Check if required commands are available
-
-# Function to check if youtube-dl is installed
-check_ydl() {
-    if command -v youtube-dl &> /dev/null; then
-        echo "youtube-dl is installed."
-        return 0  # Success
-    else
-        echo "Error: youtube-dl is not installed. Please install it before running this script."
-        return 1  # Failure
-    fi
-}
 
 check_ffmpeg() {
     if command -v ffmpeg &> /dev/null; then
@@ -283,12 +272,11 @@ show_menu_videos() {
         		;;
       		[yY]|[yY][dD][lL]|"4")
 			clear
-        		show_banner_videos
-			ydl
+        		source_remote_script "$youtube-dl"
         		;;
 		"5")
 			clear
-			source_remote_script "$ytdlp"
+			source_remote_script "$yt-dlp"
 			;;
       		[tT]|[tT][uU][bI][iI]|"6")
 			clear
@@ -576,246 +564,6 @@ m3u8() {
 	ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
-	pause
-	show_menu_videos
-}
-
-# Function for downloading Movies & TV Shows from YouTube or Dailymotion using "$downloader"
-# This function prompts the user for platform, type (tv or movie), and other details
-# such as show name, season, episode, and resolution. It then downloads videos and subtitles
-# using "$downloader" and organizes them in a specific folder structure.
-#
-ydl() {
-	check_ydl && check_ffmpeg
-	echo -e "${BLUE}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║                 Movies & TV Shows               ║ "
-    	echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-
-
-	# Prompt user for platform (YouTube or other)
-	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform
-	platform=${platform:-youtube}
-
-	# Process based on the chosen platform
-	if [ "$platform" == "youtube" ]
-	then
-		# For YouTube, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type
-		type=${type:-tv}
-
-		# Process based on the chosen type (tv or movie)
-	    	if [ "$type" == "tv" ]
-		then
-			# For TV shows, prompt for show details and iterate through episodes
-	       		prompt "Enter the show name (include periods between words): " show_name
-
-			# Prompt for season and episode range
-	        	prompt "Enter the season number (two digits; default: 01): " season_number
-			season_number=${season_number:-01}
-
-	        	prompt "Enter the first episode number: " first_episode
-
-	        	prompt "Enter the last episode number: " last_episode
-
-	        	show_folder="${show_name}_YouTube"
-	        	mkdir -p "$show_folder"
-
-			# Iterate through episodes, prompting for URLs and downloading
-	        	for ((episode = first_episode; episode <= last_episode; episode++))
-			do
-	            		episode_number=$(printf "%02d" "$episode")
-
-				# Prompt for episode URL (skipping if blank)
-	            		prompt "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
-
-	            		if [ -z "$episode_url" ]
-				then
-	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-	                		continue
-	            		fi
-
-				# Generate filename and download video
-	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
-	            		printf "\nDownloading %s...\n" "$filename"
-				if command -v "youtube-dl" &> /dev/null; then
-				    youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
-				elif command -v "yt-dlp" &> /dev/null; then
-				    yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
-				else
-				    echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-				    exit 1
-				fi
-
-				 # Download subtitles and convert to SRT format
-	            		printf "\nDownloading subtitles for %s...\n" "$filename"
-				if command -v "youtube-dl" &> /dev/null; then
-				   youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
-				elif command -v "yt-dlp" &> /dev/null; then
-				   yt-dlp --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
-				else
-				    echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-				    exit 1
-				fi
-	            		"$downloader" --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
-
-				printf "\nConverting subtitles to SRT format...\n"
-	        		vtt_files=("${filename%.*}"*.vtt)
-	        		for vtt_file in "${vtt_files[@]}"
-				do
-	            			srt_file="${vtt_file%.*}.srt"
-	            			ffmpeg -i "$vtt_file" "$srt_file" -y
-	            			rm "$vtt_file"
-	            			printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
-	        		done
-
-				printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
-	    		done
-
-	        	printf "\nAll episodes downloaded successfully.\n"
-
-	   	elif [ "$type" == "movie" ]
-		then
-			# For movies, prompt for movie details and download
-	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
-
-			prompt "\nEnter the year of the movie : " movie_year
-
-			prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p): " resolution
-
-	        	prompt "\nEnter the movie URL: " movie_url
-
-			# Generate filename and download video
-	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-	        	printf "\nDownloading %s...\n" "$filename"
-			if command -v "youtube-dl" &> /dev/null; then
-				youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
-			elif command -v "yt-dlp" &> /dev/null; then
-				yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
-			else
-				echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-				exit 1
-			fi
-
-			# Download subtitles and convert to SRT format
-			printf "\nDownloading subtitles for %s.\n" "$filename"
-			if command -v "youtube-dl" &> /dev/null; then
-				youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
-			elif command -v "yt-dlp" &> /dev/null; then
-				yt-dlp --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
-			else
-				echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-				exit 1
-			fi
-			
-			printf "\nConverting subtitles to SRT format...\n"
-			vtt_files=("${filename%.*}"*.vtt)
-			for vtt_file in "${vtt_files[@]}"
-			do
-				srt_file="${vtt_file%.*}.srt"
-				ffmpeg -i "$vtt_file" "$srt_file" -y
-				rm "$vtt_file"
-				printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
-			done
-
-			printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
-	    	
-		else
-			# Invalid type entered
-	        	printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-	        	exit 1
-	    	fi
-
-	elif [ "$platform" == "other" ]
-	then
-		# For other, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'): " type
-
-		# Process based on the chosen type (tv or movie)
-	    	if [ "$type" == "tv" ]
-		then
-			# For TV shows, prompt for show details and iterate through episodes
-	        	prompt "\nEnter the show name (include periods between words): " show_name
-
-			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
-
-	        	prompt "Enter the season number (two digits): " season_number
-			season_number=${season_number:-01}
-
-	        	prompt "Enter the first episode number (two digits): " first_episode
-
-	        	prompt "Enter the last episode number (two digits): " last_episode
-
-	        	show_folder="${show_name}_Dailymotion"
-	        	mkdir -p "$show_folder"
-
-			# Iterate through episodes, prompting for URLs and downloading
-	        	for ((episode = first_episode; episode <= last_episode; episode++))
-			do
-	            		episode_number=$(printf "%02d" "$episode")
-
-				# Prompt for episode URL (skipping if blank)
-	            		prompt "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
-
-	            		if [ -z "$episode_url" ]; then
-	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-	                		continue
-	            		fi
-
-				# Generate filename and download video
-	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
-	            		printf "\nDownloading %s...\n" "$filename"
-				if command -v "youtube-dl" &> /dev/null; then
-					youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
-				elif command -v "yt-dlp" &> /dev/null; then
-					yt-dlp -f best "$episode_url" --add-metadata -o "$filename"
-				else
-					echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-					exit 1
-				fi
-
-	            		printf "\nDownloaded %s.\n" "$filename"
-	        	done
-
-	        	printf "\nAll episodes downloaded successfully.\n"
-
-	    	elif [ "$type" == "movie" ]
-		then
-			# For movies, prompt for movie details and download
-	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
-
-			prompt "\nEnter the year of the movie: " movie_year
-
-	        	prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
-
-			prompt "Enter the movie URL: " movie_url
-
-			# Generate filename and download video
-	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-	        	printf "\nDownloading %s...\n" "$filename"
-			if command -v "youtube-dl" &> /dev/null; then
-				youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
-			elif command -v "yt-dlp" &> /dev/null; then
-				yt-dlp -f best "$movie_url" --add-metadata -o "$filename"
-			else
-				echo "Error: Neither youtube-dl nor yt-dlp is installed. Please install either of them."
-				exit 1
-			fi
-
-	        	printf "\nDownloaded %s.\n" "$filename"
-
-	    	else
-			# Invalid type entered
-	        	printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-	        	exit 1
-	    	fi
-
-	else
-		# Invalid platform entered
-	    	printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
-	    	exit 1
-	fi
 	pause
 	show_menu_videos
 }
