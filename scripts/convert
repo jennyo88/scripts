@@ -27,7 +27,7 @@ load_colors # Only loaded once
 # Check if required commands are available
 
 check_ydl() {
-    local commands=("youtube-dl" "yt-dlp")
+    local commands=("$downloader" "yt-dlp")
     local found=false
 
     for cmd in "${commands[@]}"; do
@@ -38,8 +38,8 @@ check_ydl() {
     done
 
     if [ "$found" = false ]; then
-        print_error "Error: 'youtube-dl' or 'yt-dlp' command not found."
-        echo "Please make sure 'youtube-dl' or 'yt-dlp' is installed and available in your PATH."
+        print_error "Error: '$downloader' or 'yt-dlp' command not found."
+        echo "Please make sure '$downloader' or 'yt-dlp' is installed and available in your PATH."
         exit 1
     fi
 }
@@ -54,6 +54,29 @@ check_ffmpeg() {
     fi
 }
 
+check_wget() {
+    local command="wget"
+
+    if ! command -v "$command" &> /dev/null; then
+        print_error "Error: '$command' command not found."
+        echo "Please make sure '$command' is installed and available in your PATH."
+        exit 1
+    fi
+}
+
+# Function to download using either $downloader or yt-dlp
+downloader() {
+    local downloader
+    if command -v "$downloader" &> /dev/null; then
+        downloader="$downloader"
+    elif command -v "yt-dlp" &> /dev/null; then
+        downloader="yt-dlp"
+    else
+        echo "Error: Neither $downloader nor yt-dlp is installed. Please install either of them."
+        exit 1
+    fi
+}
+
 prompt() {
     local prompt="$1"
     local variable="$2"
@@ -62,10 +85,10 @@ prompt() {
         printf "$prompt"
         read -r "$variable"
 
-        # Check if the user wants to exit
-        if [ "${!variable}" == "exit" ]; then
+        # Check if the user wants to abort
+        if [ "${!variable}" == "abort" ]; then
             sleep 1
-            echo "Exiting..."
+            echo "Abort..."
             # Add exit actions here if needed
             show_menu_main
         fi
@@ -91,7 +114,7 @@ goodbye() {
 # Function to display the main menu banner
 show_banner_main() {
     	clear
-    	echo -e "${BLUE}"
+    	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║          Converting Files - Service Menu        ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -139,12 +162,12 @@ show_menu_main() {
     	echo ""
 
     	# Prompting the user to select an option
-	echo -e "${BLUE}"
-	prompt "Select: " ANS
+	echo -e \n"${BLUE}"
+	prompt "Select: " ans
 	echo "${RESET}"
 
    	# Handling the user's choice using a case statement
-    	case $ANS in
+    	case $ans in
         	[vV]|[vV][iI][dD][eE][oO][sS]|"1")
             		show_menu_videos
             		;;
@@ -243,12 +266,12 @@ show_menu_videos() {
     	echo ""
 
    	# Prompting the user to select an option
-    	echo -e "${BLUE}"
-    	read -rp "Select: " ANS
+    	echo -e \n"${BLUE}"
+    	prompt "Select: " ans
     	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-	case $ANS in
+	case $ans in
       		[mM][aA][iI][nN]|"1")
 			clear
 			show_banner_main
@@ -332,12 +355,12 @@ show_menu_subs() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo "${BLUE}"
-	read -rp "Select: " ANS
+  	echo -e \n"${BLUE}"
+	prompt "Select: " ans
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-    	case $ANS in
+    	case $ans in
       		[mM][aA][iI][nN]|"1")
         		show_banner_main
         		show_menu_main
@@ -393,12 +416,12 @@ show_menu_clean() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo "${BLUE}"
-	read -rp "Select: " ANS
+  	echo -e \n"${BLUE}"
+	prompt "Select: " ans
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-    	case $ANS in
+    	case $ans in
       		[mM][aA][iI][nN]|"1")
         		show_banner_main
         		show_menu_main
@@ -460,17 +483,17 @@ x265() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompt user for source extension (e.g. mkv, mp4, or avi)
-	prompt "Source extension? (mkv, mp4, or avi) : " srcExt
+	prompt "\nSource extension? (mkv, mp4, or avi) : " srcExt
 
 	# Prompt user for destination extension (mkv or mp4)
-	prompt "Destination extension? (mkv or mp4; default: mp4) : " destExt
+	prompt "\nDestination extension? (mkv or mp4; default: mp4) : " destExt
 	destExt=${destExt:-mp4}
 
 	# Prompt user for for source directory
-	prompt "Source directory? : " srcDir
+	prompt "\nSource directory? : " srcDir
 
 	# Prompt user for for destination directory
-	prompt "Destination directory? (default: DONE): " destDir
+	prompt "\nDestination directory? (default: DONE): " destDir
 	destDir=${destDir:-DONE}
 
 	# Loop through each file in the source directory with the specified source extension
@@ -504,44 +527,35 @@ m3u8() {
 	# Uncomment the following lines if source extension, destination extension,
 	# and destination directory input is required
 	#
-	# printf "Source extension? : "
-	# read srcExt
+	# prompt "\nSource extension? : " srcExt
 
 	# Prompt user for destination extension
-	printf "Destination extension? (default: ts): "
-	read -r destExt
+	prompt "\nDestination extension? (default: ts): " destExt
 	destExt=${destExt:-ts}
 
 	# Prompt user for destination directory
-	printf "Destination directory? (default: ts): "
-	read -r destDir
+	prompt "\nDestination directory? (default: ts): " destDir
 	destDir=${destDir:-ts}
 
 	# Prompt user for source web address
-	printf "Source web-address? : "
-	read srcAdd
+	prompt "\nSource web-address? : " srcAdd
 
 	# Prompt user for movie details
-	printf "Movie name? (include periods between words) : "
-	read baseName
+	prompt "\nMovie name? (include periods between words) : " baseName
 
-	printf "Movie release year? : "
-	read baseYear
+	prompt "\nMovie release year? : " baseYear
 
-	printf "Scene/channel of the movie? (default: TCM) : "
-	read -r baseScene
+	prompt "\nScene/channel of the movie? (default: TCM) : " baseScene
 	baseScene=${baseScene:-TCM}
 
-	printf "Enter the resolution (e.g., 480p, 720p, 1080p; default: 720p): "
-	read -r baseResolution
+	prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p; default: 720p): " baseResolution
 	baseResolution=${baseResolution:-720p}
 
 	# Prompt user for movie language (three-letter code)
 	validLanguageCode=false
 	while [ "$validLanguageCode" = false ]
 	do
-   		printf "Movie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): "
-    		read -r language
+   		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language
 		language=${language:-eng}
 
     		if [ ${#language} -eq 3 ]
@@ -568,10 +582,10 @@ m3u8() {
 	show_menu_videos
 }
 
-# Function for downloading Movies & TV Shows from YouTube or Dailymotion using youtube-dl
+# Function for downloading Movies & TV Shows from YouTube or Dailymotion using $downloader
 # This function prompts the user for platform, type (tv or movie), and other details
 # such as show name, season, episode, and resolution. It then downloads videos and subtitles
-# using youtube-dl and organizes them in a specific folder structure.
+# using $downloader and organizes them in a specific folder structure.
 #
 ydl() {
 	check_ydl && check_ffmpeg
@@ -583,35 +597,29 @@ ydl() {
 
 
 	# Prompt user for platform (YouTube or other)
-	printf "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): "
-	read -r platform
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform
 	platform=${platform:-youtube}
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): "
-	    	read -r type
+	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type
 		type=${type:-tv}
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
-	       		printf "\nEnter the show name (include periods between words): "
-	        	read -r show_name
+	       		prompt "Enter the show name (include periods between words): " show_name
 
 			# Prompt for season and episode range
-	        	printf "Enter the season number (two digits; default: 01): "
-	        	read -r season_number
+	        	prompt "Enter the season number (two digits; default: 01): " season_number
 			season_number=${season_number:-01}
 
-	        	printf "Enter the first episode number: "
-	        	read -r first_episode
+	        	prompt "Enter the first episode number: " first_episode
 
-	        	printf "Enter the last episode number: "
-	        	read -r last_episode
+	        	prompt "Enter the last episode number: " last_episode
 
 	        	show_folder="${show_name}_YouTube"
 	        	mkdir -p "$show_folder"
@@ -622,8 +630,7 @@ ydl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-	            		read -r episode_url
+	            		prompt "Enter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
 
 	            		if [ -z "$episode_url" ]
 				then
@@ -634,11 +641,11 @@ ydl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-	            		youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
+	            		$downloader -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
 
 				 # Download subtitles and convert to SRT format
 	            		printf "\nDownloading subtitles for %s...\n" "$filename"
-	            		youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
+	            		$downloader --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
 
 				printf "\nConverting subtitles to SRT format...\n"
 	        		vtt_files=("${filename%.*}"*.vtt)
@@ -658,26 +665,22 @@ ydl() {
 	   	elif [ "$type" == "movie" ]
 		then
 			# For movies, prompt for movie details and download
-	        	printf "\nEnter the name of the movie (include periods between words): "
-	        	read -r movie_name
+	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-			printf "\nEnter the year of the movie : "
-	        	read -r movie_year
+			prompt "\nEnter the year of the movie : " movie_year
 
-			printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
-			read -r resolution
+			prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-	        	printf "Enter the movie URL: "
-	        	read -r movie_url
+	        	prompt "\nEnter the movie URL: " movie_url
 
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-	        	youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+	        	$downloader -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
 			# Download subtitles and convert to SRT format
 			printf "\nDownloading subtitles for %s.\n" "$filename"
-			youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+			$downloader --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
 			
 			printf "\nConverting subtitles to SRT format...\n"
 			vtt_files=("${filename%.*}"*.vtt)
@@ -700,28 +703,22 @@ ydl() {
 	elif [ "$platform" == "other" ]
 	then
 		# For other, prompt for TV show or movie
-	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
-	    	read -r type
+	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'): " type
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
-	        	printf "\nEnter the show name (include periods between words): "
-	        	read -r show_name
+	        	prompt "\nEnter the show name (include periods between words): " show_name
 
-			printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
-	        	read -r resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-	        	printf "Enter the season number (two digits): "
-	        	read -r season_number
+	        	prompt "Enter the season number (two digits): " season_number
 			season_number=${season_number:-01}
 
-	        	printf "Enter the first episode number (two digits): "
-	        	read -r first_episode
+	        	prompt "Enter the first episode number (two digits): " first_episode
 
-	        	printf "Enter the last episode number (two digits): "
-	        	read -r last_episode
+	        	prompt "Enter the last episode number (two digits): " last_episode
 
 	        	show_folder="${show_name}_Dailymotion"
 	        	mkdir -p "$show_folder"
@@ -732,8 +729,7 @@ ydl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-	            		read -r episode_url
+	            		prompt "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number" episode_url
 
 	            		if [ -z "$episode_url" ]; then
 	                		printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
@@ -743,7 +739,7 @@ ydl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-	            		youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
+	            		$downloader -f best "$episode_url" --add-metadata -o "$filename"
 
 	            		printf "\nDownloaded %s.\n" "$filename"
 	        	done
@@ -753,22 +749,18 @@ ydl() {
 	    	elif [ "$type" == "movie" ]
 		then
 			# For movies, prompt for movie details and download
-	        	printf "\nEnter the name of the movie (include periods between words): "
-	        	read -r movie_name
+	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-			printf "\nEnter the year of the movie: "
-	        	read -r movie_year
+			prompt "\nEnter the year of the movie: " movie_year
 
-	        	printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
-	        	read -r resolution
+	        	prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-			printf "Enter the movie URL: "
-	        	read -r movie_url
+			prompt "Enter the movie URL: " movie_url
 
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-	        	youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
+	        	$downloader -f best "$movie_url" --add-metadata -o "$filename"
 
 	        	printf "\nDownloaded %s.\n" "$filename"
 
@@ -852,6 +844,7 @@ video_sub() {
 #
 tubi() {
 	check_ffmpeg
+	check_wget
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                   tubi SCRIPT                   ║ "
@@ -859,24 +852,19 @@ tubi() {
 
 
 	# Prompting the user for show details
-	printf "Enter the name of the show: "
-	read -r show_name
+	prompt "Enter the name of the show: " show_name
 
-	printf "Enter the first episode number: "
-	read -r first_episode
+	prompt "Enter the first episode number: " first_episode
 
-	printf "Enter the last episode number: "
-	read -r last_episode
+	prompt "Enter the last episode number: " last_episode
 
 	# Loop through the specified range of episodes
 	for ((episode_number = first_episode; episode_number <= last_episode; episode_number++))
 	do
 		# Prompting the user for video and audio URLs for each episode
-	    	printf "Enter the web address for video file of episode %02d: " "${episode_number}"
-	    	read -r video_url
+	    	prompt "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
 
-	   	printf "Enter the web address for audio file of episode %02d: " "${episode_number}"
-	    	read -r audio_url
+	   	prompt "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
 
 		# Generating file names based on user input
 	    	video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
@@ -917,7 +905,7 @@ metadata() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user to enter the folder path
-	read -p "Enter the folder path where the video files are located: " folder_path
+	prompt "Enter the folder path where the video files are located: " folder_path
 
 	# Checking if the folder exists
 	if [ -d "$folder_path" ]; then
@@ -933,7 +921,7 @@ metadata() {
 			# Checking if the file is an .mp4 video file
 	        	if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
 				# Prompting the user to enter the three-letter language code
-	            		read -p "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
+	            		prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
 
 				# Checking if the user entered "abort" to stop the script
 	            		if [[ "$language" == "abort" ]]
@@ -978,20 +966,16 @@ plex() {
 
 
 	# Prompting the user for the source extension (e.g., ts)
-  	printf "Source extension? : "
-  	read srcExt
+  	prompt "Source extension? : " srcExt
 
 	# Prompting the user for the destination extension (e.g., mkv)
-  	printf "Destination extension? : "
-  	read destExt
+  	prompt "Destination extension? : " destExt
 
 	# Prompting the user for the source directory
-  	printf "Source directory? : "
-  	read srcDir
+  	prompt "Source directory? : " srcDir
 
 	# Prompting the user for the destination directory
-  	printf "Destination directory? : "
-  	read destDir
+  	prompt "Destination directory? : " destDir
 
 	# Loop through each file in the source directory with the specified source extension
   	for filename in "$srcDir"/*.$srcExt
@@ -1027,21 +1011,17 @@ extract_srt() {
 
 
 	# Prompting the user for the source extension (e.g., mp4, mkv)
-	printf "Source extension? : "
-	read srcExt
+	prompt "Source extension? : " srcExt
 
 	# Prompting the user for the destination extension (e.g., srt)
-	printf "Destination extension? (default: srt): "
-	read -r destExt
+	prompt "Destination extension? (default: srt): " destExt
 	destExt=${destExt:-srt}
 
 	# Prompting the user for the source directory
-  	printf "Source directory? : "
-  	read srcDir
+  	prompt "Source directory? : " srcDir
 
 	# Prompting the user for the destination directory
-  	printf "Destination directory? : "
-  	read -r destDir
+  	prompt "Destination directory? : " destDir
 	destDir=${destDir:-srt}
 
 	# Loop through each file in the source directory with the specified source extension
@@ -1073,13 +1053,11 @@ convert_srt() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for the source directory
-  	printf "Source directory? (default: vtt): "
-  	read -r srcDir
+  	prompt "Source directory? (default: vtt): " srcDir
 	srcDir=${srcDir:-vtt}
 
 	# Prompting the user for the destination directory
-  	printf "Destination directory? (default: srt): "
-  	read -r destDir
+  	prompt "Destination directory? (default: srt): " destDir
 	destDir=${destDir:-srt}
 
 	# Loop through each VTT file in the source directory
@@ -1111,22 +1089,18 @@ c_ts() {
 
 
 	# Prompting the user for confirmation
-	printf 'Do you want to clear ts folder (y/N)? '
-	read ANS
+	prompt 'Do you want to clear ts folder (y/N)? ' ans
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ANS" != "${ANS#[Yy]}" ]
+	if [ "$ans" != "${ans#[Yy]}" ]
 	then
 		# Removing all files with .ts extension in the 'ts' folder
 		rm -r ./ts/*.ts
 
-		# Displaying a completion message with a beep sound
 		echo -e "TS folder cleared!\a"
-		sleep 1
+		pause
+		show_menu_clean
 	fi
-
-	pause
-	show_menu_clean
 }
 
 # Function to clean up 'mkv' folder
@@ -1139,21 +1113,18 @@ c_mkv() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for confirmation
-	printf 'Do you want to clear mkv folder (y/N)? '
-	read ANS
+	prompt 'Do you want to clear mkv folder (y/N)? ' ans
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ANS" != "${ANS#[Yy]}" ]
+	if [ "$ans" != "${ans#[Yy]}" ]
 	then
 		# Removing all files with .mkv extension in the 'mkv' folder
 		rm -r ./mkv/*.mkv
 
-		# Displaying a completion message with a beep sound
 		echo -e "MKV folder cleared!\a"
-		sleep 1
+		pause
+		show_menu_clean
 	fi
-	pause
-	show_menu_clean
 }
 
 # Function to clean up all folders
@@ -1166,11 +1137,10 @@ c_all() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompting the user for confirmation
-	printf 'Do you want to clear all folders (y/N)? '
-	read ANS
+	prompt 'Do you want to clear all folders (y/N)? ' ans
 
 	# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-	if [ "$ANS" != "${ANS#[Yy]}" ]
+	if [ "$ans" != "${ans#[Yy]}" ]
 	then
 		# Removing all files with .ts extension in the 'ts' folder
  		rm -r ./ts/*.ts
@@ -1178,12 +1148,10 @@ c_all() {
 		# Removing all files with .mkv extension in the 'mkv' folder
 		rm -r ./mkv/*.
 
-		# Displaying a completion message with a beep sound
 		echo -e "All folders cleared!\a"
-		sleep 1
+		pause
+		show_menu_clean
 	fi
-	pause
-	show_menu_clean
 }
 
 # -----------------------------------
