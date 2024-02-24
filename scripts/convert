@@ -64,6 +64,7 @@ prompt() {
 
         # Check if the user wants to exit
         if [ "${!variable}" == "exit" ]; then
+            sleep 1
             echo "Exiting..."
             # Add exit actions here if needed
             show_menu_main
