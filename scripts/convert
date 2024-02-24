@@ -615,18 +615,22 @@ youtube-dl() {
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
+	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
+		read -r type
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
-	       		prompt "\nEnter the show name (include periods between words): " show_name
+	       		printf "\nEnter the show name (include periods between words): "
+			read -r show_name
 
 			# Prompt for season and episode range
-	        	prompt "Enter the season number (two digits): " season_number
+	        	printf "Enter the season number (two digits): "
+			read -r season_number
 
-	        	prompt "Enter the first episode number: " first_episode
+	        	printf "Enter the first episode number: "
+			read -r first_episode
 
 	        	prompt "Enter the last episode number: " last_episode
 
