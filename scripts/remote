@@ -4,11 +4,11 @@
 # Description: Download and execute a remote script from GitHub.
 # Author: Your Name
 # Date: February 23, 2024
-# Version: 1.1
+# Version: 1.4
 
 # Usage: ./remote
-# Note: This script prompts the user for GitHub username, repository name, branch name, script type, and script path.
-# It constructs a URL based on the user's input and attempts to download and execute a remote script from GitHub.
+# Note: This script prompts the user for GitHub username, repository name, branch name, and script path.
+# It constructs a URL based on the user's input and attempts to download and execute a remote script (Bash or Python) from GitHub.
 
 # Functions:
 
@@ -28,18 +28,16 @@ display_error() {
     echo "Error: $1"
 }
 
-# Function to prompt the user for script type
-prompt_for_script_type() {
-    echo "Select the script type:"
-    echo "1. Bash"
-    echo "2. Python"
-    read -rp "Enter the script type (1 for Bash, 2 for Python): " SCRIPT_TYPE
+# Function to get the shebang line from a script
+get_shebang() {
+    local script_content=$1
+    local shebang=$(echo "$script_content" | grep -E '^#!/usr/bin/env (bash|python3)')
 
-    case $SCRIPT_TYPE in
-        1) EXEC_COMMAND="bash -c";;
-        2) EXEC_COMMAND="python3 -c";;
-        *) display_error "Invalid script type selected."; exit 1;;
-    esac
+    if [ -n "$shebang" ]; then
+        echo "$shebang"
+    else
+        echo ""
+    fi
 }
 
 # Main Script:
@@ -73,15 +71,30 @@ fi
 # Use the provided script path or the default value
 SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 
-# Prompt the user for the script type
-prompt_for_script_type
-
 # Construct the URL based on user input
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
-# Download and execute the remote script using the selected command
-if $EXEC_COMMAND "$(curl -fsSL $REMOTE_SCRIPT_URL)"; then
-    echo "Script execution successful."
+# Download the remote script using curl
+SCRIPT_CONTENTS=$(curl -fsSL $REMOTE_SCRIPT_URL)
+
+# Get the shebang line from the script
+SHEBANG=$(get_shebang "$SCRIPT_CONTENTS")
+
+# Execute the script based on its shebang
+if [ "$SHEBANG" == "#!/usr/bin/env bash" ]; then
+    # Execute the Bash script
+    if bash -c "$SCRIPT_CONTENTS"; then
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script."
+    fi
+elif [ "$SHEBANG" == "#!/usr/bin/env python3" ]; then
+    # Execute the Python script
+    if python3 -c "$SCRIPT_CONTENTS"; then
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script."
+    fi
 else
-    display_error "Failed to execute the remote script."
+    display_error "Unsupported script type or missing shebang in the remote script."
 fi
