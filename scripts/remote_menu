@@ -50,7 +50,7 @@ show_banner_1() {
     show_banner_0
     echo -e "${BLUE}"
     echo " JENNYO88 SCRIPTS"
-    echo " ═══════════════════════════════════════""${RESET}"
+    echo " ════════════════════════════════════════""${RESET}"
 }
 
 # Function to display the other scripts menu banner
@@ -59,7 +59,7 @@ show_banner_2() {
     show_banner_0
     echo -e "${BLUE}"
     echo " OTHER SCRIPTS"
-    echo " ═══════════════════════════════════════""${RESET}"
+    echo " ════════════════════════════════════════""${RESET}"
 }
 
 # Function for displaying the main menu
@@ -73,7 +73,7 @@ show_menu_0() {
     echo ""
     echo -e "\n 0. Exit script \n"
     echo -e "${BLUE}"
-    echo "═══════════════════════════════════════"
+    echo " ════════════════════════════════════════"
 
     # Prompting the user to select an option
     read -rp "Select: " ANS
@@ -120,7 +120,7 @@ show_menu_1() {
     echo ""
     echo -e "\n 0. Exit script \n"
     echo -e "${BLUE}"
-    echo "═══════════════════════════════════════"
+    echo " ════════════════════════════════════════"
 
     # Prompting the user to select an option
     read -rp "Select: " ANS
@@ -178,7 +178,7 @@ show_menu_2() {
     echo ""
     echo -e "\n 0. Exit script \n"
     echo -e "${BLUE}"
-    echo "═══════════════════════════════════════"
+    echo " ════════════════════════════════════════"
 
     # Prompting the user to select an option
     read -rp "Select: " ans
