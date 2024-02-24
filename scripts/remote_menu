@@ -1,16 +1,5 @@
 #!/usr/bin/env bash
 
-# Function to execute a Bash script from a remote URL
-execute_remote_bash_script() {
-    local script_url=$1
-    echo "Executing script: $script_url"
-
-    if output=$(bash -c "$(curl -fsSL $script_url)" 2>&1); then
-        echo "Script execution successful."
-    else
-        echo "Script execution failed. Error message: $output"
-    fi
-}
 
 # Function to download and execute a Bash script
 execute_bash_script() {
