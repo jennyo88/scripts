@@ -68,7 +68,7 @@ jennyo88_scripts_menu() {
     fi
 
     case $choice in
-        1) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
+        1) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)" ;;
         2) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
         3) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
         4) execute_remote_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
