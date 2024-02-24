@@ -52,9 +52,9 @@ goodbye() {
 show_banner_0() {
     clear
     echo -e "${BLUE}"
-    echo " ╔════════════════════════════════════════╗ "
-    echo " ║       Execute Remote Scripts           ║ "
-    echo " ╚════════════════════════════════════════╝ ""${RESET}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║               Execute Remote Scripts            ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the jennyo88 scripts menu banner
@@ -62,8 +62,10 @@ show_banner_1() {
     clear
     show_banner_0
     echo -e "${BLUE}"
-    echo " JENNYO88 SCRIPTS"
-    echo " ═════════════════════════════════════════""${RESET}"
+    echo " ║                                                 ║ "
+    echo " ║               JENNYO88 SCRIPTS                  ║ "
+    echo " ║                                                 ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the other scripts menu banner
@@ -71,8 +73,10 @@ show_banner_2() {
     clear
     show_banner_0
     echo -e "${BLUE}"
-    echo " OTHER SCRIPTS"
-    echo " ═════════════════════════════════════════""${RESET}"
+    echo " ║                                                 ║ "
+    echo " ║                OTHER SCRIPTS                    ║ "
+    echo " ║                                                 ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function for displaying the main menu
