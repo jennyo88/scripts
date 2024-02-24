@@ -8,6 +8,8 @@
 # GitHub Repository: https://github.com/jennyo88/scripts
 
 
+main_menu="0"
+
 # -----------------------------------
 # COLORS
 # -----------------------------------
@@ -117,7 +119,7 @@ goodbye() {
 # -----------------------------------
 
 # Function to display the main menu banner
-show_banner_main() {
+show_banner_0() {
 	clear
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
@@ -125,7 +127,7 @@ show_banner_main() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_videos() {
+show_banner_1() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
@@ -134,7 +136,7 @@ show_banner_videos() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_subs() {
+show_banner_2() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
@@ -143,7 +145,7 @@ show_banner_subs() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_clean() {
+show_banner_3() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
    	echo " ║                                                 ║ "
@@ -158,7 +160,7 @@ show_banner_clean() {
 
 # Function for displaying the main menu
 show_menu_main() {
-    	show_banner_main
+    	show_banner_0
     	echo ""
     	echo ""
 	echo "		SCRIPTS"
@@ -193,53 +195,53 @@ show_menu_main() {
         	# Hidden options
         	[xX][2][6][5]|[1][6])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		x265
             		;;
         	[mM][3][uU][8]|[1][2])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		m3u8
             		;;
         	[yY][dD][lL]|[1][3])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		ydl
             		;;
         	[tT][uU][bB][iI]|[1][5])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		tubi
             		;;
         	[mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		metadata
             		;;
         	[pP][lL][eE][xX]|[1][7])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		plex
             		;;
         	[aA][lL][lL]|[1][8])
 			clear
-            		show_banner_videos
+            		show_banner_1
             		video_sub && sleep 1
             		c_all
             		;;
         	[eE][xX][tT][rR][aA][cC][tT]|[2][2])
 			clear
-            		show_banner_subs
+            		show_banner_2
             		extract_srt
             		;;
         	[vV][tT][tT]|[2][3])
 			clear
-            		show_banner_subs
+            		show_banner_2
             		convert_srt
             		;;
         	[cC][aA][lL][lL]|[3][4])
 			clear
-            		show_banner_clean
+            		show_banner_3
             		c_all
             		;;
 		# Handling invalid options
@@ -254,8 +256,8 @@ show_menu_main() {
 
 # Function for displaying the VIDEOS menu
 show_menu_videos() {
-	show_banner_main
-	show_banner_videos
+	show_banner_0
+	show_banner_1
 	echo ""
   	echo "  1. Go back to Main Menu"
 	echo ""
@@ -287,59 +289,59 @@ show_menu_videos() {
 	case $ans in
       		[mM][aA][iI][nN]|"1")
 			clear
-			show_banner_main
-        		show_menu_main
+			show_banner_0
+        		show_menu_0
         		;;
       		[mM]|[mM][3][uU][8]|[dD][2]|"2")
 			clear
-			show_banner_videos
+			show_banner_1
         		m3u8
         		;;
       		[yY]|[yY][dD][lL]|[dD][3]|"3")
 			clear
-        		show_banner_videos
+        		show_banner_1
 			youtube-dl
         		;;
 		[yY][tT]|[dD][4]|"4")
 			clear
-			show_banner_videos
+			show_banner_1
 			yt-dlp
 			;;
       		[tT]|[tT][uU][bI][iI]|[dD][5]|"5")
 			clear
-			show_banner_videos
+			show_banner_1
         		tubi
         		;;
       		[xX]|[xX][2][6][5]|[cC][6]|"6")
 			clear
-			show_banner_videos
+			show_banner_1
         		x265
         		;;
 		[vV]|[vI][iI][vV][eE][oO]|[cC][7]|"7")
 			clear
-			show_banner_main
+			show_banner_0
 			plex
 			c_ts
 			;;
 		[aA]|[aA][lL][lL]|[cC][8]|"8")
 			clear
-			show_banner_main
+			show_banner_0
 			video_sub && sleep 1
 			c_ts
 			c_mkv
 			;;
 		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][9]|"9")
 			clear
-			show_banner_videos
+			show_banner_1
 			metadata
 			;;
 		[sS]|[sS][uU][bB][sS]|"10")
-			show_banner_subs
-			show_menu_subs
+			show_banner_2
+			show_menu_2
 			;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"11")
-			show_banner_clean
-			show_menu_clean
+			show_banner_3
+			show_menu_3
 			;;
       		[eE]|[eE][xX][iI][Tt]|"0")
 			# Exiting the menu
@@ -356,8 +358,8 @@ show_menu_videos() {
 
 # Function for displaying the SUBS menu
 show_menu_subs() {
-	show_banner_main
-	show_banner_subs
+	show_banner_0
+	show_banner_2
     	echo ""
     	echo ""
     	echo " 1. Go back to Main Menu"
@@ -380,25 +382,25 @@ show_menu_subs() {
 	# Handling the user's choice using a case statement
     	case $ans in
       		[mM][aA][iI][nN]|"1")
-        		show_banner_main
-        		show_menu_main
+        		show_banner_0
+        		show_menu_0
         		;;
       		[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
 			clear
-			show_banner_subs
+			show_banner_2
         		extract_srt
         		;;
       		[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
 			clear
-			show_banner_subs
+			show_banner_2
         		convert_srt
         		;;
       		[vV]|[vV][iI][dD][eE][oO][sS]|"4")
-			show_banner_videos
+			show_banner_1
         		show_menu_videos
         		;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
-			show_banner_clean
+			show_banner_3
 			show_menu_clean
 			;;
       		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
@@ -416,8 +418,8 @@ show_menu_subs() {
 
 # Function for displaying the CLEAN-UP menu
 show_menu_clean() {
-	show_banner_main
-	show_banner_clean
+	show_banner_0
+	show_banner_3
     	echo ""
     	echo ""
     	echo " 1. Go back to Main Menu"
@@ -441,31 +443,31 @@ show_menu_clean() {
 	# Handling the user's choice using a case statement
     	case $ans in
       		[mM][aA][iI][nN]|"1")
-        		show_banner_main
-        		show_menu_main
+        		show_banner_0
+        		show_menu_0
         		;;
       		[c][tT][sS]|"2")
 			clear
-			show_banner_clean
+			show_banner_3
         		c_ts
         		;;
       		[c][mM][kK][vV]|"3")
 			clear
-			show_banner_clean
+			show_banner_3
         		c_mkv
         		;;
 		[cC][aA][lL][lL]|"4")
 			clear
-			show_banner_clean
+			show_banner_3
 			c_all
 			;;
       		[vV]|[vV][iI][dD][eE][oO][sS]|"5")
-			show_banner_videos
-        		show_menu_videos
+			show_banner_1
+        		show_menu_1
         		;;
 		[sS]|[sS][uU][bB][sS]|"6")
-			show_banner_subs
-			show_menu_subs
+			show_banner_2
+			show_menu_2
 			;;
       		"0")
 			# Exiting the menu
@@ -475,7 +477,7 @@ show_menu_clean() {
         	*)
             		echo -e "Invalid option. Please enter a valid option."
             		sleep 1
-            		show_menu_clean
+            		show_menu_3
             		;;
     	esac
 }
@@ -599,7 +601,6 @@ m3u8() {
 # using youtube-dl or yt-dlp and organizes them in a specific folder structure.
 #
 youtube-dl() {
-	check_youtube-dl && check_ffmpeg
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
@@ -801,7 +802,6 @@ youtube-dl() {
 }
 
 yt-dlp() {
-	check_yt-dlp && check_ffmpeg
 	echo -e "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
@@ -1311,7 +1311,7 @@ c_ts() {
 		rm -r ./ts/*.ts
 
 		echo -e "TS folder cleared!\a"
-		pause
+		sleep 1
 		show_menu_clean
 	fi
 }
@@ -1335,7 +1335,7 @@ c_mkv() {
 		rm -r ./mkv/*.mkv
 
 		echo -e "MKV folder cleared!\a"
-		pause
+		sleep 1
 		show_menu_clean
 	fi
 }
@@ -1362,7 +1362,7 @@ c_all() {
 		rm -r ./mkv/*.
 
 		echo -e "All folders cleared!\a"
-		pause
+		sleep 1
 		show_menu_clean
 	fi
 }
@@ -1373,6 +1373,5 @@ c_all() {
 
 while true
 do
-	show_banner_main
-	show_menu_main
+	show_banner_0 && show_menu_${main_menu}
 done
