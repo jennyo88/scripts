@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Script: remote_script_loader.sh
-# Description: Downloads and executes a remote script from a GitHub repository.
-
 # Function to display available script paths
 show_available_paths() {
     echo "Available script paths:"
@@ -34,21 +31,22 @@ printf "Enter branch name (default: main): "
 read -r BRANCH
 BRANCH=${BRANCH:-main}
 
-# Show available script paths
-show_available_paths
+# Prompt the user for script path or show available paths
+printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
+read -r SCRIPT_PATH
 
-# Prompt the user for script path
-while true; do
-    printf "Enter script path (default: scripts/convert) or type 'list' to show available paths: "
+# Allow the user to exit by entering '0'
+if [ "$SCRIPT_PATH" == "0" ]; then
+    echo "Exiting the script."
+    exit 0
+fi
+
+# Validate if the provided script path is a valid choice
+if [ "$SCRIPT_PATH" == "list" ]; then
+    show_available_paths
+    printf "Enter script path: "
     read -r SCRIPT_PATH
-
-    # Validate if the provided script path is a valid choice
-    if [ "$SCRIPT_PATH" == "list" ]; then
-        show_available_paths
-    else
-        break
-    fi
-done
+fi
 
 # Use the provided script path or the default value
 SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
@@ -57,8 +55,8 @@ SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
 # Download and execute the remote script using bash -c
-if curl -fsSL "$REMOTE_SCRIPT_URL" | bash; then
+if bash -c "$(curl -fsSL $REMOTE_SCRIPT_URL)"; then
     echo "Script execution successful."
 else
-    display_error "Failed to execute the remote script. Please check your inputs and try again."
+    display_error "Failed to execute the remote script."
 fi
