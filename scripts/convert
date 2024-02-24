@@ -254,16 +254,18 @@ show_menu_videos() {
 	show_banner_main
 	show_banner_videos
 	echo ""
-  	echo -e " 1. Go back to Main Menu\n 2. Convert video to x265"
+  	echo "  1. Go back to Main Menu"
 	echo ""
-  	echo "  2. Convert video to x265"
-  	echo "  3. Download m3u8 playlist"
-	echo "  4. Download using youtube-dl"
-	echo "  5. Download using yt-dlp"
-	echo "  6. Download from tubi"
-	echo "  7. Encode metadata"
-	echo "  8. Convert ONLY video"
-	echo "  9. Convert video & subtitles"
+	echo "		DOWNLOAD"
+  	echo "  2. Download m3u8 playlist"
+	echo "  3. Download using youtube-dl"
+	echo "  4. Download using yt-dlp"
+	echo "  5. Download from tubi"
+	echo " 		CONVERT"
+  	echo "  6. Convert video to x265"
+	echo "  7. Convert ONLY video"
+	echo "  8. Convert video & subtitles"
+	echo "  9. Encode metadata"
     	echo ""
 	echo " 10. Go to SUBS Menu"
 	echo " 11. Go to CLEAN-UP Menu"
@@ -284,48 +286,48 @@ show_menu_videos() {
 			show_banner_main
         		show_menu_main
         		;;
-      		[xX]|[xX][2][6][5]|"2")
-			clear
-			show_banner_videos
-        		x265
-        		;;
-      		[mM]|[mM][3][uU][8]|"3")
+      		[mM]|[mM][3][uU][8]|"2")
 			clear
 			show_banner_videos
         		m3u8
         		;;
-      		[yY]|[yY][dD][lL]|"4")
+      		[yY]|[yY][dD][lL]|"3")
 			clear
         		show_banner_videos
 			youtube-dl
         		;;
-		"5")
+		"4")
 			clear
 			show_banner_videos
 			yt-dlp
 			;;
-      		[tT]|[tT][uU][bI][iI]|"6")
+      		[tT]|[tT][uU][bI][iI]|"5")
 			clear
 			show_banner_videos
         		tubi
         		;;
-		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"7")
+      		[xX]|[xX][2][6][5]|"6")
 			clear
 			show_banner_videos
-			metadata
-			;;
-		[vV]|[vI][iI][vV][eE][oO]|"8")
+        		x265
+        		;;
+		[vV]|[vI][iI][vV][eE][oO]|"7")
 			clear
 			show_banner_main
 			plex
 			c_ts
 			;;
-		[aA]|[aA][lL][lL]|"9")
+		[aA]|[aA][lL][lL]|"8")
 			clear
 			show_banner_main
 			video_sub && sleep 1
 			c_ts
 			c_mkv
+			;;
+		[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|"9")
+			clear
+			show_banner_videos
+			metadata
 			;;
 		[sS]|[sS][uU][bB][sS]|"10")
 			show_banner_subs
