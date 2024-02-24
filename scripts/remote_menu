@@ -89,10 +89,11 @@ show_menu_0() {
     echo ""
     echo ""
     echo " 0. Exit script"
-    echo -e "${BLUE}"
-    echo " ═════════════════════════════════════════"
+    echo ""
+
 
     # Prompting the user to select an option
+    echo -e "${BLUE}"
     read -rp "Select: " ANS
     echo "${RESET}"
 
@@ -139,10 +140,10 @@ show_menu_1() {
     echo ""
     echo ""
     echo " 0. Exit script"
-    echo -e "${BLUE}"
-    echo " ═════════════════════════════════════════"
+    echo ""
 
     # Prompting the user to select an option
+    echo -e "${BLUE}"
     read -rp "Select: " ANS
     echo "${RESET}"
 
@@ -200,11 +201,11 @@ show_menu_2() {
     echo ""
     echo ""
     echo " 0. Exit script"
-    echo -e "${BLUE}"
-    echo " ═════════════════════════════════════════"
+    echo ""
 
     # Prompting the user to select an option
-    read -rp "Select: " ans
+    echo -e "${BLUE}"
+    read -rp "Select: " ANS
     echo "${RESET}"
 
     # Handling the user's choice using a case statement
@@ -236,7 +237,7 @@ show_menu_2() {
 }
 
 # -----------------------------------
-# Scripts
+# Execute Scripts
 # -----------------------------------
 
 # Function to download and execute a Bash script
