@@ -608,26 +608,26 @@ youtube-dl() {
 
 
 	# Prompt user for platform (YouTube or other)
-	prompt -e "\nIs it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): \n" platform "youtube"
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+	    	prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
-	       		prompt "Enter the show name (include periods between words): " show_name
+	       		prompt "\nEnter the show name (include periods between words): " show_name
 
 			# Prompt for season and episode range
-	        	prompt "Enter the season number (two digits; default: 01): " season_number "01"
+	        	prompt "\nEnter the season number (two digits; default: 01): " season_number "01"
 
-	        	prompt "Enter the first episode number: " first_episode
+	        	prompt "\nEnter the first episode number: " first_episode
 
-	        	prompt "Enter the last episode number: " last_episode
+	        	prompt "\nEnter the last episode number: " last_episode
 
 	        	show_folder="${show_name}_YouTube"
 	        	mkdir -p "$show_folder"
