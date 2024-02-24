@@ -48,6 +48,14 @@ SCRIPT_PATH=${SCRIPT_PATH:-scripts/convert}
 # Construct the URL based on user input
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/$USERNAME/$REPOSITORY/$BRANCH/$SCRIPT_PATH"
 
+# Install required dependencies
+if ! command -v pip3 &> /dev/null; then
+    display_error "pip3 is not installed. Please install pip3 and try again."
+    exit 1
+fi
+
+pip3 install sympy
+
 # Download and execute the remote script using python3
 if python3 <(curl -fsSL $REMOTE_SCRIPT_URL); then
     echo "Script execution successful."
