@@ -653,10 +653,21 @@ ydl() {
 	            		printf "\nDownloading %s...\n" "$filename"
 	            		youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
 
-				 # Download subtitles SRT format
+				 # Download subtitles and convert to SRT format
 	            		printf "\nDownloading subtitles for %s...\n" "$filename"
 	            		youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
-				printf "\nDownloaded subtitles for %s.\n" "$filename"
+
+				printf "\nConverting subtitles to SRT format...\n"
+	        		vtt_files=("${filename%.*}"*.vtt)
+	        		for vtt_file in "${vtt_files[@]}"
+				do
+	            			srt_file="${vtt_file%.*}.srt"
+	            			ffmpeg -i "$vtt_file" "$srt_file" -y
+	            			rm "$vtt_file"
+	            			printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+	        		done
+
+				printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
 	    		done
 
 	        	printf "\nAll episodes downloaded successfully.\n"
