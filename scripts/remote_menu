@@ -113,8 +113,8 @@ show_menu_0() {
     show_banner_0
     echo ""
     echo ""
-    echo " 1. Execute jennyo88 scripts"
-    echo " 2. Execute scripts in other repositories"
+    echo " 1. Execute JENNYO88 scripts"
+    echo " 2. Execute scripts in OTHER repositories"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -128,10 +128,10 @@ show_menu_0() {
 
     # Handling the user's choice using a case statement
     case $ans in
-        "1")
+        [jJ]|[jJ][eE][nN][nN][yY][oO][8][8]|"1")
             show_menu_1
             ;;
-        "2")
+        [oO]|[oO][tT][hH][eE][rR]|"2")
             show_menu_2
             ;;
         [eE]|[eE][xX][iI][tT]|[qQ]|"0")
@@ -139,7 +139,7 @@ show_menu_0() {
             goodbye
             ;;
         # Hidden options
-        [cC][oO][nN][vV][eE][rR][tT]|[1][1])
+        [cC]|[cC][oO][nN][vV][eE][rR][tT]|[1][1])
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
             ;;
         # Handling invalid options
@@ -161,7 +161,7 @@ show_menu_1() {
     echo " 2. convert            - Converting files"
     echo " 3. tmux_ref           - tmux reference"
     echo " 4. test               - Payroll TEST script"
-    echo " 5. other"
+    echo " 5. more"
     echo ""
     echo " 6. Go to OTHER SCRIPTS Menu"
     echo ""
@@ -176,23 +176,23 @@ show_menu_1() {
 
     # Handling the user's choice using a case statement
     case $ans in
-        [mM][aA][iI][nN]|"1")
+        [mM]|[mM][aA][iI][nN]|"1")
             show_banner_0
             show_menu_0
             ;;
-        "2")
+        [cC]|[cC][oO][nN][vV][eE][rR][tT]|"2")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
             ;;
-        "3")
+        [tT]|[tT][mM][uU][xX]|"3")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
             ;;
-        "4")
+        [tT][eE][sS][tT]|"4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
             ;;
-        "5")
+        [mM][oO][rR][eE]|"5")
             execute_bash_script
             ;;
-        "6")
+	[oO]|[oO][tT][hH][eE][rR]|"6")
             show_banner_2
             show_menu_2
             ;;
@@ -235,13 +235,13 @@ show_menu_2() {
             show_banner_0
             show_menu_0
             ;;
-        "2")
+        [bB]|[bB][aA][sS][hH]|"2")
             execute_bash_script
             ;;
-        "3")
+        [pP]|[pP][yY][tT][hH][oO][nN]|"3")
             execute_python_script
             ;;
-        "4")
+        [jJ]|[jJ][eE][nN][nN][yY][oO][8][8]|"4")
             show_banner_1
             show_menu_1
             ;;
