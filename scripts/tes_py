@@ -12,30 +12,20 @@ read -r GITHUB_URL
 # Download the remote script content
 REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
 
-# Create a temporary directory for the virtual environment
-TEMP_DIR=$(mktemp -d)
+# Install required Python modules locally
+if ! command -v pip3 &> /dev/null; then
+    display_error "pip3 is not installed. Please install pip3 and try again."
+    exit 1
+fi
 
-# Set up a virtual environment in the temporary directory
-python3 -m venv "$TEMP_DIR/venv"
-
-# Activate the virtual environment
-source "$TEMP_DIR/venv/bin/activate"
-
-# Install required Python modules in the virtual environment
-pip install sympy
+pip3 install sympy
 
 # Save the remote script content to a file
 echo "$REMOTE_SCRIPT_CONTENT" > remote_script.py
 
-# Execute the saved script using the Python interpreter from the virtual environment
+# Execute the saved script using the Python interpreter locally
 if python3 remote_script.py; then
     echo "Script execution successful."
 else
     display_error "Failed to execute the remote script."
 fi
-
-# Deactivate the virtual environment
-deactivate
-
-# Clean up the temporary directory
-rm -rf "$TEMP_DIR"
