@@ -222,7 +222,7 @@ show_menu_main() {
             		show_banner_clean
             		c_all
             		;;
-		[tT][eE][sS][tT])
+		[tT][eE][sS][tT]|[4][4])
 			clear
 			source_remote_script "$tmux_ref"
 			;;
