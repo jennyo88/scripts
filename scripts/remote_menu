@@ -99,6 +99,7 @@ show_menu_0() {
         *)
             echo -e "Invalid option. Please enter a valid option."
             pause
+            show_menu_0
             ;;
     esac
 }
@@ -164,6 +165,7 @@ show_menu_1() {
         *)
             echo -e "Invalid option. Please enter a valid option."
             pause
+            show_menu_1
     esac
 }
 
@@ -212,6 +214,7 @@ show_menu_2() {
         *)
             echo -e "Invalid option. Please enter a valid option."
             pause
+            show_menu_2
     esac
 }
 
