@@ -5,9 +5,6 @@ execute_remote_bash_script() {
     local script_url=$1
     echo "Executing script: $script_url"
 
-    # Add this line to print the command being executed
-    echo "Command to execute: bash -c \"\$(curl -fsSL $script_url)\""
-
     if output=$(bash -c "$(curl -fsSL $script_url)" 2>&1); then
         echo "Script execution successful."
     else
@@ -19,9 +16,6 @@ execute_remote_bash_script() {
 execute_bash_script() {
     read -p "Enter the URL of the Bash script: " bash_script_url
     echo "Downloading and executing Bash script from: $bash_script_url"
-
-    # Add this line to print the command being executed
-    echo "Command to execute: bash -c \"\$(curl -fsSL $bash_script_url)\""
 
     if output=$(bash -c "$(curl -fsSL $bash_script_url)" 2>&1); then
         echo "Script execution successful."
@@ -35,9 +29,6 @@ execute_python_script() {
     local python_script_url="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tes_py"
     
     echo "Executing Python script from: $python_script_url"
-    
-    # Add this line to print the command being executed
-    echo "Command to execute: bash -c \"\$(curl -fsSL $python_script_url)\""
     
     if output=$(bash -c "$(curl -fsSL $python_script_url)" 2>&1); then
         echo "Script execution successful."
@@ -64,17 +55,18 @@ jennyo88_scripts_menu() {
 
     read -p "Enter your choice (0-6): " choice
 
+    # Validate that the input is a number between 0 and 6
     if [[ ! $choice =~ ^[0-6]$ ]]; then
         echo "Invalid choice. Please enter a number between 0 and 6."
         jennyo88_scripts_menu
     fi
 
     case $choice in
-        1) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert" ;;
-        2) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote" ;;
-        3) open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote" ;;
-        4) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref" ;;
-        5) execute_remote_bash_script "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test" ;;
+        1) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)" ;;
+        2) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)" ;;
+        3) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote)" ;;
+        4) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)" ;;
+        5) bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)" ;;
         6) execute_bash_script ;;
         0) main_menu ;;
     esac
