@@ -14,6 +14,32 @@ execute_bash_script() {
     fi
 }
 
+function execute_remote_python_script() {
+    # Prompt the user for the GitHub URL of the script
+    printf "Enter the GitHub URL of the script: "
+    read -r GITHUB_URL
+
+    # Download the remote script content
+    REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
+
+    # Install required Python modules locally
+    if ! command -v pip3 &> /dev/null; then
+        display_error "pip3 is not installed. Please install pip3 and try again."
+        exit 1
+    fi
+
+    pip3 install sympy
+
+    # Save the remote script content to a file
+    echo "$REMOTE_SCRIPT_CONTENT" > remote_script.py
+
+    # Execute the saved script using the Python interpreter locally
+    if python3 remote_script.py; then
+        echo "Script execution successful."
+    else
+        display_error "Failed to execute the remote script."
+    fi
+}
 
 # Function to execute a Python script
 execute_python_script() {
@@ -71,6 +97,7 @@ other_scripts_menu() {
     echo ""
     echo " 1. Execute Another Bash Script"
     echo " 2. Execute Python Script"
+    echo " 3. Execute Remote Script"
     echo ""
     echo " 0. Go back to Main Menu"
     echo "======================================================="
@@ -85,6 +112,7 @@ other_scripts_menu() {
     case $choice in
         1) execute_bash_script ;;
         2) execute_python_script ;;
+        3) execute_remote_python_script ;;
         0) main_menu ;;
     esac
 }
