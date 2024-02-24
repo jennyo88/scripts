@@ -464,7 +464,7 @@ m3u8() {
 	validLanguageCode=false
 	while [ "$validLanguageCode" = false ]
 	do
-   		printf "Movie language? (Enter a three-letter language code, e.g., eng, spa, jpn, fre, zho): "
+   		printf "Movie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): "
     		read -r language
 		language=${language:-eng}
 
