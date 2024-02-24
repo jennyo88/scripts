@@ -204,7 +204,7 @@ show_menu_main() {
         	[yY][dD][lL]|[1][3])
 			clear
             		show_banner_videos
-            		youtube-dl
+            		ydl
             		;;
         	[tT][uU][bB][iI]|[1][5])
 			clear
@@ -608,26 +608,26 @@ youtube-dl() {
 
 
 	# Prompt user for platform (YouTube or other)
-	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'): " platform
 
 	# Process based on the chosen platform
 	if [ "$platform" == "youtube" ]
 	then
 		# For YouTube, prompt for TV show or movie
-		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+	    	prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
 
 		# Process based on the chosen type (tv or movie)
-		if [ "$type" == "tv" ]
+	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
 	       		prompt "\nEnter the show name (include periods between words): " show_name
 
 			# Prompt for season and episode range
-	        	prompt "\nEnter the season number (two digits; default: 01): " season_number "01"
+	        	prompt "Enter the season number (two digits): " season_number
 
-	        	prompt "\nEnter the first episode number: " first_episode
+	        	prompt "Enter the first episode number: " first_episode
 
-	        	prompt "\nEnter the last episode number: " last_episode
+	        	prompt "Enter the last episode number: " last_episode
 
 	        	show_folder="${show_name}_YouTube"
 	        	mkdir -p "$show_folder"
@@ -638,7 +638,7 @@ youtube-dl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
 	            		read -r episode_url
 
 	            		if [ -z "$episode_url" ]
@@ -650,11 +650,11 @@ youtube-dl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-				youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
+	            		youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename"
 
 				 # Download subtitles and convert to SRT format
 	            		printf "\nDownloading subtitles for %s...\n" "$filename"
-				youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
+	            		youtube-dl --write-sub --sub-lang en,en-US,en-CA,es,ja --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
 
 				printf "\nConverting subtitles to SRT format...\n"
 	        		vtt_files=("${filename%.*}"*.vtt)
@@ -674,18 +674,22 @@ youtube-dl() {
 	   	elif [ "$type" == "movie" ]
 		then
 			# For movies, prompt for movie details and download
-	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
+	        	printf "\nEnter the name of the movie (include periods between words): "
+	        	read -r movie_name
 
-			prompt "\nEnter the year of the movie : " movie_year
+			printf "\nEnter the year of the movie : "
+	        	read -r movie_year
 
-			prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
+			read -r resolution
 
-	        	prompt "\nEnter the movie URL: " movie_url
+	        	printf "Enter the movie URL: "
+	        	read -r movie_url
 
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-			youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+	        	youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
 			# Download subtitles and convert to SRT format
 			printf "\nDownloading subtitles for %s.\n" "$filename"
@@ -712,21 +716,27 @@ youtube-dl() {
 	elif [ "$platform" == "other" ]
 	then
 		# For other, prompt for TV show or movie
-	    	prompt "Is it a TV show or a movie? (Enter 'tv' or 'movie'): " type
+	    	printf "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): "
+	    	read -r type
 
 		# Process based on the chosen type (tv or movie)
 	    	if [ "$type" == "tv" ]
 		then
 			# For TV shows, prompt for show details and iterate through episodes
-	        	prompt "\nEnter the show name (include periods between words): " show_name
+	        	printf "\nEnter the show name (include periods between words): "
+	        	read -r show_name
 
-			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
+	        	read -r resolution
 
-	        	prompt "Enter the season number (two digits): " season_number "01"
+	        	printf "Enter the season number (two digits): "
+	        	read -r season_number
 
-	        	prompt "Enter the first episode number (two digits): " first_episode
+	        	printf "Enter the first episode number (two digits): "
+	        	read -r first_episode
 
-	        	prompt "Enter the last episode number (two digits): " last_episode
+	        	printf "Enter the last episode number (two digits): "
+	        	read -r last_episode
 
 	        	show_folder="${show_name}_Dailymotion"
 	        	mkdir -p "$show_folder"
@@ -737,7 +747,7 @@ youtube-dl() {
 	            		episode_number=$(printf "%02d" "$episode")
 
 				# Prompt for episode URL (skipping if blank)
-				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+	            		printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
 	            		read -r episode_url
 
 	            		if [ -z "$episode_url" ]; then
@@ -748,7 +758,7 @@ youtube-dl() {
 				# Generate filename and download video
 	            		filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
 	            		printf "\nDownloading %s...\n" "$filename"
-				youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
+	            		youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
 
 	            		printf "\nDownloaded %s.\n" "$filename"
 	        	done
@@ -758,18 +768,22 @@ youtube-dl() {
 	    	elif [ "$type" == "movie" ]
 		then
 			# For movies, prompt for movie details and download
-	        	prompt "\nEnter the name of the movie (include periods between words): " movie_name
+	        	printf "\nEnter the name of the movie (include periods between words): "
+	        	read -r movie_name
 
-			prompt "\nEnter the year of the movie: " movie_year
+			printf "\nEnter the year of the movie: "
+	        	read -r movie_year
 
-	        	prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+	        	printf "Enter the resolution (e.g., 480p, 720p, 1080p): "
+	        	read -r resolution
 
-			prompt "Enter the movie URL: " movie_url
+			printf "Enter the movie URL: "
+	        	read -r movie_url
 
 			# Generate filename and download video
 	        	filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
 	        	printf "\nDownloading %s...\n" "$filename"
-			youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
+	        	youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
 
 	        	printf "\nDownloaded %s.\n" "$filename"
 
