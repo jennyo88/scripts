@@ -1,85 +1,108 @@
 #!/usr/bin/env bash
 
-### Console menu for converting Files
-### A menu driven shell script.
-### Just a simple menu, nothing more than a shortcut.
+# Convert
+# Author: Jennifer Romero
+# Description: This script provides a menu-driven interface to convert files
+# Version: 4.0
+# Last Updated: Feb 24, 2024
+# GitHub Repository: https://github.com/jennyo88/scripts
 
-## ----------------------
-## Step #1: Define variables
-## ----------------------
 
-main_menu="0"
+# -----------------------------------
+# User defined functions
+# -----------------------------------
 
-## -------------------------------
-# Step #2: User defined functions
-## -------------------------------
+# Color definitions
+load_colors() {
+    BLUE=$'\e[38;5;39m'	    # Blue color
+    ORANGE=$'\e[38;5;208m'	# Orange color
+    RED=$'\e[1;31m'		    # Red color (bold)
+    RESET=$'\e[0m'		    # Reset color attributes
+}
 
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
+
+# Check if required commands are available
+check_commands() {
+    local commands=("youtube-dl" "yt-dlp" "ffmpeg")
+
+    for cmd in "${commands[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            echo -e "${RED}Error: '$cmd' command not found.${RESET}"
+            echo "Please make sure '$cmd' is installed and available in your PATH."
+            exit 1
+        fi
+    done
+}
+
+# Function to pause and wait for user input
+pause() {
+    echo
+    read -rp "Press ENTER to continue..." fackEnterKey
+}
+
+# Function to display goodbye message, reset colors, clear the screen, and exit
+goodbye() {
+    echo -e "${RESET}"
+    clear
+    exit
+}
+
+# Function to display the main menu banner
 show_banner_0() {
-	clear
-    	echo -e "${blu}"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo "                  			Converting Files - Service Menu     "
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+    	clear
+    	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║          Converting Files - Service Menu        ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 show_banner_1() {
-  	clear
-    	echo -e "${blu}"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo '       /$$    /$$ /$$$$$$ /$$$$$$$  /$$$$$$$$  /$$$$$$   /$$$$$$		'
-    	echo '      | $$   | $$|_  $$_/| $$__  $$| $$_____/ /$$__  $$ /$$__  $$		'
-    	echo '      | $$   | $$  | $$  | $$  \ $$| $$      | $$  \ $$| $$  \__/		'
-    	echo '      |  $$ / $$/  | $$  | $$  | $$| $$$$$   | $$  | $$|  $$$$$$ 		'
-    	echo '       \  $$ $$/   | $$  | $$  | $$| $$__/   | $$  | $$ \____  $$		'
-    	echo '        \  $$$/    | $$  | $$  | $$| $$      | $$  | $$ /$$  \ $$		'
-    	echo '         \  $/    /$$$$$$| $$$$$$$/| $$$$$$$$|  $$$$$$/|  $$$$$$/		'
-    	echo '          \_/    |______/|_______/ |________/ \______/  \______/ 		'
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+    	show_banner_0
+    	echo "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                                                 ║ "
+    	echo " ║                     VIDEOS                      ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_2() {
-	clear
-    	echo -e "${blu}"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo '                    /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$ 		'
-    	echo '                   /$$__  $$| $$  | $$| $$__  $$ /$$__  $$		'
-    	echo '                  | $$  \__/| $$  | $$| $$  \ $$| $$  \__/		'
-    	echo '                  |  $$$$$$ | $$  | $$| $$$$$$$ |  $$$$$$ 		'
-    	echo '                   \____  $$| $$  | $$| $$__  $$ \____  $$		'
-    	echo '                   /$$  \ $$| $$  | $$| $$  \ $$ /$$  \ $$		'
-    	echo '                  |  $$$$$$/|  $$$$$$/| $$$$$$$/|  $$$$$$/		'
-    	echo '                   \______/  \______/ |_______/  \______/			'
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+show_banner_1() {
+    	show_banner_0
+    	echo "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                                                 ║ "
+    	echo " ║                      SUBS                       ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-show_banner_3() {
-	clear
-	echo -e "${blu}"
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-    	echo '   /$$$$$$  /$$       /$$$$$$$$  /$$$$$$  /$$   /$$       /$$   /$$ /$$$$$$$  '
-    	echo '  /$$__  $$| $$      | $$_____/ /$$__  $$| $$$ | $$      | $$  | $$| $$__  $$ '
-    	echo ' | $$  \__/| $$      | $$      | $$  \ $$| $$$$| $$      | $$  | $$| $$  \ $$ '
-    	echo ' | $$      | $$      | $$$$$   | $$$$$$$$| $$ $$ $$      | $$  | $$| $$$$$$$/ '
-    	echo ' | $$      | $$      | $$__/   | $$__  $$| $$  $$$$      | $$  | $$| $$____/  '
-    	echo ' | $$    $$| $$      | $$      | $$  | $$| $$\  $$$      | $$  | $$| $$       '
-    	echo ' |  $$$$$$/| $$$$$$$$| $$$$$$$$| $$  | $$| $$ \  $$      |  $$$$$$/| $$       '
-    	echo '  \______/ |________/|________/|__/  |__/|__/  \__/       \______/ |__/       '
-    	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""${end}"
+show_banner_1() {
+    	show_banner_0
+    	echo "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+   	echo " ║                                                 ║ "
+    	echo " ║                    CLEAN-UP                     ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
+
 
 # Function for displaying the main menu
 show_menu_0() {
-    	# clear --> moved to show_banner
-	echo -e
+    	show_banner_0
+    	echo ""
+    	echo ""
 	echo " 1) Videos"
 	echo " 2) Subs"
 	echo " 3) Clean-up"
 	echo -e "\n 0) Exit Menu \n"
 
     	# Prompting the user to select an option
-	echo "${blu}"
+	echo "${BLUE}"
 	read -rp "Select: " ans
-	echo "${end}"
+	echo "${RESET}"
 
 	# Displaying the menu banner
     	show_banner_0
@@ -169,9 +192,9 @@ show_menu_1() {
   	echo -e "\n 0) Exit Menu \n"
 
 	# Prompting the user to select an option
- 	echo "${blu}"
+ 	echo "${BLUE}"
 	read -rp "Select: " ans
-	echo "${end}"
+	echo "${RESET}"
 
 	# Displaying the menu banner
     	show_banner_1
@@ -242,9 +265,9 @@ show_menu_2() {
   	echo -e "\n 0) Exit Menu \n"
 
 	# Prompting the user to select an option
-  	echo "${blu}"
+  	echo "${BLUE}"
 	read -rp "Select: " ans
-	echo "${end}"
+	echo "${RESET}"
 
 	# Displaying the menu banner
     	show_banner_2
@@ -295,9 +318,9 @@ show_menu_3() {
   	echo -e "\n 0) Exit Menu \n"
 
 	# Prompting the user to select an option
-  	echo "${blu}"
+  	echo "${BLUE}"
 	read -rp "Select: " ans
-	echo "${end}"
+	echo "${RESET}"
 
 	# Displaying the menu banner
     	show_banner_3
@@ -339,30 +362,6 @@ show_menu_3() {
     	esac
 }
 
-# Function to pause and wait for user input
-pause() {
-  	echo
-	read -rp "Press ENTER to continue..." fackEnterKey
-}
-
-# Function to display goodbye message, reset colors, clear the screen, and exit
-goodbye() {
-  	echo -e "${end}"
-  	clear
-	exit
-}
-
-# Function to load colors using ANSI escape codes
-load_colors() {
-  	blu=$'\e[38;5;39m'	# Blue color
-  	orn=$'\e[38;5;208m'	# Orange color
-  	red=$'\e[1;31m'		# Red color (bold)
-  	end=$'\e[0m'		# Reset color attributes
-}
-
-# Calling the load_colors() function to set color variables
-load_colors # Only loaded once
-
 # ----------------------------------
 # Step #3: Formulas
 # ----------------------------------
@@ -378,9 +377,9 @@ load_colors # Only loaded once
 #
 x265() {
 	# Displaying a header using colored text
-  	echo "${blu}""                           			x265 Script   	"
+  	echo "${BLUE}""                           			x265 Script   	"
     	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompt user for source extension (e.g. mkv, mp4, or avi)
 	printf "Source extension? (mkv, mp4, or avi) : "
@@ -421,9 +420,9 @@ x265() {
 #
 m3u8() {
 	# Displaying a header using colored text
-  	echo "${blu}""                            M3U8 to TS Script         	       		    "
+  	echo "${BLUE}""                            M3U8 to TS Script         	       		    "
     	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- 	echo -e "${end}"
+ 	echo -e "${RESET}"
 
 	# Uncomment the following lines if source extension, destination extension,
 	# and destination directory input is required
@@ -497,9 +496,9 @@ m3u8() {
 #
 ydl() {
 	# Displaying a header using colored text
-  	echo "${blu}""              Movies & TV Shows YOUTUBE-DL to MP4 Script              "
+  	echo "${BLUE}""              Movies & TV Shows YOUTUBE-DL to MP4 Script              "
     	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
- 	echo -e "${end}"
+ 	echo -e "${RESET}"
 
 	# Check if youtube-dl and ffmpeg are installed
 	if ! command -v youtube-dl &> /dev/null || ! command -v ffmpeg &> /dev/null
@@ -718,9 +717,9 @@ ydl() {
 #
 video_sub() {
 	# Displaying a header using colored text
-  	echo "${blu}""                          Video and Subs Script       		       		  "
+  	echo "${BLUE}""                          Video and Subs Script       		       		  "
   	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Loop through each .ts file in the 'ts' directory
 	for filename in ts/*.ts
@@ -773,9 +772,9 @@ video_sub() {
 #
 tubi() {
 	# Displaying a header using colored text
-  	echo "${blu}""                         	 For tubi Script          		     				  "
+  	echo "${BLUE}""                         	 For tubi Script          		     				  "
   	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for show details
 	printf "Enter the name of the show: "
@@ -826,9 +825,9 @@ tubi() {
 #
 metadata() {
 	# Displaying a header using colored text
-  	echo "${blu}""                     For Language Metadata Script     		            "
+  	echo "${BLUE}""                     For Language Metadata Script     		            "
   	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user to enter the folder path
 	read -p "Enter the folder path where the video files are located: " folder_path
@@ -881,9 +880,9 @@ metadata() {
 #
 plex() {
 	# Displaying a header using colored text
-  	echo "${blu}""                          For PLEX TS to MKV Script       	          "
+  	echo "${BLUE}""                          For PLEX TS to MKV Script       	          "
   	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for the source extension (e.g., ts)
   	printf "Source extension? : "
@@ -927,9 +926,9 @@ plex() {
 #
 extract_srt() {
 	# Displaying a header using colored text
-  	echo "${blu}""                             Extract SRT script                       "
+  	echo "${BLUE}""                             Extract SRT script                       "
   	echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for the source extension (e.g., mp4, mkv)
 	printf "Source extension? : "
@@ -971,9 +970,9 @@ extract_srt() {
 #
 convert_srt() {
 	# Displaying a header using colored text
-  	echo "${blu}""                             Convert SRT script                       "
+  	echo "${BLUE}""                             Convert SRT script                       "
  		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for the source directory
   	printf "Source directory? (default: vtt): "
@@ -1007,9 +1006,9 @@ convert_srt() {
 #
 c_ts() {
 	# Displaying a header using colored text
-  	echo "${blu}""                             CLEAN UP script             		   	      "
+  	echo "${BLUE}""                             CLEAN UP script             		   	      "
 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear ts folder (y/N)? '
@@ -1032,9 +1031,9 @@ c_ts() {
 #
 c_mkv() {
 	# Displaying a header using colored text
-  	echo "${blu}""                             CLEAN UP script            		          "
+  	echo "${BLUE}""                             CLEAN UP script            		          "
 		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear mkv folder (y/N)? '
@@ -1057,9 +1056,9 @@ c_mkv() {
 #
 c_all() {
 	# Displaying a header using colored text
-  	echo "${blu}""                             CLEAN UP script           			          "
+  	echo "${BLUE}""                             CLEAN UP script           			          "
  		echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-  	echo -e "${end}"
+  	echo -e "${RESET}"
 
 	# Prompting the user for confirmation
 	printf 'Do you want to clear all folders (y/N)? '
