@@ -35,6 +35,35 @@ check_commands() {
     done
 }
 
+# -----------------------------------
+# ABORT
+# -----------------------------------
+
+prompt() {
+	local prompt="$1"
+    	local variable="$2"
+    	local default_value="$3"
+
+    	while true; do
+        	printf "$prompt"
+
+        	# Set the default value if user presses Enter
+        	read -r "$variable"
+        	[ -z "${!variable}" ] && eval "$variable=\"$default_value\""
+
+        	# Check if the user wants to abort
+        	if [ "${!variable}" == "abort" ]; then
+            		sleep 1
+            		echo "Abort..."
+            		# Add exit actions here if needed
+            		show_menu_0
+        	fi
+
+        	# Break the loop if input is not empty
+        	[ -n "${!variable}" ] && break
+    	done
+}
+
 # Function to pause and wait for user input
 pause() {
     echo
@@ -94,11 +123,11 @@ show_menu_0() {
 
     # Prompting the user to select an option
     echo -e "${BLUE}"
-    read -rp "Select: " ANS
+    prompt "Select: " ans
     echo "${RESET}"
 
     # Handling the user's choice using a case statement
-    case $ANS in
+    case $ans in
         "1")
             show_menu_1
             ;;
@@ -130,13 +159,12 @@ show_menu_1() {
     echo " 1. Go back to Main Menu"
     echo ""
     echo " 2. convert            - Converting files"
-    echo " 3. convert_remote     - Uses yt-dlp instead of youtube-dl"
-    echo " 4. template_remote    - Open template to execute a script from GitHub"
-    echo " 5. tmux_ref           - Tmux reference"
-    echo " 6. test               - Payroll test script"
-    echo " 7. other"
+    echo " 3. template_remote    - Open template to execute a script from GitHub"
+    echo " 4. tmux_ref           - Tmux reference"
+    echo " 5. test               - Payroll test script"
+    echo " 6. other"
     echo ""
-    echo " 8. Go to OTHER SCRIPTS Menu"
+    echo " 7. Go to OTHER SCRIPTS Menu"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -144,11 +172,11 @@ show_menu_1() {
 
     # Prompting the user to select an option
     echo -e "${BLUE}"
-    read -rp "Select: " ANS
+    prompt "Select: " ans
     echo "${RESET}"
 
     # Handling the user's choice using a case statement
-    case $ANS in
+    case $ans in
         [mM][aA][iI][nN]|"1")
             show_banner_0
             show_menu_0
@@ -157,21 +185,18 @@ show_menu_1() {
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
             ;;
         "3")
-            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert_remote)"
-            ;;
-        "4")
             open "https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/template_remote"
             ;;
-        "5")
+        "4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
             ;;
-        "6")
+        "5")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
             ;;
-        "7")
+        "6")
             execute_bash_script
             ;;
-        "8")
+        "7")
             show_banner_2
             show_menu_2
             ;;
@@ -205,7 +230,7 @@ show_menu_2() {
 
     # Prompting the user to select an option
     echo -e "${BLUE}"
-    read -rp "Select: " ANS
+    prompt "Select: " ans
     echo "${RESET}"
 
     # Handling the user's choice using a case statement
@@ -244,8 +269,7 @@ show_menu_2() {
 execute_bash_script() {
     check_commands
     show_banner_2
-    printf "Enter the URL of the Bash script: " 
-    read -r REMOTE_SCRIPT_URL
+    prompt "Enter the URL of the Bash script: " REMOTE_SCRIPT_URL
 
     # Download and execute the remote script using bash -c
     if bash -c "$(curl -fsSL "$REMOTE_SCRIPT_URL")"; then
@@ -259,8 +283,7 @@ execute_bash_script() {
 execute_python_script() {
     check_commands
     show_banner_2
-    printf "Enter the GitHub URL of the script: "
-    read -r GITHUB_URL
+    prompt "Enter the GitHub URL of the script: " GITHUB_URL
 
     # Download the remote script content
     REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
