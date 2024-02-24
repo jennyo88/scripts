@@ -27,8 +27,7 @@ load_colors # Only loaded once
 # Check if required commands are available
 
 check_ydl() {
-    if command -v youtube-dl &> /dev/null; then
-        echo "youtube-dl is installed."
+    if command -v yt-dlp &> /dev/null; then
         return 0  # Success
     else
         echo "Error: youtube-dl is not installed. Please install it before running this script."
@@ -38,7 +37,6 @@ check_ydl() {
 
 check_ffmpeg() {
     if command -v ffmpeg &> /dev/null; then
-        echo "ffmpeg is installed."
         return 0  # Success
     else
         echo "Error: ffmpeg is not installed. Please install it before running this script."
