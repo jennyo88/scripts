@@ -784,9 +784,6 @@ youtube-dl() {
 	    	printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
 	    	exit 1
 	fi
-
-	pause
-	show_menu_videos
 }
 
 yt-dlp() {
@@ -975,8 +972,6 @@ yt-dlp() {
 	    	printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
 	    	exit 1
 	fi
-	pause
-	show_menu_videos
 }
 
 # Function for converting video files and extracting subtitles
