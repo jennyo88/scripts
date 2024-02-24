@@ -102,10 +102,10 @@ other_scripts_menu() {
     echo " 0. Go back to Main Menu"
     echo "======================================================="
 
-    read -p "Enter your choice (0-2): " choice
+    read -p "Enter your choice (0-3): " choice
 
-    if [[ ! $choice =~ ^[0-2]$ ]]; then
-        echo "Invalid choice. Please enter a number between 0 and 2."
+    if [[ ! $choice =~ ^[0-3]$ ]]; then
+        echo "Invalid choice. Please enter a number between 0 and 3."
         other_scripts_menu
     fi
 
