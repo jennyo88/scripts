@@ -4,7 +4,7 @@
 # Description: Prompt the user to choose between Python and Bash scripts and execute the selected script.
 # Author: Your Name
 # Date: February 23, 2024
-# Version: 1.0
+# Version: 2.0
 
 # Functions:
 
@@ -37,6 +37,15 @@ execute_remote_script() {
     fi
 }
 
+# Function to prompt user for script details
+prompt_for_script_details() {
+    read -p "Enter your GitHub username: " USERNAME
+    read -p "Enter your repository name: " REPOSITORY
+    read -p "Enter the branch (default: main): " BRANCH
+    BRANCH=${BRANCH:-main}
+    read -p "Enter the path to the script: " SCRIPT_PATH
+}
+
 # Main Script:
 
 # Prompt the user to choose between Python and Bash scripts
@@ -50,12 +59,12 @@ case $choice in
     1)
         # User chose Python script
         echo "You selected Python script."
-        # Additional prompts for Python script details (GitHub username, repository, branch, script path)
+        prompt_for_script_details
         ;;
     2)
         # User chose Bash script
         echo "You selected Bash script."
-        # Additional prompts for Bash script details (GitHub username, repository, branch, script path)
+        prompt_for_script_details
         ;;
     *)
         display_error "Invalid choice. Exiting."
@@ -63,13 +72,5 @@ case $choice in
         ;;
 esac
 
-# You can now add additional prompts based on the user's choice to get details like GitHub username, repository, branch, and script path.
-
-# For simplicity, let's assume the details are provided directly here:
-USERNAME="your_username"
-REPOSITORY="your_repository"
-BRANCH="main"
-SCRIPT_PATH="your_script_path"
-
-# Execute the remote script based on the user's choice
+# Execute the remote script based on the user's choice and provided details
 execute_remote_script "$USERNAME" "$REPOSITORY" "$BRANCH" "$SCRIPT_PATH"
