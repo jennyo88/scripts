@@ -283,7 +283,7 @@ ydl() {
 	    	exit 1
 	fi
 	pause
-	show_banner_videos
+	clear
 }
 # -----------------------------------
 # Main logic - infinite loop
