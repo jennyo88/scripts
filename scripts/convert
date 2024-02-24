@@ -25,12 +25,11 @@ load_colors # Only loaded once
 
 source_remote_script() {
   local script_url=$1
-  echo "Sourcing script: $script_url"
   bash -c "$(curl -fsSL $script_url)"
 }
 # LIST OF SCRIPTS
 ytdlp="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/yt-dlp"
-script_to_source="https://example.com/script3.sh"
+tmux_ref="https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref"
 script_to_source="https://example.com/script3.sh"
 script_to_source="https://example.com/script3.sh"
 
@@ -223,6 +222,10 @@ show_menu_main() {
             		show_banner_clean
             		c_all
             		;;
+		[tT][eE][sS][tT])
+			clear
+			source_remote_script "$tmux_ref"
+			;;
 		# Handling invalid options
         	*)
             		echo -e "Invalid option. Please enter a valid option."
