@@ -245,7 +245,7 @@ show_menu_main() {
 		# Handling invalid options
         	*)
             		echo -e "Invalid option. Please enter a valid option."
-            		pause
+            		sleep 1
             		show_menu_main
             		;;
     	esac
@@ -348,7 +348,7 @@ show_menu_videos() {
 		# Handling invalid options
         	*)
             		echo -e "Invalid option. Please enter a valid option."
-            		pause
+            		sleep 1
             		show_menu_videos
             		;;
     	esac
@@ -408,7 +408,7 @@ show_menu_subs() {
 		# Handling invalid options
         	*)
             		echo -e "Invalid option. Please enter a valid option."
-            		pause
+            		sleep 1
             		show_menu_subs
             		;;
     	esac
@@ -474,7 +474,7 @@ show_menu_clean() {
 		# Handling invalid options
         	*)
             		echo -e "Invalid option. Please enter a valid option."
-            		pause
+            		sleep 1
             		show_menu_clean
             		;;
     	esac
@@ -523,7 +523,7 @@ x265() {
 	done
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
-	pause
+	sleep 1
 	show_menu_videos
 }
 
@@ -589,7 +589,7 @@ m3u8() {
 	ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"
 
   	echo -e "Conversion from {srcExt} to {destExt} complete!\a"
-	pause
+	sleep 1
 	show_menu_videos
 }
 
