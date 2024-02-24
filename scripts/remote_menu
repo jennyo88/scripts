@@ -47,6 +47,7 @@ show_banner_0() {
 # Function to display the jennyo88 scripts menu banner
 show_banner_1() {
     clear
+    show_banner_0
     echo -e "${BLUE}"
     echo "        JENNYO88 SCRIPTS                "
     echo " -------------------------------------------- ""${RESET}"
@@ -55,6 +56,7 @@ show_banner_1() {
 # Function to display the other scripts menu banner
 show_banner_2() {
     clear
+    show_banner_0
     echo -e "${BLUE}"
     echo "        OTHER SCRIPTS                "
     echo " -------------------------------------------- ""${RESET}"
@@ -82,11 +84,9 @@ show_menu_0() {
     # Handling the user's choice using a case statement
     case $ANS in
         "1")
-            show_banner_1
             show_menu_1
             ;;
         "2")
-            show_banner_2
             show_menu_2
             ;;
         [eE]|[eE][xX][iI][tT]|[qQ]|"0")
@@ -106,7 +106,6 @@ show_menu_0() {
 
 # Function for displaying the jennyo88 scripts menu
 show_menu_1() {
-    show_banner_0
     show_banner_1
 
     echo -e
@@ -171,7 +170,6 @@ show_menu_1() {
 
 # Function for displaying the other scripts menu
 show_menu_2() {
-    show_banner_0
     show_banner_2
 
     echo -e
