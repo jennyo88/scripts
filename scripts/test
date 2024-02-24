@@ -1,0 +1,150 @@
+#!/bin/bash
+
+# Function to calculate gross pay
+calculate_gross_pay() {
+    hours_worked=$1
+    hourly_rate=$2
+    gross_pay=$(echo "$hours_worked * $hourly_rate" | bc)
+    echo $gross_pay
+}
+
+# Function to calculate federal withholding based on tax brackets
+calculate_federal_withholding() {
+    taxable_income=$1
+    tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#tax_brackets[@]}; i+=3)); do
+        lower_limit=${tax_brackets[i]}
+        upper_limit=${tax_brackets[i+1]}
+        tax_rate=${tax_brackets[i+2]}
+
+        if [ "$taxable_income" -le "$upper_limit" ]; then
+            if [ "$taxable_income" -le "$lower_limit" ]; then
+                withholding=0
+            else
+                excess=$(echo "$taxable_income - $lower_limit" | bc)
+                withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $withholding
+            return
+        fi
+    done
+}
+
+# Function to calculate state withholding based on tax brackets
+calculate_state_withholding() {
+    taxable_income=$1
+    tax_brackets=("${@:2}")
+
+    for ((i=0; i<${#tax_brackets[@]}; i+=3)); do
+        lower_limit=${tax_brackets[i]}
+        upper_limit=${tax_brackets[i+1]}
+        tax_rate=${tax_brackets[i+2]}
+
+        if [ "$taxable_income" -le "$upper_limit" ]; then
+            if [ "$taxable_income" -le "$lower_limit" ]; then
+                withholding=0
+            else
+                excess=$(echo "$taxable_income - $lower_limit" | bc)
+                withholding=$(echo "$excess * ($tax_rate / 100)" | bc)
+            fi
+            echo $withholding
+            return
+        fi
+    done
+}
+
+# Function to calculate net pay
+calculate_net_pay() {
+    gross_pay=$1
+    federal_withholding=$2
+    state_withholding=$3
+
+    total_withholdings=$(echo "$federal_withholding + $state_withholding" | bc)
+    net_pay=$(echo "$gross_pay - $total_withholdings" | bc)
+    echo $net_pay
+}
+
+# Input variables
+read -p "Enter hours worked: " hours_worked
+read -p "Enter hourly rate: " hourly_rate
+
+# Validate input
+if ! [[ "$hours_worked" =~ ^[0-9]+(\.[0-9]+)?$ && "$hourly_rate" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+    echo "Invalid input. Please enter numeric values for hours worked and hourly rate."
+    exit 1
+fi
+
+# Calculate gross pay
+gross_pay=$(calculate_gross_pay $hours_worked $hourly_rate)
+
+# Define federal withholding tax brackets for different filing statuses
+# Each entry in the array represents: lower_limit, upper_limit, tax_rate
+tax_brackets_single=(0 11600 10 11601 47150 12 47151 100525 22 100526 191950 24 191951 243725 32 243726 609350 35 609351 37)
+tax_brackets_head_of_household=(0 13850 10 13851 52800 12)
+tax_brackets_married_filing_jointly=(0 23200 10 23201 87000 12)
+
+# Define state withholding tax brackets for different filing statuses
+state_tax_brackets_single=(0 10000 5 10001 30000 7)
+state_tax_brackets_head_of_household=(0 12000 5 12001 35000 7)
+state_tax_brackets_married_filing_jointly=(0 20000 5 20001 60000 7)
+
+# Replace the following placeholder values with your actual rates
+medicare_employer_rate=1.45
+medicare_employee_rate=1.45
+social_security_employer_rate=6.2
+social_security_employee_rate=6.2
+ca_withholding_rate=8
+ca_sdi_rate=1.1
+ca_unemployment_company_rate=2.9
+ca_employment_training_tax_rate=0.1
+
+# Calculate federal withholding based on the appropriate tax bracket
+# For example, if the user selects "Single," use tax_brackets_single
+# You can extend this logic to include other filing statuses.
+filing_status="single"  # Replace with user input
+case "$filing_status" in
+    "single")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${tax_brackets_single[@]}")
+        state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets_single[@]}")
+        ;;
+    "head_of_household")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${tax_brackets_head_of_household[@]}")
+        state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets_head_of_household[@]}")
+        ;;
+    "married_filing_jointly")
+        federal_withholding=$(calculate_federal_withholding $gross_pay "${tax_brackets_married_filing_jointly[@]}")
+        state_withholding=$(calculate_state_withholding $gross_pay "${state_tax_brackets_married_filing_jointly[@]}")
+        ;;
+    *)
+        echo "Invalid filing status"
+        exit 1
+        ;;
+esac
+
+# Calculate other payroll items
+medicare_employer=$(echo "$gross_pay * ($medicare_employer_rate / 100)" | bc)
+medicare_employee=$(echo "$gross_pay * ($medicare_employee_rate / 100)" | bc)
+social_security_employer=$(echo "$gross_pay * ($social_security_employer_rate / 100)" | bc)
+social_security_employee=$(echo "$gross_pay * ($social_security_employee_rate / 100)" | bc)
+ca_withholding=$(echo "$gross_pay * ($ca_withholding_rate / 100)" | bc)
+ca_sdi=$(echo "$gross_pay * ($ca_sdi_rate / 100)" | bc)
+ca_unemployment_company=$(echo "$gross_pay * ($ca_unemployment_company_rate / 100)" | bc)
+ca_employment_training_tax=$(echo "$gross_pay * ($ca_employment_training_tax_rate / 100)" | bc)
+
+# Calculate net pay
+net_pay=$(calculate_net_pay $gross_pay $federal_withholding $state_withholding)
+
+# Display results with formatted output
+printf "Gross Pay: $%.2f\n" $gross_pay
+printf "Federal Withholding: $%.2f\n" $federal_withholding
+printf "State Withholding: $%.2f\n" $state_withholding
+printf "Medicare Employer: $%.2f\n" $medicare_employer
+printf "Medicare Employee: $%.2f\n" $medicare_employee
+printf "Social Security Employer: $%.2f\n" $social_security_employer
+printf "Social Security Employee: $%.2f\n" $social_security_employee
+printf "CA Withholding: $%.2f\n" $ca_withholding
+printf "CA SDI: $%.2f\n" $ca_sdi
+printf "CA Unemployment Company: $%.2f\n" $ca_unemployment_company
+printf "CA Employment Training Tax: $%.2f\n" $ca_employment_training_tax
+printf "Net Pay: $%.2f\n" $net_pay
