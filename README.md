@@ -8,7 +8,7 @@ A collection of bash scripts for various file conversion and system update tasks
 - [Scripts](#scripts)
   - [convert](#convert)
   - [tmux_ref](#tmux_ref)
-  - [remote](#remote)
+  - [remote_menu](#remote_menu)
   - [update-debian](#update-debian)
   - [update-fedora](#update-fedora)
   - [upinst](#upinst)
