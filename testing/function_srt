@@ -1,0 +1,86 @@
+
+
+# -----------------------------------
+# SUBTITLE FORMULAS
+# -----------------------------------
+
+# Function to extract subtitles from video files and save as SRT
+# This function prompts the user for source and destination directories,
+# source and destination extensions, then iterates through all files
+# in the source directory with the specified source extension,
+# extracting subtitles using FFmpeg, and saving them in the destination directory
+# with the specified destination extension.
+#
+extract_srt() {
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║              Extract subtitles SCRIPT           ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+
+	# Prompting the user for the source extension (e.g., mp4, mkv)
+	prompt "Source extension? : " srcExt
+
+	# Prompting the user for the destination extension (e.g., srt)
+	prompt "Destination extension? (default: srt): " destExt
+	destExt=${destExt:-srt}
+
+	# Prompting the user for the source directory
+  	prompt "Source directory? : " srcDir
+
+	# Prompting the user for the destination directory
+  	prompt "Destination directory? : " destDir
+	destDir=${destDir:-srt}
+
+	# Loop through each file in the source directory with the specified source extension
+  	for filename in "$srcDir"/*.$srcExt
+	do
+		# Extracting the base name and path without the extension
+  		basePath=${filename%.*}
+    		baseName=${basePath##*/}
+
+		# Using FFmpeg to extract subtitles and save as SRT in the destination directory
+  		ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s "$destDir"/"$baseName".en."$destExt"
+  	done
+
+  	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+	pause
+	show_menu_2
+}
+
+# Function to convert VTT subtitles to SRT format
+# This function prompts the user for source and destination directories,
+# then iterates through all VTT files in the source directory,
+# converting each to SRT format using FFmpeg and saving them in the destination directory.
+#
+convert_srt() {
+	check_ffmpeg
+	echo -e "${BLUE}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║              Convert Subtitles SCRIPT           ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+	# Prompting the user for the source directory
+  	prompt "Source directory? (default: vtt): " srcDir
+	srcDir=${srcDir:-vtt}
+
+	# Prompting the user for the destination directory
+  	prompt "Destination directory? (default: srt): " destDir
+	destDir=${destDir:-srt}
+
+	# Loop through each VTT file in the source directory
+  	for filename in "$srcDir"/*.vtt
+	do
+		# Extracting the base name and path without the extension
+  		basePath=${filename%.*}
+    		baseName=${basePath##*/}
+
+		# Using FFmpeg to convert VTT to SRT and save the file in the destination directory
+  		ffmpeg -i $filename "$destDir"/"$baseName".srt
+  	done
+
+  	echo -e "Conversion from vtt to srt complete!\a"
+	pause
+	show_menu_2
+}
