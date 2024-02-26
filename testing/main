@@ -41,7 +41,7 @@ source_script() {
     local script_name=$(basename "${script_url}")
 
     # Download the script
-    bash -c "$(curl -fsSL ${script_url}" -o "${script_name})"
+    curl -fsSL "${script_url}" -o "${script_name}"
 #    curl -sSL "${script_url}" -o "${script_name}"
 
     # Source the script
