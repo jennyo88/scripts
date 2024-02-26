@@ -4,13 +4,13 @@
 
 # Function to load colors into variables
 load_colors() {
-    MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
-	MENU_1_COLOR=$'\e[38;5;208m'        # Orange color
-	MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
-	MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
-	MENU_4_COLOR=$'\e[38;5;165m'        # Purple color
-	ERROR=$'\e[1;31m'                   # Red color (bold)
-	RESET=$'\e[0m'                      # Reset color attributes
+    MAIN_MENU_COLOR='\e[38;5;39m'      # Blue color
+	MENU_1_COLOR='\e[38;5;208m'        # Orange color
+	MENU_2_COLOR='\e[1;32m'            # Green color (bold)
+	MENU_3_COLOR='\e[1;36m'            # Cyan color (bold)
+	MENU_4_COLOR='\e[38;5;165m'        # Purple color
+	ERROR='\e[1;31m'                   # Red color (bold)
+	RESET='\e[0m'                      # Reset color attributes
 }
 
 # -----------------------------------
