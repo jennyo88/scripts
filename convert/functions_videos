@@ -11,7 +11,7 @@
 #
 x265() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                    x265 SCRIPT                  ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -52,7 +52,7 @@ x265() {
 #
 m3u8() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 M3U8 to TS SCRIPT               ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -117,7 +117,7 @@ m3u8() {
 # using youtube-dl or yt-dlp and organizes them in a specific folder structure.
 #
 ydl() {
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
     	echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
@@ -285,7 +285,7 @@ ydl() {
 }
 
 ytdl() {
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                 Movies & TV Shows               ║ "
     	echo " ║                YT-DLP to MP4 SCRIPT             ║ "
@@ -458,7 +458,7 @@ ytdl() {
 #
 video_sub() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                Video & Subs SCRIPT              ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -517,7 +517,7 @@ video_sub() {
 tubi() {
 	check_ffmpeg
 	check_wget
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                   tubi SCRIPT                   ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -571,7 +571,7 @@ tubi() {
 #
 metadata() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║          Encode Language Metadata SCRIPT        ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -631,7 +631,7 @@ metadata() {
 #
 plex() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║               plex TS to MKV SCRIPT             ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
