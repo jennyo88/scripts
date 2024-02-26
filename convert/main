@@ -65,13 +65,11 @@ done
 # Calling the load_colors() function to set color variables
 load_colors # Only loaded once
 
-main_menu="0"
-
 # -----------------------------------
 # INFINITE LOOP
 # -----------------------------------
 
 while true
 do
-    show_banner_0 && show_menu_${main_menu}
+    show_banner_0 && show_menu_0
 done
