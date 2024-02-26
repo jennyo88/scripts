@@ -13,7 +13,7 @@
 #
 extract_srt() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_2_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║              Extract subtitles SCRIPT           ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -56,7 +56,7 @@ extract_srt() {
 #
 convert_srt() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_2_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║              Convert Subtitles SCRIPT           ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
