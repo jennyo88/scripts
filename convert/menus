@@ -231,12 +231,12 @@ show_menu_1() {
 			show_menu_4 ;;
         [eE]|[eE][xX][iI][Tt]|"0")
 			# Exiting the menu
-        		goodbye ;;
+        	goodbye ;;
 		# Handling invalid options
-        	*)
-            	echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-    			pause
-            	show_menu_1 ;;
+        *)
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+    		pause
+            show_menu_1 ;;
     esac
 }
 
