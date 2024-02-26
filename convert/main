@@ -7,19 +7,6 @@
 # Last Updated: Feb 25, 2024
 # GitHub Repository: https://github.com/jennyo88/scripts/testing/main
 
-# -----------------------------------
-# COLORS
-# -----------------------------------
-
-load_colors() {
-	BLUE=$'\e[38;5;39m'	# Blue color
-	ORANGE=$'\e[38;5;208m'	# Orange color
-	RED=$'\e[1;31m'		# Red color (bold)
-	RESET=$'\e[0m'		# Reset color attributes
-}
-
-# Calling the load_colors() function to set color variables
-load_colors # Only loaded once
 
 # -----------------------------------
 # SOURCE SCRIPTS
@@ -70,10 +57,12 @@ done
 # Call the functions or execute any code as needed
 
 
+# -----------------------------------
+# MAIN MENU AND COLORS
+# -----------------------------------
 
-# -----------------------------------
-# STEP 1
-# -----------------------------------
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
 
 main_menu="0"
 
