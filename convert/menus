@@ -4,11 +4,12 @@
 
 # Function to load colors into variables
 load_colors() {
-	BLUE=$'\e[38;5;39m'	# Blue color
-	ORANGE=$'\e[38;5;208m'	# Orange color
-    	CYAN=$'\e[1;36m'        # Cyan color (bold)
-	RED=$'\e[1;31m'		# Red color (bold)
-	RESET=$'\e[0m'		# Reset color attributes
+    	MAIN_MENU_COLOR=$'\e[38;5;39m'  	# Blue color
+    	MENU_1_COLOR=$'\e[38;5;208m'       	# Orange color
+    	MENU_2_COLOR=$'\e[1;32m'           	# Green color (bold)
+    	MENU_3_COLOR=$'\e[1;36m'           	# Cyan color (bold)
+    	ERROR=$'\e[1;31m'         	   	# Red color (bold)
+    	RESET=$'\e[0m'                     	# Reset color attributes
 }
 
 # -----------------------------------
@@ -18,7 +19,7 @@ load_colors() {
 # Function to display the main menu banner
 show_banner_0() {
 	clear
-    	echo "${BLUE}"
+    	echo "${MAIN_MENU_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║          Converting Files - Service Menu        ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -26,7 +27,7 @@ show_banner_0() {
 
 # Function to display the VIDEOS menu banner
 show_banner_1() {
-    	echo "${BLUE}"
+    	echo "${MENU_1_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
     	echo " ║                     VIDEOS                      ║ "
@@ -36,7 +37,7 @@ show_banner_1() {
 
 # Function to display the SUBS menu banner
 show_banner_2() {
-    	echo "${BLUE}"
+    	echo "${MENU_2_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                                                 ║ "
     	echo " ║                      SUBS                       ║ "
@@ -46,7 +47,7 @@ show_banner_2() {
 
 # Function to display the CLEAN-UP menu banner
 show_banner_3() {
-    	echo "${BLUE}"
+    	echo "${MENU_3_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
    	echo " ║                                                 ║ "
     	echo " ║                    CLEAN-UP                     ║ "
@@ -62,8 +63,8 @@ show_banner_3() {
 show_menu_0() {
     	show_banner_0
     	echo ""
-	echo "${CYAN}"
-	echo "    	SCRIPTS""${RESET}"
+	echo ""
+	echo "    	SCRIPTS"
 	echo " 1. For videos"
 	echo " 2. For subtitles"
 	echo " 3. For clean-up"
@@ -73,7 +74,7 @@ show_menu_0() {
     	echo ""
 
     	# Prompting the user to select an option
-	echo -e "${BLUE}"
+	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -146,7 +147,7 @@ show_menu_0() {
             		;;
 		# Handling invalid options
         	*)
-            		echo -e "Invalid option. Please enter a valid option."
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
             		sleep 1
             		show_menu_0
             		;;
@@ -181,7 +182,7 @@ show_menu_1() {
     	echo ""
 
    	# Prompting the user to select an option
-	echo -e "${BLUE}"
+	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -249,7 +250,7 @@ show_menu_1() {
         		;;
 		# Handling invalid options
         	*)
-            		echo -e "Invalid option. Please enter a valid option."
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
             		pause
             		show_menu_1
             		;;
@@ -275,7 +276,7 @@ show_menu_2() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo -e "${BLUE}"
+  	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -309,7 +310,7 @@ show_menu_2() {
         		;;
 		# Handling invalid options
         	*)
-            		echo -e "Invalid option. Please enter a valid option."
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
             		pause
             		show_menu_2
             		;;
@@ -336,7 +337,7 @@ show_menu_3() {
     	echo ""
 
 	# Prompting the user to select an option
-  	echo -e "${BLUE}"
+  	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
@@ -375,7 +376,7 @@ show_menu_3() {
         		;;
 		# Handling invalid options
         	*)
-            		echo -e "Invalid option. Please enter a valid option."
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
             		pause
             		show_menu_3
             		;;
