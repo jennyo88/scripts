@@ -27,11 +27,11 @@ load_colors # Only loaded once
 
 # List of script URLs to download and source
 script_urls=(
-    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/error_handling"
-    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/menus"
-    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_videos"
-    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_srt"
-    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_cleanup"
+    "https://raw.githubusercontent.com/jennyo88/convert/main/error_handling"
+    "https://raw.githubusercontent.com/jennyo88/convert/main/menus"
+    "https://raw.githubusercontent.com/jennyo88/convert/main/functions_videos"
+    "https://raw.githubusercontent.com/jennyo88/convert/main/functions_srt"
+    "https://raw.githubusercontent.com/jennyo88/convert/main/functions_cleanup"
     # Add more script URLs as needed
 )
 
