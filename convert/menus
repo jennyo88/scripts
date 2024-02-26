@@ -4,13 +4,13 @@
 
 # Function to load colors into variables
 load_colors() {
-    MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
-    MENU_1_COLOR=$'\e[38;5;208m'        # Orange color
-    MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
-    MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
-    MENU_4_COLOR=$'\e[38;5;165m'        # Purple color
-    ERROR=$'\e[1;31m'                   # Red color (bold)
-    RESET=$'\e[0m'                      # Reset color attributes
+    	MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
+	MENU_1_COLOR=$'\e[38;5;208m'        # Orange color
+	MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
+	MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
+	MENU_4_COLOR=$'\e[38;5;165m'        # Purple color
+	ERROR=$'\e[1;31m'                   # Red color (bold)
+	RESET=$'\e[0m'                      # Reset color attributes
 }
 
 # -----------------------------------
@@ -20,50 +20,50 @@ load_colors() {
 # Function to display the main menu banner
 show_banner_0() {
 	clear
-    echo "${MAIN_MENU_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║          Converting Files - Service Menu        ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    	echo "${MAIN_MENU_COLOR}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║          Converting Files - Service Menu        ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the VIDEOS menu banner
 show_banner_1() {
-    echo "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-	echo " ║                                                 ║ "
-    echo " ║                     VIDEOS                      ║ "
-    echo " ║                                                 ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    	echo "${MENU_1_COLOR}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                                                 ║ "
+    	echo " ║                     VIDEOS                      ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the SUBS menu banner
 show_banner_2() {
-    echo "${MENU_2_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                                                 ║ "
-    echo " ║                      SUBS                       ║ "
-    echo " ║                                                 ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	echo "${MENU_2_COLOR}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                                                 ║ "
+	echo " ║                      SUBS                       ║ "
+	echo " ║                                                 ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the CLEAN-UP menu banner
 show_banner_3() {
-    echo "${MENU_3_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-   	echo " ║                                                 ║ "
-    echo " ║                    CLEAN-UP                     ║ "
-	echo " ║                                                 ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    	echo "${MENU_3_COLOR}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                                                 ║ "
+    	echo " ║                    CLEAN-UP                     ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the TMUX menu banner
 show_banner_4() {
-    echo "${MENU_4_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-   	echo " ║                                                 ║ "
-	echo " ║                   	  	TMUX           	         ║ "
-	echo " ║                                                 ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    	echo "${MENU_4_COLOR}"
+    	echo " ╔═════════════════════════════════════════════════╗ "
+    	echo " ║                                                 ║ "
+    	echo " ║             		TMUX           		 ║ "
+    	echo " ║                                                 ║ "
+    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # -----------------------------------
@@ -73,84 +73,84 @@ show_banner_4() {
 # Function for displaying the main menu
 show_menu_0() {
 	show_banner_0
-    echo ""
+   	echo ""
 	echo ""
 	echo "    	SCRIPTS"
 	echo " 1. For videos"
 	echo " 2. For subtitles"
 	echo " 3. For clean-up"
 	echo " 4. For tmux"
-    echo ""
-    echo ""
+    	echo ""
+    	echo ""
 	echo " 0. Exit script"
 	echo ""
 
-    # Prompting the user to select an option
+    	# Prompting the user to select an option
 	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
    	# Handling the user's choice using a case statement
-    case $ans in
-        [vV]|[vV][iI][dD][eE][oO][sS]|"1")
-            show_menu_1 ;;
-        [sS]|[sS][uU][bB][sS]|"2")
-            show_menu_2 ;;
-        [cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
-            show_menu_3 ;;
+    	case $ans in
+        	[vV]|[vV][iI][dD][eE][oO][sS]|"1")
+            		show_menu_1 ;;
+        	[sS]|[sS][uU][bB][sS]|"2")
+            		show_menu_2 ;;
+        	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
+            		show_menu_3 ;;
 		[tT]|[tT][mM][uU][xX]|"4")
 			show_menu_4 ;;
-        [eE]|[eE][xX][iI][tT]|[qQ]|"0")
-        	# Exiting script
-         	goodbye ;;
-    	# Hidden options
-    	[xX][2][6][5]|[1][6])
+        	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+        		# Exiting script
+         		goodbye ;;
+    		# Hidden options
+    		[xX][2][6][5]|[1][6])
 			clear
 			show_banner_1
-        	x265 ;;
-        [mM][3][uU][8]|[1][2])
+        		x265 ;;
+        	[mM][3][uU][8]|[1][2])
 			clear
-        	show_banner_1
-            m3u8 ;;
-    	[yY][dD][lL]|[1][3])
+        		show_banner_1
+            		m3u8 ;;
+    		[yY][dD][lL]|[1][3])
 			clear
-            show_banner_1
-            ydl ;;
-        [tT][uU][bB][iI]|[1][5])
+            		show_banner_1
+            		ydl ;;
+        	[tT][uU][bB][iI]|[1][5])
 			clear
-            show_banner_1
-            tubi ;;
-        [mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
+            		show_banner_1
+            		tubi ;;
+        	[mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
 			clear
-            show_banner_1
-            metadata ;;
-        [pP][lL][eE][xX]|[1][7])
+            		show_banner_1
+            		metadata ;;
+        	[pP][lL][eE][xX]|[1][7])
 			clear
-        	show_banner_1
-        	plex ;;
-        [aA][lL][lL]|[1][8])
+        		show_banner_1
+        		plex ;;
+        	[aA][lL][lL]|[1][8])
 			clear
-    		show_banner_1
-        	video_sub && sleep 1
-    		c_all  ;;
-        [eE][xX][tT][rR][aA][cC][tT]|[2][2])
+    			show_banner_1
+        		video_sub && sleep 1
+    			c_all  ;;
+        	[eE][xX][tT][rR][aA][cC][tT]|[2][2])
 			clear
-            show_banner_2
-            extract_srt ;;
-        [vV][tT][tT]|[2][3])
+            		show_banner_2
+            		extract_srt ;;
+        	[vV][tT][tT]|[2][3])
 			clear
-            show_banner_2
-            convert_srt ;;
-        [cC][aA][lL][lL]|[3][4])
+            		show_banner_2
+            		convert_srt ;;
+        	[cC][aA][lL][lL]|[3][4])
 			clear
-            show_banner_3
-            c_all ;;
+       		     	show_banner_3
+            		c_all ;;
 		# Handling invalid options
 		*)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-            sleep 1
-            show_menu_0 ;;
-    esac
+            		echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            		sleep 1
+            		show_menu_0 ;;
+	esac
 }
 
 
@@ -172,14 +172,14 @@ show_menu_1() {
 	echo "  7. Convert ONLY video"
 	echo "  8. Convert video & subtitles"
 	echo "  9. Encode metadata"
-    echo ""
+    	echo ""
 	echo " 10. Go to SUBS Menu"
 	echo " 11. Go to CLEAN-UP Menu"
 	echo " 12. Go to TMUX Menu"
-    echo ""
-    echo ""
-    echo "  0. Exit script"
-    echo ""
+    	echo ""
+    	echo ""
+    	echo "  0. Exit script"
+    	echo ""
 
    	# Prompting the user to select an option
 	echo -e "${MAIN_MENU_COLOR}"
@@ -188,30 +188,30 @@ show_menu_1() {
 
 	# Handling the user's choice using a case statement
 	case $ans in
-      	[mM][aA][iI][nN]|"1")
+      		[mM][aA][iI][nN]|"1")
 			clear
 			show_banner_0
-        	show_menu_0 ;;
-      	[mM]|[mM][3][uU][8]|[dD][2]|"2")
+        		show_menu_0 ;;
+      		[mM]|[mM][3][uU][8]|[dD][2]|"2")
 			clear
 			show_banner_1
-        	m3u8 ;;
-      	[yY]|[yY][dD][lL]|[dD][3]|"3")
+        		m3u8 ;;
+      		[yY]|[yY][dD][lL]|[dD][3]|"3")
 			clear
-        	show_banner_1
+        		show_banner_1
 			ydl ;;
 		[yY][tT]|[dD][4]|"4")
 			clear
 			show_banner_1
 			ytdl ;;
-      	[tT]|[tT][uU][bI][iI]|[dD][5]|"5")
+      		[tT]|[tT][uU][bI][iI]|[dD][5]|"5")
 			clear
 			show_banner_1
-        	tubi ;;
-      	[xX]|[xX][2][6][5]|[cC][6]|"6")
+        		tubi ;;
+      		[xX]|[xX][2][6][5]|[cC][6]|"6")
 			clear
 			show_banner_1
-        	x265 ;;
+        		x265 ;;
 		[vV]|[vI][iI][vV][eE][oO]|[cC][7]|"7")
 			clear
 			show_banner_0
@@ -236,15 +236,15 @@ show_menu_1() {
 		[tT]|[tT][mM][uU][xX]|"12")
 			show_banner_4
 			show_menu_4 ;;
-      	[eE]|[eE][xX][iI][Tt]|"0")
+      		[eE]|[eE][xX][iI][Tt]|"0")
 			# Exiting the menu
-        	goodbye ;;
+        		goodbye ;;
 		# Handling invalid options
-        *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-    		pause
-            show_menu_1 ;;
-    esac
+        	*)
+            		echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+    			pause
+            		show_menu_1 ;;
+	esac
 }
 
 # Function for displaying the SUBS menu
@@ -261,10 +261,10 @@ show_menu_2() {
   	echo " 4. Go to VIDEOS Menu"
 	echo " 5. Go to CLEAN-UP Menu"
 	echo " 6. Go to TMUX Menu"
-    echo ""
-    echo ""
-    echo " 0. Exit script"
-    echo ""
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+    	echo ""
 
 	# Prompting the user to select an option
   	echo -e "${MAIN_MENU_COLOR}"
@@ -272,46 +272,46 @@ show_menu_2() {
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-    case $ans in
-      	[mM][aA][iI][nN]|"1")
-        	show_banner_0
-        	show_menu_0 ;;
-      	[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
+    	case $ans in
+      		[mM][aA][iI][nN]|"1")
+        		show_banner_0
+        		show_menu_0 ;;
+      		[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
 			clear
 			show_banner_2
-        	extract_srt ;;
-      	[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
+        		extract_srt ;;
+      		[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
 			clear
 			show_banner_2
-        	convert_srt ;;
-      	[vV]|[vV][iI][dD][eE][oO][sS]|"4")
+        		convert_srt ;;
+      		[vV]|[vV][iI][dD][eE][oO][sS]|"4")
 			show_banner_1
-        	show_menu_1 ;;
+        		show_menu_1 ;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
 			show_banner_3
 			show_menu_3 ;;
 		[tT]|[tT][mM][uU][xX]|"6")
 			show_banner_4
 			show_menu_4 ;;
-      	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
-        	goodbye ;;
+        		goodbye ;;
 		# Handling invalid options
-        *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-            pause
-            show_menu_2 ;;
-    esac
+        	*)
+            		echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            		pause
+            		show_menu_2 ;;
+	esac
 }
 
 # Function for displaying the CLEAN-UP menu
 show_menu_3() {
 	show_banner_0
 	show_banner_3
-    echo ""
-    echo ""
-    echo " 1. Go back to Main Menu"
-    echo ""
+	echo ""
+    	echo ""
+    	echo " 1. Go back to Main Menu"
+    	echo ""
   	echo " 2. Clear folder ts"
   	echo " 3. Clear folder mkv"
 	echo " 4. Clear both folders"
@@ -319,10 +319,10 @@ show_menu_3() {
 	echo " 5. Go to VIDEOS Menu"
 	echo " 6. Go to SUBS Menu"
 	echo " 7. Go to TMUX Menu"
-    echo ""
-    echo ""
-    echo " 0. Exit script"
-    echo ""
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+   	echo ""
 
 	# Prompting the user to select an option
   	echo -e "${MAIN_MENU_COLOR}"
@@ -330,62 +330,62 @@ show_menu_3() {
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-    case $ans in
-      	[mM][aA][iI][nN]|"1")
-        	show_banner_0
-        	show_menu_0 ;;
-      	[c][tT][sS]|"2")
+    	case $ans in
+      		[mM][aA][iI][nN]|"1")
+        		show_banner_0
+        		show_menu_0 ;;
+      		[c][tT][sS]|"2")
 			clear
 			show_banner_3
-        	c_ts ;;
-      	[c][mM][kK][vV]|"3")
+        		c_ts ;;
+      		[c][mM][kK][vV]|"3")
 			clear
 			show_banner_3
-        	c_mkv ;;
+        		c_mkv ;;
 		[cC][aA][lL][lL]|"4")
 			clear
 			show_banner_3
 			c_all ;;
-      	[vV]|[vV][iI][dD][eE][oO][sS]|"5")
+      		[vV]|[vV][iI][dD][eE][oO][sS]|"5")
 			show_banner_1
-        	show_menu_1 ;;
+        		show_menu_1 ;;
 		[sS]|[sS][uU][bB][sS]|"6")
 			show_banner_2
 			show_menu_2 ;;
 		[tT]|[tT][mM][uU][xX]|"7")
 			show_banner_4
 			show_menu_4 ;;
-      	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
-        	goodbye ;;
+        		goodbye ;;
 		# Handling invalid options
-        *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-            pause
-            show_menu_3 ;;
-    esac
+        	*)
+           	 	echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            		pause
+            		show_menu_3 ;;
+	esac
 }
 
 # Function for displaying the TMUX menu
 show_menu_4() {
 	show_banner_0
 	show_banner_4
-    echo ""
-    echo ""
-    echo " 1. Go back to Main Menu"
-    echo ""
+    	echo ""
+    	echo ""
+    	echo " 1. Go back to Main Menu"
+    	echo ""
   	echo " 2. Create new session"
   	echo " 3. Attach to session"
 	echo " 4. List sessions"
-    echo ""
+    	echo ""
 	echo ""
 	echo " 5. Go to VIDEOS Menu"
 	echo " 6. Go to SUBS Menu"
 	echo " 7. Go to CLEAN-UP Menu"
-    echo ""
-    echo ""
-    echo " 0. Exit script"
-    echo ""
+    	echo ""
+    	echo ""
+    	echo " 0. Exit script"
+    	echo ""
 
 	# Prompting the user to select an option
   	echo -e "${MAIN_MENU_COLOR}"
@@ -393,35 +393,35 @@ show_menu_4() {
 	echo "${RESET}"
 
 	# Handling the user's choice using a case statement
-    case $ans in
-      	[mM][aA][iI][nN]|"1")
-        	show_banner_0
-        	show_menu_0 ;;
-      	[nN]|[nN][eE][wW]|"2")
+    	case $ans in
+      		[mM][aA][iI][nN]|"1")
+        		show_banner_0
+        		show_menu_0 ;;
+      		[nN]|[nN][eE][wW]|"2")
 			prompt "Enter session name: " session_name
 			tmux_command new-session -s "$session_name" ;;
-      	[aA]|[]aA[tT][tT][aA][cC][hH]|"3")
+      		[aA]|[]aA[tT][tT][aA][cC][hH]|"3")
 			prompt "Enter session name to attach: " session_name
 			tmux_command attach-session -t "$session_name" ;;
 		[lL]|[lL][iI][sS][tT]|"4")
 			tmux_command list-sessions ;;
-      	[vV]|[vV][iI][dD][eE][oO][sS]|"5")
+      		[vV]|[vV][iI][dD][eE][oO][sS]|"5")
 			show_banner_1
-        	show_menu_1 ;;
+        		show_menu_1 ;;
 		[sS]|[sS][uU][bB][sS]|"6")
 			show_banner_2
 			show_menu_2 ;;
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"7")
 			show_banner_3
 			show_menu_3 ;;
-      	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      		[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
-        	goodbye ;;
+        		goodbye ;;
 		# Handling invalid options
-        *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
-            pause
-            show_menu_4 ;;
-    esac
+        	*)
+            		echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            		pause
+            		show_menu_4 ;;
+	esac
 }
 
