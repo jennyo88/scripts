@@ -50,6 +50,16 @@ source_script() {
     fi
 }
 
+# Function to remove downloaded script files
+cleanup() {
+    for url in "${script_urls[@]}"; do
+        local script_name=$(basename "${url}")
+        rm -f "${script_name}"
+    done
+}
+
+# Set up a trap to run the cleanup function on script exit
+trap cleanup EXIT
 
 # Iterate through the list of script URLs and source each one
 for url in "${script_urls[@]}"; do
