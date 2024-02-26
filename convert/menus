@@ -1,4 +1,15 @@
 # -----------------------------------
+# COLORS
+# -----------------------------------
+
+load_colors() {
+	BLUE=$'\e[38;5;39m'	# Blue color
+	ORANGE=$'\e[38;5;208m'	# Orange color
+	RED=$'\e[1;31m'		# Red color (bold)
+	RESET=$'\e[0m'		# Reset color attributes
+}
+
+# -----------------------------------
 # BANNERS
 # -----------------------------------
 
@@ -47,7 +58,7 @@ show_menu_0() {
     	show_banner_0
     	echo ""
     	echo ""
-	echo "		SCRIPTS"
+	echo "${ORANGE}"	SCRIPTS""${RESET}"
 	echo " 1. For videos"
 	echo " 2. For subtitles"
 	echo " 3. For clean-up"
