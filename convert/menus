@@ -147,7 +147,7 @@ show_menu_0() {
             		;;
 		# Handling invalid options
         	*)
-            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             		sleep 1
             		show_menu_0
             		;;
@@ -250,7 +250,7 @@ show_menu_1() {
         		;;
 		# Handling invalid options
         	*)
-            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             		pause
             		show_menu_1
             		;;
@@ -310,7 +310,7 @@ show_menu_2() {
         		;;
 		# Handling invalid options
         	*)
-            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}
+            		echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             		pause
             		show_menu_2
             		;;
