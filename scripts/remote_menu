@@ -140,7 +140,7 @@ show_menu_0() {
             ;;
         # Hidden options
         [cC]|[cC][oO][nN][vV][eE][rR][tT]|[1][1])
-            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
             ;;
         # Handling invalid options
         *)
@@ -181,7 +181,7 @@ show_menu_1() {
             show_menu_0
             ;;
         [cC]|[cC][oO][nN][vV][eE][rR][tT]|"2")
-            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/convert)"
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
             ;;
         [tT]|[tT][mM][uU][xX]|"3")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
