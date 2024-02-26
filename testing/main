@@ -40,13 +40,16 @@ source_script() {
     local script_url=$1
     local script_name=$(basename "${script_url}")
 
-    # Download the script
-    curl -fsSL "${script_url}" -o "${script_name}"
-#    curl -sSL "${script_url}" -o "${script_name}"
-
-    # Source the script
-    source "${script_name}"
+    # Download the script with error handling and silent operation
+    if curl -fsSL "${script_url}" -o "${script_name}"; then
+        # Source the script if download is successful
+        source "${script_name}"
+    else
+        echo "Failed to download script: ${script_url}"
+        exit 1
+    fi
 }
+
 
 # Iterate through the list of script URLs and source each one
 for url in "${script_urls[@]}"; do
