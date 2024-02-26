@@ -35,13 +35,13 @@ script_urls=(
     # Add more script URLs as needed
 )
 
-# Function to source a script
+# Function to source a script without download output
 source_script() {
     local script_url=$1
     local script_name=$(basename "${script_url}")
 
-    # Download the script with error handling and silent operation
-    if curl -fsSL "${script_url}" -o "${script_name}"; then
+    # Download the script silently
+    if curl -fsSL "${script_url}" -o "${script_name}" >/dev/null 2>&1; then
         # Source the script if download is successful
         source "${script_name}"
     else
