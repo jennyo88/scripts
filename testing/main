@@ -22,6 +22,45 @@ load_colors() {
 load_colors # Only loaded once
 
 
+# -----------------------------------
+# SOURCE
+# -----------------------------------
+
+# List of script URLs to download and source
+script_urls=(
+    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/error_handling"
+    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/menus"
+    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_videos"
+    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_srt"
+    "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_cleanup"
+    # Add more script URLs as needed
+)
+
+# Function to source a script
+source_script() {
+    local script_url=$1
+    local script_name=$(basename "${script_url}")
+
+    # Download the script
+    curl -sSL "${script_url}" -o "${script_name}"
+
+    # Source the script
+    source "${script_name}"
+}
+
+# Iterate through the list of script URLs and source each one
+for url in "${script_urls[@]}"; do
+    source_script "${url}"
+done
+
+# Now you can use functions from the sourced scripts
+# Call the functions or execute any code as needed
+
+# -----------------------------------
+# STEP 1
+# -----------------------------------
+
+main_menu_0
 
 # -----------------------------------
 # INFINITE LOOP
