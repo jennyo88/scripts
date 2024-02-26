@@ -73,5 +73,5 @@ main_menu="0"
 
 while true
 do
-	show_banner_0 && show_menu_${main_menu}
+    show_banner_0 && show_menu_${main_menu}
 done
