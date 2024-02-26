@@ -4,8 +4,7 @@
 
 load_colors() {
 	BLUE=$'\e[38;5;39m'	# Blue color
-	BBLUE=$'\e[48;5;39m'	# Background Blue
-	ORANGE=$'\e[38;5;208m'	# Orange color
+	ORANGE=$'\e[4;208m'	# Orange color (underlined)
 	RED=$'\e[1;31m'		# Red color (bold)
 	RESET=$'\e[0m'		# Reset color attributes
 }
@@ -17,7 +16,7 @@ load_colors() {
 # Function to display the main menu banner
 show_banner_0() {
 	clear
-    	echo "${BBLUE}"
+    	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║          Converting Files - Service Menu        ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
