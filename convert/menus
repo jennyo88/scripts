@@ -2,9 +2,11 @@
 # COLORS
 # -----------------------------------
 
+# Function to load colors into variables
 load_colors() {
 	BLUE=$'\e[38;5;39m'	# Blue color
 	ORANGE=$'\e[38;5;208m'	# Orange color
+    	CYAN=$'\e[1;36m'        # Cyan color (bold)
 	RED=$'\e[1;31m'		# Red color (bold)
 	RESET=$'\e[0m'		# Reset color attributes
 }
@@ -22,6 +24,7 @@ show_banner_0() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
+# Function to display the VIDEOS menu banner
 show_banner_1() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
@@ -31,6 +34,7 @@ show_banner_1() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
+# Function to display the SUBS menu banner
 show_banner_2() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
@@ -40,6 +44,7 @@ show_banner_2() {
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
+# Function to display the CLEAN-UP menu banner
 show_banner_3() {
     	echo "${BLUE}"
     	echo " ╔═════════════════════════════════════════════════╗ "
@@ -57,8 +62,8 @@ show_banner_3() {
 show_menu_0() {
     	show_banner_0
     	echo ""
-    	echo "${ORANGE}"
-	echo "		SCRIPTS""${RESET}"
+	echo "${CYAN}"
+	echo "    	SCRIPTS""${RESET}"
 	echo " 1. For videos"
 	echo " 2. For subtitles"
 	echo " 3. For clean-up"
