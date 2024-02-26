@@ -22,9 +22,7 @@ load_colors() {
 load_colors # Only loaded once
 
 
-# -----------------------------------
-# SOURCE SCRIPS
-# -----------------------------------
+# main_script.sh
 
 # List of script URLs to download and source
 script_urls=(
@@ -41,11 +39,17 @@ source_script() {
     local script_url=$1
     local script_name=$(basename "${script_url}")
 
-    # Download the script
-    curl -fsSL "${script_url}" -o "${script_name}"
+    # Create a temporary directory for scripts
+    local temp_dir=$(mktemp -d)
 
-    # Source the script
-    source "${script_name}"
+    # Download the script into the temporary directory
+    curl -sSL "${script_url}" -o "${temp_dir}/${script_name}"
+
+    # Source the script from the temporary directory
+    source "${temp_dir}/${script_name}"
+
+    # Clean up the temporary directory
+    rm -rf "${temp_dir}"
 }
 
 # Iterate through the list of script URLs and source each one
@@ -55,6 +59,7 @@ done
 
 # Now you can use functions from the sourced scripts
 # Call the functions or execute any code as needed
+
 
 # -----------------------------------
 # STEP 1
