@@ -1,3 +1,7 @@
+# -------------------------
+# extract_srt / convert_srt
+# -------------------------
+
 # Function to extract subtitles from video files and save as SRT
 extract_srt() {
     check_ffmpeg
