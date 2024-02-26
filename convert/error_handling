@@ -8,7 +8,7 @@ check_ydl() {
 	if command -v youtube-dl &> /dev/null; then
 		return 0  # Success
    	else
-        	echo "Error: youtube-dl is not installed. Please install it before running this script."
+        	echo -e "${ERROR}Error: youtube-dl is not installed. Please install it before running this script.${RESET}"
         	return 1  # Failure
     	fi
 }
@@ -17,7 +17,7 @@ check_ytdl() {
     	if command -v yt-dlp &> /dev/null; then
         	return 0  # Success
     	else
-        	echo "Error: yt-dlp is not installed. Please install it before running this script."
+        	echo -e "${ERROR}Error: yt-dlp is not installed. Please install it before running this script.${RESET}"
         	return 1  # Failure
     fi
 }
@@ -26,7 +26,7 @@ check_ffmpeg() {
     	if command -v ffmpeg &> /dev/null; then
         	return 0  # Success
     	else
-        	echo "Error: ffmpeg is not installed. Please install it before running this script."
+        	echo -e "${ERROR}Error: ffmpeg is not installed. Please install it before running this script.${RESET}"
         	return 1  # Failure
     	fi
 }
@@ -35,7 +35,7 @@ check_wget() {
     	if command -v wget &> /dev/null; then
         	return 0  # Success
     	else
-        	echo "Error: wget is not installed. Please install it before running this script."
+        	echo -e "${ERROR}Error: wget is not installed. Please install it before running this script.${RESET}"
         	return 1  # Failure
     fi
 }
@@ -52,24 +52,22 @@ prompt() {
     	while true; do
         	printf "$prompt"
 
-        	# Set the default value if user presses Enter
+        	# Set the default value if the user presses Enter
         	read -r "$variable"
         	[ -z "${!variable}" ] && eval "$variable=\"$default_value\""
 
         	# Check if the user wants to abort
         	if [ "${!variable}" == "abort" ]; then
             		sleep 1
-            		echo "Abort..."
+            		echo -e "${ERROR}Abort...${RESET}"
             		# Add exit actions here if needed
             		show_menu_0
         	fi
 
-        	# Break the loop if input is not empty
+        	# Break the loop if the input is not empty
         	[ -n "${!variable}" ] && break
     	done
 }
-
-
 
 # -----------------------------------
 # PAUSE & GOODBYE
@@ -81,7 +79,7 @@ pause() {
 	read -rp "Press ENTER to continue..." fackEnterKey
 }
 
-# Function to display goodbye message and exit
+# Function to display a goodbye message and exit
 goodbye() {
 	echo -e "${RESET}"
 	clear
