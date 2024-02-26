@@ -140,7 +140,7 @@ show_menu_0() {
             c_all ;;
 		# Handling invalid options
 		*)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             sleep 1
             show_menu_0 ;;
     esac
@@ -234,7 +234,7 @@ show_menu_1() {
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
     		pause
             show_menu_1 ;;
     esac
@@ -291,7 +291,7 @@ show_menu_2() {
         	goodbye ;;
 		# Handling invalid options
      	*)
-      		echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}" 
+            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             pause
         	show_menu_2 ;;
     esac
@@ -353,7 +353,7 @@ show_menu_3() {
         	goodbye ;;
 		# Handling invalid options
         *)
-           	echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             pause
             show_menu_3 ;;
     esac
@@ -412,9 +412,8 @@ show_menu_4() {
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
+            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
             pause
             show_menu_4 ;;
 	esac
 }
-
