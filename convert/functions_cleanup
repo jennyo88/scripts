@@ -7,7 +7,7 @@
 # This function prompts the user for confirmation and, if confirmed, removes all files with .ts extension in the 'ts' folder.
 #
 c_ts() {
-	echo -e "${BLUE}"
+	echo -e "${MENU_3_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                CLEAN-UP ts SCRIPT               ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -32,7 +32,7 @@ c_ts() {
 # This function prompts the user for confirmation and, if confirmed, removes all files with .mkv extension in the 'mkv' folder.
 #
 c_mkv() {
-	echo -e "${BLUE}"
+	echo -e "${MENU_3_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                CLEAN-UP mkv SCRIPT              ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -56,7 +56,7 @@ c_mkv() {
 # This function prompts the user for confirmation and, if confirmed, removes all files in the 'ts' and 'mkv' folders.
 #
 c_all() {
-	echo -e "${BLUE}"
+	echo -e "${MENU_3_COLOR}"
     	echo " ╔═════════════════════════════════════════════════╗ "
     	echo " ║                Full CLEAN-UP SCRIPT             ║ "
     	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
