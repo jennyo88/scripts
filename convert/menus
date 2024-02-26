@@ -147,7 +147,7 @@ show_menu_0() {
             c_all ;;
 		# Handling invalid options
 		*)
-            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
             sleep 1
             show_menu_0 ;;
     esac
@@ -175,6 +175,7 @@ show_menu_1() {
     echo ""
 	echo " 10. Go to SUBS Menu"
 	echo " 11. Go to CLEAN-UP Menu"
+	echo " 12. Go to TMUX Menu"
     echo ""
     echo ""
     echo "  0. Exit script"
@@ -232,12 +233,15 @@ show_menu_1() {
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"11")
 			show_banner_3
 			show_menu_3 ;;
+		[tT]|[tT][mM][uU][xX]|"12")
+			show_banner_4
+			show_menu_4 ;;
       	[eE]|[eE][xX][iI][Tt]|"0")
 			# Exiting the menu
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
     		pause
             show_menu_1 ;;
     esac
@@ -256,6 +260,7 @@ show_menu_2() {
 	echo ""
   	echo " 4. Go to VIDEOS Menu"
 	echo " 5. Go to CLEAN-UP Menu"
+	echo " 6. Go to TMUX Menu"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -285,12 +290,15 @@ show_menu_2() {
 		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
 			show_banner_3
 			show_menu_3 ;;
+		[tT]|[tT][mM][uU][xX]|"6")
+			show_banner_4
+			show_menu_4 ;;
       	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
             pause
             show_menu_2 ;;
     esac
@@ -310,6 +318,7 @@ show_menu_3() {
 	echo ""
 	echo " 5. Go to VIDEOS Menu"
 	echo " 6. Go to SUBS Menu"
+	echo " 7. Go to TMUX Menu"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -342,14 +351,16 @@ show_menu_3() {
         	show_menu_1 ;;
 		[sS]|[sS][uU][bB][sS]|"6")
 			show_banner_2
-			show_menu_2
-			;;
+			show_menu_2 ;;
+		[tT]|[tT][mM][uU][xX]|"7")
+			show_banner_4
+			show_menu_4 ;;
       	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
             pause
             show_menu_3 ;;
     esac
@@ -366,7 +377,13 @@ show_menu_4() {
   	echo " 2. Create new session"
   	echo " 3. Attach to session"
 	echo " 4. List sessions"
+    echo ""
 	echo ""
+	echo " 5. Go to VIDEOS Menu"
+	echo " 6. Go to SUBS Menu"
+	echo " 7. Go to CLEAN-UP Menu"
+    echo ""
+    echo ""
     echo " 0. Exit script"
     echo ""
 
@@ -388,12 +405,21 @@ show_menu_4() {
 			tmux_command attach-session -t "$session_name" ;;
 		[lL]|[lL][iI][sS][tT]|"4")
 			tmux_command list-sessions ;;
+      	[vV]|[vV][iI][dD][eE][oO][sS]|"5")
+			show_banner_1
+        	show_menu_1 ;;
+		[sS]|[sS][uU][bB][sS]|"6")
+			show_banner_2
+			show_menu_2 ;;
+		[cC]|[cC][lL][eE][aA][nN][uU][pP]|"7")
+			show_banner_3
+			show_menu_3 ;;
       	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
 			# Exiting the menu
         	goodbye ;;
 		# Handling invalid options
         *)
-            echo -e "${ERROR}" "Invalid option. Please enter a valid option.""${RESET}"
+            echo -e "${ERROR} Invalid option. Please enter a valid option.${RESET}"
             pause
             show_menu_4 ;;
     esac
