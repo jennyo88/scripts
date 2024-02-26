@@ -4,7 +4,7 @@
 
 # Function to load colors into variables
 load_colors() {
-    	MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
+    MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
 	MENU_1_COLOR=$'\e[38;5;208m'        # Orange color
 	MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
 	MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
@@ -20,18 +20,18 @@ load_colors() {
 # Function to display the main menu banner
 show_banner_0() {
 	clear
-    	echo "${MAIN_MENU_COLOR}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║          Converting Files - Service Menu        ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    echo "${MAIN_MENU_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║          Converting Files - Service Menu        ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the VIDEOS menu banner
 show_banner_1() {
-    	echo "${MENU_1_COLOR}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║                     VIDEOS                      ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    echo "${MENU_1_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                     VIDEOS                      ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the SUBS menu banner
@@ -44,18 +44,18 @@ show_banner_2() {
 
 # Function to display the CLEAN-UP menu banner
 show_banner_3() {
-    	echo "${MENU_3_COLOR}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║                    CLEAN-UP                     ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    echo "${MENU_3_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                    CLEAN-UP                     ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # Function to display the TMUX menu banner
 show_banner_4() {
-    	echo "${MENU_4_COLOR}
+    echo "${MENU_4_COLOR}
 	echo "╔═════════════════════════════════════════════════╗"
-    	echo "║                     TMUX                        ║"
-    	echo "╚═════════════════════════════════════════════════╝${RESET}"
+    echo "║                     TMUX                        ║"
+    echo "╚═════════════════════════════════════════════════╝${RESET}"
 }
 
 
@@ -73,24 +73,24 @@ show_menu_0() {
 	echo " 2. For subtitles"
 	echo " 3. For clean-up"
 	echo " 4. For tmux"
-    	echo ""
-    	echo ""
+    echo ""
+    echo ""
 	echo " 0. Exit script"
 	echo ""
 
-    	# Prompting the user to select an option
+    # Prompting the user to select an option
 	echo -e "${MAIN_MENU_COLOR}"
 	prompt "Select: " ans
 	echo "${RESET}"
 
    	# Handling the user's choice using a case statement
-    	case $ans in
-        	[vV]|[vV][iI][dD][eE][oO][sS]|"1")
-            		show_menu_1 ;;
-        	[sS]|[sS][uU][bB][sS]|"2")
-            		show_menu_2 ;;
-        	[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
-            		show_menu_3 ;;
+    case $ans in
+        [vV]|[vV][iI][dD][eE][oO][sS]|"1")
+            	show_menu_1 ;;
+        [sS]|[sS][uU][bB][sS]|"2")
+            	show_menu_2 ;;
+        [cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
+            	show_menu_3 ;;
 		[tT]|[tT][mM][uU][xX]|"4")
 			show_menu_4 ;;
         	[eE]|[eE][xX][iI][tT]|[qQ]|"0")
