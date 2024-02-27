@@ -10,6 +10,7 @@ load_colors() {
   MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
   MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
   MENU_4_COLOR=$'\e[38;5;165m'        # Purple color
+  OK=$'\e[38;5;32m'                   # Green color
   ERROR=$'\e[1;31m'                   # Red color (bold)
   RESET=$'\e[0m'                      # Reset color attributes
 }
