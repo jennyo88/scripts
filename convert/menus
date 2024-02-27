@@ -463,7 +463,7 @@ show_menu_4() {
     [sS][hH]|"6")
       tmux split-window -h
       ;;
-    [sS][vV]|7")
+    [sS][vV]|"7")
       tmux split-window -v
       ;;
     [vV]|[vV][iI][dD][eE][oO][sS]|"8")
