@@ -5,88 +5,90 @@
 
 # Function to clean up 'ts' folder
 c_ts() {
-    echo -e "${MENU_3_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                CLEAN-UP ts SCRIPT               ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  echo -e "${MENU_3_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                CLEAN-UP ts SCRIPT               ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompting the user for confirmation
-    prompt 'Do you want to clear ts folder (y/N)? ' ans
+  # Prompting the user for confirmation
+  prompt 'Do you want to clear ts folder (y/N)? ' ans
 
-    # Checking if the user entered 'y' or 'Y' to proceed with cleanup
-    if [ "$ans" != "${ans#[Yy]}" ]; then
-        # Removing all files with .ts extension in the 'ts' folder
-        if rm -r ./ts/*.ts; then
-            echo -e "TS folder cleared!\a"
-        else
-            echo -e "${ERROR}Error clearing TS folder.${RESET}"
-        fi
-        sleep 1
-        show_menu_3
+  # Checking if the user entered 'y' or 'Y' to proceed with cleanup
+  if [ "$ans" != "${ans#[Yy]}" ]; then
+    # Removing all files with .ts extension in the 'ts' folder
+    if rm -r ./ts/*.ts; then
+      echo -e "TS folder cleared!\a"
     else
-        echo -e "TS folder cleanup cancelled.\a"
-        sleep 1
-        show_menu_3
+      echo -e "${ERROR}Error clearing TS folder.${RESET}"
     fi
+    sleep 1
+    show_menu_3
+  else
+    echo -e "TS folder cleanup cancelled.\a"
+    sleep 1
+    show_menu_3
+  fi
 }
 
 # Function to clean up 'mkv' folder
 c_mkv() {
-    echo -e "${MENU_3_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                CLEAN-UP mkv SCRIPT              ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  echo -e "${MENU_3_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                CLEAN-UP mkv SCRIPT              ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompting the user for confirmation
-    prompt 'Do you want to clear mkv folder (y/N)? ' ans
+  # Prompting the user for confirmation
+  prompt 'Do you want to clear mkv folder (y/N)? ' ans
 
-    # Checking if the user entered 'y' or 'Y' to proceed with cleanup
-    if [ "$ans" != "${ans#[Yy]}" ]; then
-        # Removing all files with .mkv extension in the 'mkv' folder
-        if rm -r ./mkv/*.mkv; then
-            echo -e "MKV folder cleared!\a"
-        else
-            echo -e "${ERROR}Error clearing MKV folder.${RESET}"
-        fi
-        sleep 1
-        show_menu_3
-    else
-        echo -e "MKV folder cleanup cancelled.\a"
-        sleep 1
-        show_menu_3
-    fi
-}
-# Function to clean up all folders
-c_all() {
-    echo -e "${MENU_3_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                Full CLEAN-UP SCRIPT             ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-
-# Prompting the user for confirmation
-prompt 'Do you want to clear all folders (y/N)? ' ans
-
-# Checking if the user entered 'y' or 'Y' to proceed with cleanup
-if [ "$ans" != "${ans#[Yy]}" ]; then
-    # Removing all files with .ts extension in the 'ts' folder
-    if rm -r ./ts/*.ts; then
-        echo -e "TS folder cleared!\a"
-    else
-        echo -e "${ERROR}Error clearing TS folder.${RESET}"
-    fi
-
+  # Checking if the user entered 'y' or 'Y' to proceed with cleanup
+  if [ "$ans" != "${ans#[Yy]}" ]; then
     # Removing all files with .mkv extension in the 'mkv' folder
     if rm -r ./mkv/*.mkv; then
-        echo -e "MKV folder cleared!\a"
+      echo -e "MKV folder cleared!\a"
     else
-        echo -e "${ERROR}Error clearing MKV folder.${RESET}"
+      echo -e "${ERROR}Error clearing MKV folder.${RESET}"
+    fi
+    sleep 1
+    show_menu_3
+  else
+    echo -e "MKV folder cleanup cancelled.\a"
+    sleep 1
+    show_menu_3
+  fi
+}
+
+# Function to clean up all folders
+c_all() {
+  echo -e "${MENU_3_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                Full CLEAN-UP SCRIPT             ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+  # Prompting the user for confirmation
+  prompt 'Do you want to clear all folders (y/N)? ' ans
+
+  # Checking if the user entered 'y' or 'Y' to proceed with cleanup
+  if [ "$ans" != "${ans#[Yy]}" ]; then
+    # Removing all files with .ts extension in the 'ts' folder
+    if rm -r ./ts/*.ts; then
+      echo -e "TS folder cleared!\a"
+    else
+      echo -e "${ERROR}Error clearing TS folder.${RESET}"
+    fi
+
+      # Removing all files with .mkv extension in the 'mkv' folder
+    if rm -r ./mkv/*.mkv; then
+      echo -e "MKV folder cleared!\a"
+    else
+      echo -e "${ERROR}Error clearing MKV folder.${RESET}"
     fi
 
     echo -e "All folders cleared!\a"
     sleep 1
     show_menu_3
-else
+  else
     echo -e "Cleanup cancelled.\a"
     sleep 1
     show_menu_3
-fi
+  fi
+}

@@ -2,14 +2,13 @@
 # x265 / m3u8 / ydl or ytdl / video_sub / tubi / metadata
 # -------------------------------------------------------
 
-
 # Function for converting video files to x265 format using FFmpeg
 x265() {
 	check_ffmpeg
 	echo -e "${MENU_1_COLOR}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║                    x265 SCRIPT                  ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                    x265 SCRIPT                  ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompt user for source extension (e.g. mkv, mp4, or avi)
 	prompt "\nSource extension? (mkv, mp4, or avi) : " srcExt
@@ -28,16 +27,16 @@ x265() {
 	# Loop through each file in the source directory with the specified source extension
 	for filename in "$srcDir"/*.$srcExt
 	do
-    		basePath=${filename%.*}
+		basePath=${filename%.*}
 		baseName=${basePath##*/}
 
-        	# Using FFmpeg to convert the source file to x265 format with the specified destination extension
-        	if ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"; then
-            		echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-        	else
-            		echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
-        	fi
-    	done
+		# Using FFmpeg to convert the source file to x265 format with the specified destination extension
+		if ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"; then
+			echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+		else
+			echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
+		fi
+	done
 	pause
 	show_menu_1
 }
@@ -46,15 +45,9 @@ x265() {
 m3u8() {
 	check_ffmpeg
 	echo -e "${MENU_1_COLOR}"
-    	echo " ╔═════════════════════════════════════════════════╗ "
-    	echo " ║                 M3U8 to TS SCRIPT               ║ "
-    	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-
-
-	# Uncomment the following lines if source extension, destination extension,
-	# and destination directory input is required
-	#
-	# prompt "\nSource extension? : " srcExt
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                 M3U8 to TS SCRIPT               ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 	# Prompt user for destination extension
 	prompt "\nDestination extension? (default: ts): " destExt "ts"
@@ -78,583 +71,544 @@ m3u8() {
 	validLanguageCode=false
 	while [ "$validLanguageCode" = false ]
 	do
-   		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language "eng"
+		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language "eng"
 
-    		if [ ${#language} -eq 3 ]
+		if [ ${#language} -eq 3 ]
 		then
-        		validLanguageCode=true
-    		else
-        		echo "Invalid language code. Please enter a three-letter code."
-    		fi
+			validLanguageCode=true
+		else
+			echo "Invalid language code. Please enter a three-letter code."
+		fi
 	done
 
 	# Create a directory based on movie name and release year
 	dirName="${baseName} (${baseYear})"
 	newname=`echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' `
 
-    	mkdir "$dirName"
+	mkdir "$dirName"
 	mv "$dirName" "$newname"
 	mv "$newname" ./DONE/
 
-    	# Download M3U8 stream and convert to TS format using FFmpeg
-    	if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
-        	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-        	sleep 1
-        	show_menu_1
-    	else
-        	echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
-    	fi
+	# Download M3U8 stream and convert to TS format using FFmpeg
+	if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
+		echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+		sleep 1
+		show_menu_1
+	else
+		echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
+	fi
 }
 
 # Function for downloading Movies & TV Shows from YouTube or other sites using Youtube-DL
 ydl() {
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                 Movies & TV Shows               ║ "
-    echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	echo -e "${MENU_1_COLOR}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                 Movies & TV Shows               ║ "
+	echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompt user for platform (YouTube or other)
-    prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
+	# Prompt user for platform (YouTube or other)
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
 
-    # Process based on the chosen platform
-    if [ "$platform" == "youtube" ]; then
-        # For YouTube, prompt for TV show or movie
-        prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+	# Process based on the chosen platform
+	if [ "$platform" == "youtube" ]; then
+		# For YouTube, prompt for TV show or movie
+		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
-        # Process based on the chosen type (tv or movie)
-        if [ "$type" == "tv" ]; then
-            # For TV shows, prompt for show details and iterate through episodes
-            prompt "\nEnter the show name (include periods between words): " show_name
+		# Process based on the chosen type (tv or movie)
+		if [ "$type" == "tv" ]; then
+			# For TV shows, prompt for show details and iterate through episodes
+			prompt "\nEnter the show name (include periods between words): " show_name
 
-            # Prompt for season and episode range
-            prompt "Enter the season number (two digits; default: 01): " season_number "01"
+			# Prompt for season and episode range
+			prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
-            prompt "Enter the first episode number: " first_episode
+			prompt "Enter the first episode number: " first_episode
 
-            prompt "Enter the last episode number: " last_episode
+			prompt "Enter the last episode number: " last_episode
 
-            show_folder="${show_name}_YouTube"
-            mkdir -p "$show_folder"
+			show_folder="${show_name}_YouTube"
+			mkdir -p "$show_folder"
 
-            # Iterate through episodes, prompting for URLs and downloading
-            for ((episode = first_episode; episode <= last_episode; episode++)); do
-                episode_number=$(printf "%02d" "$episode")
+			# Iterate through episodes, prompting for URLs and downloading
+			for ((episode = first_episode; episode <= last_episode; episode++)); do
+				episode_number=$(printf "%02d" "$episode")
 
-                # Prompt for episode URL (skipping if blank)
-                printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-                read -r episode_url
+				# Prompt for episode URL (skipping if blank)
+				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
-                if [ -z "$episode_url" ]; then
-                    printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-                    continue
-                fi
+				if [ -z "$episode_url" ]; then
+					printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+					continue
+				fi
 
-                # Generate filename and download video
-                filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+				# Generate filename and download video
+				filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 
-                # Downloading video and converting subtitles
-                if youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
-                    youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"; then
-                    printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
-                else
-                    echo -e "${ERROR}Error during download of ${filename}${RESET}"
-                fi
-            done
+				# Downloading video and converting subtitles
+				if youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
+					youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"; then
+					printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+				else
+					echo -e "${ERROR}Error during download of ${filename}${RESET}"
+				fi
+			done
 
-            printf "\nAll episodes downloaded successfully.\n"
+			printf "\nAll episodes downloaded successfully.\n"
 
-        elif [ "$type" == "movie" ]; then
-            # For movies, prompt for movie details and download
-            prompt "\nEnter the name of the movie (include periods between words): " movie_name
+		elif [ "$type" == "movie" ]; then
+			# For movies, prompt for movie details and download
+			prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-            prompt "\nEnter the year of the movie : " movie_year
+			prompt "\nEnter the year of the movie : " movie_year
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the movie URL: " movie_url
+			prompt "Enter the movie URL: " movie_url
 
-            # Generate filename and download video
-            filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-            printf "\nDownloading %s...\n" "$filename"
-            youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+			# Generate filename and download video
+			filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+			printf "\nDownloading %s...\n" "$filename"
+			youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
-            # Download subtitles and convert to SRT format
-            printf "\nDownloading subtitles for %s.\n" "$filename"
-            youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
-            printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+			# Download subtitles and convert to SRT format
+			printf "\nDownloading subtitles for %s.\n" "$filename"
+			youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+			printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
 
-        else
-            # Invalid type entered
-            printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-            exit 1
-        fi
+		else
+			# Invalid type entered
+			printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+			exit 1
+		fi
 
-    elif [ "$platform" == "other" ]; then
-        # For other, prompt for TV show or movie
-        prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
+	elif [ "$platform" == "other" ]; then
+		# For other, prompt for TV show or movie
+		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
 
-        # Process based on the chosen type (tv or movie)
-        if [ "$type" == "tv" ]; then
-            # For TV shows, prompt for show details and iterate through episodes
-            prompt "\nEnter the show name (include periods between words): " show_name
+		# Process based on the chosen type (tv or movie)
+		if [ "$type" == "tv" ]; then
+			# For TV shows, prompt for show details and iterate through episodes
+			prompt "\nEnter the show name (include periods between words): " show_name
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the season number (two digits; default: 01): " season_number "01"
+			prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
-            prompt "Enter the first episode number (two digits): " first_episode
+			prompt "Enter the first episode number (two digits): " first_episode
 
-            prompt "Enter the last episode number (two digits): " last_episode
+			prompt "Enter the last episode number (two digits): " last_episode
 
-            show_folder="${show_name}_Other"
-            mkdir -p "$show_folder"
+			show_folder="${show_name}_Other"
+			mkdir -p "$show_folder"
 
-            # Iterate through episodes, prompting for URLs and downloading
-            for ((episode = first_episode; episode <= last_episode; episode++)); do
-                episode_number=$(printf "%02d" "$episode")
+			# Iterate through episodes, prompting for URLs and downloading
+			for ((episode = first_episode; episode <= last_episode; episode++)); do
+				episode_number=$(printf "%02d" "$episode")
 
-                # Prompt for episode URL (skipping if blank)
-                printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-                read -r episode_url
+				# Prompt for episode URL (skipping if blank)
+				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
-                if [ -z "$episode_url" ]; then
-                    printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-                    continue
-                fi
+				if [ -z "$episode_url" ]; then
+					printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+					continue
+				fi
 
-                # Generate filename and download video
-                filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
-                printf "\nDownloading %s...\n" "$filename"
-                youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
+				# Generate filename and download video
+				filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
+				printf "\nDownloading %s...\n" "$filename"
+				youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
 
-                printf "\nDownloaded %s.\n" "$filename"
-            done
+				printf "\nDownloaded %s.\n" "$filename"
+			done
 
-            printf "\nAll episodes downloaded successfully.\n"
+			printf "\nAll episodes downloaded successfully.\n"
 
-        elif [ "$type" == "movie" ]; then
-            # For movies, prompt for movie details and download
-            prompt "\nEnter the name of the movie (include periods between words): " movie_name
+		elif [ "$type" == "movie" ]; then
+			# For movies, prompt for movie details and download
+			prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-            prompt "\nEnter the year of the movie: " movie_year
+			prompt "\nEnter the year of the movie: " movie_year
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the movie URL: " movie_url
+			prompt "Enter the movie URL: " movie_url
 
-            # Generate filename and download video
-            filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-            printf "\nDownloading %s...\n" "$filename"
-            youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
+			# Generate filename and download video
+			filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+			printf "\nDownloading %s...\n" "$filename"
+			youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
 
-            printf "\nDownloaded %s.\n" "$filename"
+			printf "\nDownloaded %s.\n" "$filename"
 
-        else
-            # Invalid type entered
-            printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-            exit 1
-        fi
+		else
+			# Invalid type entered
+			printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+			exit 1
+		fi
 
-    else
-        # Invalid platform entered
-        printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
-        exit 1
-    fi
+	else
+		# Invalid platform entered
+		printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
+		exit 1
+	fi
 
-    pause
-    show_menu_1
+	pause
+	show_menu_1
 }
 
-
+# Fork function for YT-DLP instead of YOUTUBE-DL
 ytdl() {
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                 Movies & TV Shows               ║ "
-    echo " ║                YT-DLP to MP4 SCRIPT             ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                 Movies & TV Shows               ║ "
+	echo " ║                YT-DLP to MP4 SCRIPT             ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompt user for platform (YouTube or other)
-    prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
+	# Prompt user for platform (YouTube or other)
+	prompt "Is it YouTube or other? (Enter 'youtube' or 'other'; default: youtube): " platform "youtube"
 
-    # Process based on the chosen platform
-    if [ "$platform" == "youtube" ]; then
-        # For YouTube, prompt for TV show or movie
-        prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+	# Process based on the chosen platform
+	if [ "$platform" == "youtube" ]; then
+		# For YouTube, prompt for TV show or movie
+		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
 
-        # Process based on the chosen type (tv or movie)
-        if [ "$type" == "tv" ]; then
-            # For TV shows, prompt for show details and iterate through episodes
-            prompt "\nEnter the show name (include periods between words): " show_name
+		# Process based on the chosen type (tv or movie)
+		if [ "$type" == "tv" ]; then
+			# For TV shows, prompt for show details and iterate through episodes
+			prompt "\nEnter the show name (include periods between words): " show_name
 
-            # Prompt for season and episode range
-            prompt "Enter the season number (two digits; default: 01): " season_number "01"
+			# Prompt for season and episode range
+			prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
-            prompt "Enter the first episode number: " first_episode
+			prompt "Enter the first episode number: " first_episode
 
-            prompt "Enter the last episode number: " last_episode
+			prompt "Enter the last episode number: " last_episode
 
-            show_folder="${show_name}_YouTube"
-            mkdir -p "$show_folder"
+			show_folder="${show_name}_YouTube"
+			mkdir -p "$show_folder"
 
-            # Iterate through episodes, prompting for URLs and downloading
-            for ((episode = first_episode; episode <= last_episode; episode++)); do
-                episode_number=$(printf "%02d" "$episode")
+			# Iterate through episodes, prompting for URLs and downloading
+			for ((episode = first_episode; episode <= last_episode; episode++)); do
+				episode_number=$(printf "%02d" "$episode")
 
-                # Prompt for episode URL (skipping if blank)
-                printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-                read -r episode_url
+				# Prompt for episode URL (skipping if blank)
+				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
-                if [ -z "$episode_url" ]; then
-                    printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-                    continue
-                fi
+				if [ -z "$episode_url" ]; then
+					printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+					continue
+				fi
 
-                # Generate filename and download video
-                filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+				# Generate filename and download video
+				filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 
-                # Downloading video and converting subtitles
-                if yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
-                    yt-dlp --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"; then
-                    printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
-                else
-                    echo -e "${ERROR}Error during download of ${filename}${RESET}"
-                fi
-            done
+				# Downloading video and converting subtitles
+				if yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
+					yt-dlp --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"; then
+					printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+				else
+					echo -e "${ERROR}Error during download of ${filename}${RESET}"
+				fi
+			done
 
-            printf "\nAll episodes downloaded successfully.\n"
+			printf "\nAll episodes downloaded successfully.\n"
 
-        elif [ "$type" == "movie" ]; then
-            # For movies, prompt for movie details and download
-            prompt "\nEnter the name of the movie (include periods between words): " movie_name
+		elif [ "$type" == "movie" ]; then
+			# For movies, prompt for movie details and download
+			prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-            prompt "\nEnter the year of the movie : " movie_year
+			prompt "\nEnter the year of the movie : " movie_year
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the movie URL: " movie_url
+			prompt "Enter the movie URL: " movie_url
 
-            # Generate filename and download video
-            filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-            printf "\nDownloading %s...\n" "$filename"
-            yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+			# Generate filename and download video
+			filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+			printf "\nDownloading %s...\n" "$filename"
+			youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
-            # Download subtitles and convert to SRT format
-            printf "\nDownloading subtitles for %s.\n" "$filename"
-            yt-dlp --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
-            printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+			# Download subtitles and convert to SRT format
+			printf "\nDownloading subtitles for %s.\n" "$filename"
+			yt-dlp --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+			printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
 
-        else
-            # Invalid type entered
-            printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-            exit 1
-        fi
+		else
+			# Invalid type entered
+			printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+			exit 1
+		fi
 
-    elif [ "$platform" == "other" ]; then
-        # For other, prompt for TV show or movie
-        prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
+	elif [ "$platform" == "other" ]; then
+		# For other, prompt for TV show or movie
+		prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'): " type
 
-        # Process based on the chosen type (tv or movie)
-        if [ "$type" == "tv" ]; then
-            # For TV shows, prompt for show details and iterate through episodes
-            prompt "\nEnter the show name (include periods between words): " show_name
+		# Process based on the chosen type (tv or movie)
+		if [ "$type" == "tv" ]; then
+			# For TV shows, prompt for show details and iterate through episodes
+			prompt "\nEnter the show name (include periods between words): " show_name
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the season number (two digits; default: 01): " season_number "01"
+			prompt "Enter the season number (two digits; default: 01): " season_number "01"
 
-            prompt "Enter the first episode number (two digits): " first_episode
+			prompt "Enter the first episode number (two digits): " first_episode
 
-            prompt "Enter the last episode number (two digits): " last_episode
+			prompt "Enter the last episode number (two digits): " last_episode
 
-            show_folder="${show_name}_Other"
-            mkdir -p "$show_folder"
+			show_folder="${show_name}_Other"
+			mkdir -p "$show_folder"
 
-            # Iterate through episodes, prompting for URLs and downloading
-            for ((episode = first_episode; episode <= last_episode; episode++)); do
-                episode_number=$(printf "%02d" "$episode")
+			# Iterate through episodes, prompting for URLs and downloading
+			for ((episode = first_episode; episode <= last_episode; episode++)); do
+				episode_number=$(printf "%02d" "$episode")
 
-                # Prompt for episode URL (skipping if blank)
-                printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
-                read -r episode_url
+				# Prompt for episode URL (skipping if blank)
+				printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+				read -r episode_url
 
-                if [ -z "$episode_url" ]; then
-                    printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
-                    continue
-                fi
+				if [ -z "$episode_url" ]; then
+					printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+					continue
+				fi
 
-                # Generate filename and download video
-                filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
-                printf "\nDownloading %s...\n" "$filename"
-                yt-dlp -f best "$episode_url" --add-metadata -o "$filename"
+				# Generate filename and download video
+				filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${resolution}.WEBRip.x264.mp4"
+				printf "\nDownloading %s...\n" "$filename"
+				yt-dlp -f best "$episode_url" --add-metadata -o "$filename"
 
-                printf "\nDownloaded %s.\n" "$filename"
-            done
+				printf "\nDownloaded %s.\n" "$filename"
+			done
 
-            printf "\nAll episodes downloaded successfully.\n"
+			printf "\nAll episodes downloaded successfully.\n"
 
-        elif [ "$type" == "movie" ]; then
-            # For movies, prompt for movie details and download
-            prompt "\nEnter the name of the movie (include periods between words): " movie_name
+		elif [ "$type" == "movie" ]; then
+			# For movies, prompt for movie details and download
+			prompt "\nEnter the name of the movie (include periods between words): " movie_name
 
-            prompt "\nEnter the year of the movie: " movie_year
+			prompt "\nEnter the year of the movie: " movie_year
 
-            prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+			prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
 
-            prompt "Enter the movie URL: " movie_url
+			prompt "Enter the movie URL: " movie_url
 
-            # Generate filename and download video
-            filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
-            printf "\nDownloading %s...\n" "$filename"
-            yt-dlp -f best "$movie_url" --add-metadata -o "$filename"
+			# Generate filename and download video
+			filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+			printf "\nDownloading %s...\n" "$filename"
+			yt-dlp -f best "$movie_url" --add-metadata -o "$filename"
 
-            printf "\nDownloaded %s.\n" "$filename"
+			printf "\nDownloaded %s.\n" "$filename"
 
-        else
-            # Invalid type entered
-            printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
-            exit 1
-        fi
+		else
+			# Invalid type entered
+			printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+			exit 1
+		fi
 
-    else
-        # Invalid platform entered
-        printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
-        exit 1
-    fi
+	else
+		# Invalid platform entered
+		printf "\nInvalid platform. Please enter 'youtube' or 'other'.\n"
+		exit 1
+	fi
 
-    pause
-    show_menu_1
+	pause
+	show_menu_1
 }
-
 
 # Function for converting video files and extracting subtitles
 video_sub() {
-    check_ffmpeg
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                Video & Subs SCRIPT              ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                Video & Subs SCRIPT              ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Ensure 'ts', 'mkv', 'srt', and 'DONE' directories exist
-    mkdir -p ts mkv srt DONE
 
-    # Loop through each .ts file in the 'ts' directory
-    for filename in ts/*.ts; do
-        # Extracting the base name and path without the extension
-        basePath=${filename%.*}
-        baseName=${basePath##*/}
+	# Loop through each .ts file in the 'ts' directory
+	for filename in ts/*.ts
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
 
-        # Using FFmpeg to convert .ts to .mkv with the same metadata
-        if ffmpeg -i "$filename" -map 0 -c copy -map_metadata 0 "mkv/$baseName.mkv"; then
-            printf "\nConverted %s to mkv.\n" "$filename"
-        else
-            echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
-        fi
-    done
+		# Using FFmpeg to convert .ts to .mkv with the same metadata
+		ffmpeg -i "$filename" -map 0 -c copy -map_metadata 0 "mkv/$baseName.mkv"
+	done
 
-    # Pause for a short duration
-    sleep 1
+	# Pause for a short duration
+	sleep 1
 
-    # Loop through each .ts file again
-    for filename in ts/*.ts; do
-        # Extracting the base name and path without the extension
-        basePath=${filename%.*}
-        baseName=${basePath##*/}
+	# Loop through each .ts file again
+	for filename in ts/*.ts
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
 
-        # Using FFmpeg to extract subtitles from .ts and save as .srt
-        if ffmpeg -f lavfi -i "movie=$filename[out0+subcc]" -map s "srt/$baseName.en.srt"; then
-            printf "\nExtracted subtitles from %s.\n" "$filename"
-        else
-            echo -e "${ERROR}Error during subtitle extraction from ${filename}${RESET}"
-        fi
-    done
+		# Using FFmpeg to extract subtitles from .ts and save as .srt
+		ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s srt/"$baseName".en.srt
+	done
 
-    # Pause for a short duration
-    sleep 1
+	# Pause for a short duration
+	sleep 1
 
-    # Loop through each .mkv file in the 'mkv' directory
-    for filename in mkv/*.mkv; do
-        # Extracting the base name and path without the extension
-        basePath=${filename%.*}
-        baseName=${basePath##*/}
+	# Loop through each .mkv file in the 'mkv' directory
+	for filename in mkv/*.mkv
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
 
-        # Using FFmpeg to convert .mkv to .mp4 with specific settings
-        if ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4"; then
-            printf "\nConverted %s to mp4.\n" "$filename"
-        else
-            echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
-        fi
-    done
+		# Using FFmpeg to convert .mkv to .mp4 with specific settings
+		ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4"
+	done
 
-    echo -e "Conversion complete!\a"
-    pause
-    show_menu_1
+	echo -e "Conversion complete!\a"
+	pause
+	show_menu_1
 }
-
 
 # Function for downloading and merging video and audio files for Tubi episodes
 tubi() {
-    check_ffmpeg
-    check_wget
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                   tubi SCRIPT                   ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	check_ffmpeg
+	check_wget
+	echo -e "${BLUE}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                   tubi SCRIPT                   ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompting the user for show details
-    prompt "Enter the name of the show: " show_name
 
-    prompt "Enter the first episode number: " first_episode
+	# Prompting the user for show details
+	prompt "Enter the name of the show: " show_name
 
-    prompt "Enter the last episode number: " last_episode
+	prompt "Enter the first episode number: " first_episode
 
-    # Loop through the specified range of episodes
-    for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
-        # Prompting the user for video and audio URLs for each episode
-        prompt "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
+	prompt "Enter the last episode number: " last_episode
 
-        prompt "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
+	# Loop through the specified range of episodes
+	for ((episode_number = first_episode; episode_number <= last_episode; episode_number++))
+	do
+		# Prompting the user for video and audio URLs for each episode
+		prompt "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
 
-        # Generating file names based on user input
-        video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
-        audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
-        output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
+		prompt "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
 
-        # Downloading video and audio files
-        printf "Downloading video for episode %02d...\n" "${episode_number}"
-        if wget -O "${video_file}" "${video_url}"; then
-            printf "Video downloaded successfully.\n"
-        else
-            echo -e "${ERROR}Error downloading video for episode ${episode_number}${RESET}"
-            continue
-        fi
+		# Generating file names based on user input
+		video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
+		audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
+		output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
 
-        printf "Downloading audio for episode %02d...\n" "${episode_number}"
-        if wget -O "${audio_file}" "${audio_url}"; then
-            printf "Audio downloaded successfully.\n"
-        else
-            echo -e "${ERROR}Error downloading audio for episode ${episode_number}${RESET}"
-            continue
-        fi
+		# Downloading video and audio files
+		printf "Downloading video for episode %02d...\n" "${episode_number}"
+		wget -O "${video_file}" "${video_url}"
 
-        # Merging video and audio files using FFmpeg
-        printf "Merging video and audio files for episode %02d...\n" "${episode_number}"
-        if ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"; then
-            printf "Video and audio files merged successfully. Output file: %s\n" "${output_file}"
-        else
-            echo -e "${ERROR}Error merging video and audio files for episode ${episode_number}${RESET}"
-            continue
-        fi
+		printf "Downloading audio for episode %02d...\n" "${episode_number}"
+		wget -O "${audio_file}" "${audio_url}"
 
-        # Removing downloaded video and audio files
-        rm "${video_file}" "${audio_file}"
-    done
+		# Merging video and audio files using FFmpeg
+		ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
 
-    echo -e "Download complete!\a"
-    pause
-    show_menu_1
+		printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
+
+		# Removing downloaded video and audio files
+		rm "${video_file}" "${audio_file}"
+	done
+
+	echo -e "Download complete!\a"
+	pause
+	show_menu_1
 }
 
 # Function to update language metadata in MP4 video files
 metadata() {
-    check_ffmpeg
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║          Encode Language Metadata SCRIPT        ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║          Encode Language Metadata SCRIPT        ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompting the user to enter the folder path
-    prompt "Enter the folder path where the video files are located: " folder_path
+	# Prompting the user to enter the folder path
+	prompt "Enter the folder path where the video files are located: " folder_path
 
-    # Checking if the folder exists
-    if [ -d "$folder_path" ]; then
-        # Creating the Metadata folder if it doesn't exist
-        mkdir -p "$folder_path/Metadata"
+	# Checking if the folder exists
+	if [ -d "$folder_path" ]; then
+		# Creating the Metadata folder if it doesn't exist
+		mkdir -p "$folder_path/Metadata"
 
-        # Moving to the specified folder
-        cd "$folder_path"
+		# Moving to the specified folder
+		cd "$folder_path"
 
-        # Looping through each file in the folder
-        for file in *; do
-            # Checking if the file is an .mp4 video file
-            if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
-                # Prompting the user to enter the three-letter language code
-                prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
+		# Looping through each file in the folder
+		for file in *
+		do
+			# Checking if the file is an .mp4 video file
+			if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
+				# Prompting the user to enter the three-letter language code
+				prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
 
-                # Checking if the user entered "abort" to stop the script
-                if [[ "$language" == "abort" ]]; then
-                    echo -e "${ERROR}Script aborted by user.${RESET}"
-                    exit 1
-                fi
+				# Checking if the user entered "abort" to stop the script
+				if [[ "$language" == "abort" ]]
+				then
+					echo "Script aborted by user."
+					exit 1
+				fi
 
-                # Setting the output file name
-                output_file="Metadata/$file"
+				# Setting the output file name
+				output_file="Metadata/$file"
 
-                # Using ffmpeg to change the metadata language and save the output file
-                if ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"; then
-                    echo "Updated metadata for $file"
-                else
-                    echo -e "${ERROR}Error updating metadata for $file${RESET}"
-                    continue
-                fi
-            fi
-        done
+				# Using ffmpeg to change the metadata language and save the output file
+				ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"
 
-        echo "Metadata files are saved in $folder_path/Metadata"
-    else
-        echo -e "${ERROR}Folder not found.${RESET}"
-    fi
+				echo "Updated metadata for $file"
+			fi
+		done
 
-    echo -e "Metadata has been encoded!\a"
-    pause
-    show_menu_1
+		echo "Metadata files are saved in $folder_path/Metadata"
+	else
+			echo "Folder not found."
+	fi
+
+	echo -e "Metadata has been encoded!\a"
+	pause
+	show_menu_1
 }
 
 # Function to convert TS to MKV for PLEX compatibility
 plex() {
-    check_ffmpeg
-    echo -e "${MENU_1_COLOR}"
-    echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║               plex TS to MKV SCRIPT             ║ "
-    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+	check_ffmpeg
+	echo -e "${BLUE}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║               plex TS to MKV SCRIPT             ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-    # Prompting the user for the source extension (e.g., ts)
-    prompt "Source extension? : " srcExt
 
-    # Prompting the user for the destination extension (e.g., mkv)
-    prompt "Destination extension? : " destExt
+	# Prompting the user for the source extension (e.g., ts)
+	prompt "Source extension? : " srcExt
 
-    # Prompting the user for the source directory
-    prompt "Source directory? : " srcDir
+	# Prompting the user for the destination extension (e.g., mkv)
+	prompt "Destination extension? : " destExt
 
-    # Prompting the user for the destination directory
-    prompt "Destination directory? : " destDir
+	# Prompting the user for the source directory
+	prompt "Source directory? : " srcDir
 
-    # Checking if the source directory exists
-    if [ ! -d "$srcDir" ]; then
-        echo -e "${ERROR}Source directory not found.${RESET}"
-        exit 1
-    fi
+	# Prompting the user for the destination directory
+	prompt "Destination directory? : " destDir
 
-    # Creating the destination directory if it doesn't exist
-    mkdir -p "$destDir"
+	# Loop through each file in the source directory with the specified source extension
+	for filename in "$srcDir"/*.$srcExt ; do
+	# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
 
-    # Loop through each file in the source directory with the specified source extension
-    for filename in "$srcDir"/*.$srcExt; do
-        # Extracting the base name and path without the extension
-        basePath=${filename%.*}
-        baseName=${basePath##*/}
+		# Using FFmpeg to convert TS to MKV and save the file in the destination directory
+		ffmpeg -i $filename -map 0 -c copy "$destDir"/"$baseName"."$destExt"
+	done
 
-        # Using FFmpeg to convert TS to MKV and save the file in the destination directory
-        if ffmpeg -i "$filename" -map 0 -c copy "$destDir/$baseName.$destExt"; then
-            echo "Converted $baseName.$srcExt to $baseName.$destExt"
-        else
-            echo -e "${ERROR}Error converting $baseName.$srcExt to $baseName.$destExt${RESET}"
-            continue
-        fi
-    done
-
-    echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-    pause
-    show_menu_1
+	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+	pause
+	show_menu_1
 }

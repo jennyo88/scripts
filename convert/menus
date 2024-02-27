@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # -----------------------------------
-# BANNERS
+# COLORS
 # -----------------------------------
 
 load_colors() {
@@ -18,7 +18,7 @@ load_colors() {
 # BANNERS
 # -----------------------------------
 
-# Function to display the main menu banner
+# Function to display MAIN menu banner
 show_banner_0() {
   clear
   echo "${MAIN_MENU_COLOR}"
@@ -26,7 +26,7 @@ show_banner_0() {
   echo " ║          Converting Files - Service Menu        ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
-
+# Function to display VIDEOS menu banner
 show_banner_1() {
   echo "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
@@ -35,7 +35,7 @@ show_banner_1() {
   echo " ║                                                 ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
-
+# Function to display SUBS menu banner
 show_banner_2() {
   echo "${MENU_2_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
@@ -44,7 +44,7 @@ show_banner_2() {
   echo " ║                                                 ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
-
+# Function to display CLEAN-UP menu banner
 show_banner_3() {
   echo "${MENU_3_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
@@ -54,27 +54,30 @@ show_banner_3() {
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-# Function to display the TMUX menu banner
+# Function to display TMUX menu banner
 show_banner_4() {
-  echo "${MENU_4_COLOR}
-  echo "╔═════════════════════════════════════════════════╗"
-  echo "║                     TMUX                        ║"
-  echo "╚═════════════════════════════════════════════════╝${RESET}"
+  echo "${MENU_4_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                                                 ║ "
+  echo " ║                     TMUX                        ║ "
+  echo " ║                                                 ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 # -----------------------------------
 # MENUS
 # -----------------------------------
 
-# Function for displaying the main menu
+# Function for displaying MAIN menu
 show_menu_0() {
   show_banner_0
   echo ""
   echo ""
-  echo "		SCRIPTS"
+  echo "    SCRIPTS"
   echo " 1. For videos"
   echo " 2. For subtitles"
   echo " 3. For clean-up"
+  echo " 4. For tmux"
   echo ""
   echo ""
   echo " 0. Exit script"
@@ -95,6 +98,9 @@ show_menu_0() {
       ;;
     [cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
       show_menu_3
+      ;;
+    [tT]|[tT][mM][uU][xX]|"4")
+      show_menu_4
       ;;
     [eE]|[eE][xX][iI][tT]|[qQ]|"0")
     # Exiting script
@@ -154,20 +160,19 @@ show_menu_0() {
       ;;
     # Handling invalid options
     *)
-      echo -e "Invalid option. Please enter a valid option."
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
       sleep 1
       show_menu_0
       ;;
   esac
 }
 
-
-# Function for displaying the VIDEOS menu
+# Function for displaying VIDEOS menu
 show_menu_1() {
   show_banner_0
   show_banner_1
   echo ""
-  echo "  1. Go back to Main Menu"
+  echo "  1. Go back to MAIN menu"
   echo ""
   echo "    DOWNLOAD"
   echo "  2. Download m3u8 playlist"
@@ -181,8 +186,9 @@ show_menu_1() {
   echo "  8. Convert video & subtitles"
   echo "  9. Encode metadata"
   echo ""
-  echo " 10. Go to SUBS Menu"
-  echo " 11. Go to CLEAN-UP Menu"
+  echo " 10. Go to SUBS menu"
+  echo " 11. Go to CLEAN-UP menu"
+  echo " 12. Go to TMUX menu"
   echo ""
   echo ""
   echo "  0. Exit script"
@@ -251,32 +257,37 @@ show_menu_1() {
       show_banner_3
       show_menu_3
       ;;
+    [tT]|[tT][mM][uU][xX]|"12")
+      show_banner_4
+      show_menu_4
+      ;;
     [eE]|[eE][xX][iI][Tt]|"0")
       # Exiting the menu
       goodbye
       ;;
     # Handling invalid options
     *)
-      echo -e "Invalid option. Please enter a valid option."
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
       pause
       show_menu_1
       ;;
   esac
 }
 
-# Function for displaying the SUBS menu
+# Function for displaying SUBS menu
 show_menu_2() {
   show_banner_0
   show_banner_2
   echo ""
   echo ""
-  echo " 1. Go back to Main Menu"
+  echo " 1. Go back to MAIN menu"
   echo ""
   echo " 2. Extract subtitles"
   echo " 3. Convert subtitles"
   echo ""
-  echo " 4. Go to VIDEOS Menu"
-  echo " 5. Go to CLEAN-UP Menu"
+  echo " 4. Go to VIDEOS menu"
+  echo " 5. Go to CLEAN-UP menu"
+  echo " 6. Go to TMUX menu"
   echo ""
   echo ""
   echo " 0. Exit script"
@@ -307,9 +318,13 @@ show_menu_2() {
       show_banner_1
       show_menu_1
       ;;
-    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
+    [cC][uU]|[cC][lL][eE][aA][nN][uU][pP]|"5")
       show_banner_3
       show_menu_3
+      ;;
+    [tT]|[tT][mM][uU][xX]|"6")
+      show_banner_4
+      show_menu_4
       ;;
     [eE]|[eE][xX][iI][tT]|[qQ]|"0")
       # Exiting the menu
@@ -317,27 +332,28 @@ show_menu_2() {
       ;;
     # Handling invalid options
     *)
-      echo -e "Invalid option. Please enter a valid option."
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
       pause
       show_menu_2
       ;;
   esac
 }
 
-# Function for displaying the CLEAN-UP menu
+# Function for displaying CLEAN-UP menu
 show_menu_3() {
   show_banner_0
   show_banner_3
   echo ""
   echo ""
-  echo " 1. Go back to Main Menu"
+  echo " 1. Go back to MAIN menu"
   echo ""
   echo " 2. Clear folder ts"
   echo " 3. Clear folder mkv"
   echo " 4. Clear both folders"
   echo ""
-  echo " 5. Go to VIDEOS Menu"
-  echo " 6. Go to SUBS Menu"
+  echo " 5. Go to VIDEOS menu"
+  echo " 6. Go to SUBS menu"
+  echo " 7. Go to TMUX enu"
   echo ""
   echo ""
   echo " 0. Exit script"
@@ -377,15 +393,87 @@ show_menu_3() {
       show_banner_2
       show_menu_2
       ;;
+    [tT]|[tT][mM][uU][xX]|"7")
+      show_banner_4
+      show_menu_4
+      ;;
     "0")
       # Exiting the menu
       goodbye
       ;;
     # Handling invalid options
     *)
-      echo -e "Invalid option. Please enter a valid option."
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
       pause
       show_menu_3
+      ;;
+  esac
+}
+
+# Function for displaying TMUX menu
+show_menu_4() {
+  show_banner_0
+  show_banner_4
+  echo ""
+  echo ""
+  echo " 1. Go back to MAIN menu"
+  echo ""
+  echo " 2. Create new session"
+  echo " 3. Attach to session"
+  echo " 4. List sessions"
+  echo ""
+  echo ""
+  echo " 5. Go to VIDEOS menu"
+  echo " 6. Go to SUBS menu"
+  echo " 7. Go to CLEAN-UP menu"
+  echo ""
+  echo ""
+  echo " 0. Exit script"
+  echo ""
+
+  # Prompting the user to select an option
+  echo -e "${MAIN_MENU_COLOR}"
+  prompt "Select: " ans
+  echo "${RESET}"
+
+  # Handling the user's choice using a case statement
+  case $ans in
+    [mM][aA][iI][nN]|"1")
+      show_banner_0
+      show_menu_0
+      ;;
+    [nN]|[nN][eE][wW]|"2")
+      read -p "Enter session name: " session_name
+      tmux_command new-session -s "$session_name"
+      ;;
+    [aA]|[]aA[tT][tT][aA][cC][hH]|"3")
+      read p "Enter session name to attach: " session_name
+      tmux_command attach-session -t "$session_name"
+      ;;
+    [lL]|[lL][iI][sS][tT]|"4")
+      tmux_command list-sessions
+      ;;
+    [vV]|[vV][iI][dD][eE][oO][sS]|"5")
+      show_banner_1
+      show_menu_1
+      ;;
+    [sS]|[sS][uU][bB][sS]|"6")
+      show_banner_2
+      show_menu_2
+      ;;
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"7")
+      show_banner_3
+      show_menu_3
+      ;;
+    [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      # Exiting the menu
+      goodbye
+      ;;
+    # Handling invalid options
+    *)
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
+      pause
+      show_menu_4
       ;;
   esac
 }
