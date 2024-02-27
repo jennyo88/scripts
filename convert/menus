@@ -447,7 +447,7 @@ show_menu_4() {
       tmux_command new-session -s "$session_name"
       ;;
     [aA]|[]aA[tT][tT][aA][cC][hH]|"3")
-      read p "Enter session name to attach: " session_name
+      read -p "Enter session name to attach: " session_name
       tmux_command attach-session -t "$session_name"
       ;;
     [lL]|[lL][iI][sS][tT]|"4")
