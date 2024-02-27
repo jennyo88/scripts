@@ -458,7 +458,6 @@ show_menu_4() {
       ;;
     [lL]|[lL][iI][sS][tT]|"5")
       tmux ls
-      read -p "Press Enter to continue..."
       ;;
     [sS][hH]|"6")
       tmux split-window -h
