@@ -1,0 +1,319 @@
+#!/usr/bin/env bash
+
+# Remote Script Executor
+# Author: Jennifer Romero
+# Description: This script provides a menu-driven interface to execute remote Bash and Python scripts. Use with caution and ensure scripts are from trusted sources.
+# Version: 2.0
+# Last Updated: Feb 24, 2024
+# GitHub Repository: https://github.com/jennyo88/scripts
+
+# -----------------------------------
+# User defined functions
+# -----------------------------------
+
+# Color definitions
+load_colors() {
+    BLUE=$'\e[38;5;39m'	    # Blue color
+    ORANGE=$'\e[38;5;208m'	# Orange color
+    RED=$'\e[1;31m'		    # Red color (bold)
+    RESET=$'\e[0m'		    # Reset color attributes
+}
+
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
+
+# Check if required commands are available
+check_commands() {
+    local commands=("bash" "curl" "python3")
+
+    for cmd in "${commands[@]}"; do
+        if ! command -v "$cmd" &> /dev/null; then
+            echo -e "${RED}Error: '$cmd' command not found.${RESET}"
+            echo "Please make sure '$cmd' is installed and available in your PATH."
+            exit 1
+        fi
+    done
+}
+
+# -----------------------------------
+# ABORT
+# -----------------------------------
+
+prompt() {
+	local prompt="$1"
+    	local variable="$2"
+    	local default_value="$3"
+
+    	while true; do
+        	printf "$prompt"
+
+        	# Set the default value if user presses Enter
+        	read -r "$variable"
+        	[ -z "${!variable}" ] && eval "$variable=\"$default_value\""
+
+        	# Check if the user wants to abort
+        	if [ "${!variable}" == "abort" ]; then
+            		sleep 1
+            		echo "Abort..."
+            		# Add exit actions here if needed
+            		show_menu_0
+        	fi
+
+        	# Break the loop if input is not empty
+        	[ -n "${!variable}" ] && break
+    	done
+}
+
+# Function to pause and wait for user input
+pause() {
+    echo
+    read -rp "Press ENTER to continue..." fackEnterKey
+}
+
+# Function to display goodbye message, reset colors, clear the screen, and exit
+goodbye() {
+    echo -e "${RESET}"
+    clear
+    exit
+}
+
+# Function to display the main menu banner
+show_banner_0() {
+    clear
+    echo -e "${BLUE}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║               Execute Remote Scripts            ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# Function to display the jennyo88 scripts menu banner
+show_banner_1() {
+    show_banner_0
+    echo "${BLUE}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                                                 ║ "
+    echo " ║                JENNYO88 SCRIPTS                 ║ "
+    echo " ║                                                 ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# Function to display the other scripts menu banner
+show_banner_2() {
+    show_banner_0
+    echo "${BLUE}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                                                 ║ "
+    echo " ║                 OTHER SCRIPTS                   ║ "
+    echo " ║                                                 ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# Function for displaying the main menu
+show_menu_0() {
+    show_banner_0
+    echo ""
+    echo ""
+    echo " 1. Execute JENNYO88 scripts"
+    echo " 2. Execute scripts in OTHER repositories"
+    echo ""
+    echo ""
+    echo " 0. Exit script"
+    echo ""
+
+
+    # Prompting the user to select an option
+    echo -e "${BLUE}"
+    prompt "Select: " ans
+    echo "${RESET}"
+
+    # Handling the user's choice using a case statement
+    case $ans in
+        [jJ]|[jJ][eE][nN][nN][yY][oO][8][8]|"1")
+            show_menu_1
+            ;;
+        [oO]|[oO][tT][hH][eE][rR]|"2")
+            show_menu_2
+            ;;
+        [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+            # Exiting the menu
+            goodbye
+            ;;
+        # Hidden options
+        [cC]|[cC][oO][nN][vV][eE][rR][tT]|[1][1])
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
+            ;;
+        # Handling invalid options
+        *)
+            echo -e "Invalid option. Please enter a valid option."
+            pause
+            show_menu_0
+            ;;
+    esac
+}
+
+# Function for displaying the jennyo88 scripts menu
+show_menu_1() {
+    show_banner_1
+    echo ""
+    echo ""
+    echo " 1. Go back to Main Menu"
+    echo ""
+    echo " 2. convert            - Converting files"
+    echo " 3. tmux_ref           - tmux reference"
+    echo " 4. test               - Payroll TEST script"
+    echo " 5. more"
+    echo ""
+    echo " 6. Go to OTHER SCRIPTS Menu"
+    echo ""
+    echo ""
+    echo " 0. Exit script"
+    echo ""
+
+    # Prompting the user to select an option
+    echo -e "${BLUE}"
+    prompt "Select: " ans
+    echo "${RESET}"
+
+    # Handling the user's choice using a case statement
+    case $ans in
+        [mM]|[mM][aA][iI][nN]|"1")
+            show_banner_0
+            show_menu_0
+            ;;
+        [cC]|[cC][oO][nN][vV][eE][rR][tT]|"2")
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
+            ;;
+        [tT]|[tT][mM][uU][xX]|"3")
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
+            ;;
+        [tT][eE][sS][tT]|"4")
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
+            ;;
+        [mM][oO][rR][eE]|"5")
+            execute_bash_script
+            ;;
+	[oO]|[oO][tT][hH][eE][rR]|"6")
+            show_banner_2
+            show_menu_2
+            ;;
+        [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+            # Exiting the menu
+            goodbye
+            ;;
+        # Handling invalid options
+        *)
+            echo -e "Invalid option. Please enter a valid option."
+            pause
+            show_menu_1
+    esac
+}
+
+# Function for displaying the other scripts menu
+show_menu_2() {
+    show_banner_2
+    echo ""
+    echo ""
+    echo " 1. Go back to Main Menu"
+    echo ""
+    echo " 2. Execute Another Bash Script"
+    echo " 3. Execute Python Script"
+    echo ""
+    echo " 4. Go to JENNYO88 SCRIPTS Menu"
+    echo ""
+    echo ""
+    echo " 0. Exit script"
+    echo ""
+
+    # Prompting the user to select an option
+    echo -e "${BLUE}"
+    prompt "Select: " ans
+    echo "${RESET}"
+
+    # Handling the user's choice using a case statement
+    case $ans in
+        [mM][mM][aA][iI][nN]|"1")
+            show_banner_0
+            show_menu_0
+            ;;
+        [bB]|[bB][aA][sS][hH]|"2")
+            execute_bash_script
+            ;;
+        [pP]|[pP][yY][tT][hH][oO][nN]|"3")
+            execute_python_script
+            ;;
+        [jJ]|[jJ][eE][nN][nN][yY][oO][8][8]|"4")
+            show_banner_1
+            show_menu_1
+            ;;
+        [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+            # Exiting the menu
+            goodbye
+            ;;
+        # Handling invalid options
+        *)
+            echo -e "Invalid option. Please enter a valid option."
+            pause
+            show_menu_2
+    esac
+}
+
+# -----------------------------------
+# Execute Scripts
+# -----------------------------------
+
+# Function to download and execute a Bash script
+execute_bash_script() {
+    check_commands
+    show_banner_2
+    prompt "Enter the URL of the Bash script: " REMOTE_SCRIPT_URL
+
+    # Download and execute the remote script using bash -c
+    if bash -c "$(curl -fsSL "$REMOTE_SCRIPT_URL")"; then
+        echo "Script execution successful."
+    else
+        echo -e "${RED}Failed to execute the remote script.${RESET}"
+    fi
+}
+
+# Function to execute a remote Python script
+execute_python_script() {
+    check_commands
+    show_banner_2
+    prompt "Enter the GitHub URL of the script: " GITHUB_URL
+
+    # Download the remote script content
+    REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$GITHUB_URL")
+
+    # Save the remote script content to a file
+    echo "$REMOTE_SCRIPT_CONTENT" > remote_script.py
+
+    # Save the requirements.txt content to a file if present
+    grep -E '^import |^from ' remote_script.py | awk '{print $2}' > requirements.txt
+
+    # Check if there is a requirements.txt file and install dependencies
+    if [ -s requirements.txt ]; then
+        if command -v pip3 &> /dev/null; then
+            pip3 install --upgrade -r requirements.txt
+        else
+            echo -e "${RED}Error: pip3 is not installed. Please install pip3 and try again.${RESET}"
+            exit 1
+        fi
+    fi
+
+    # Execute the saved script using the Python interpreter locally
+    if python3 remote_script.py; then
+        echo "Script execution successful."
+    else
+        echo -e "${RED}Failed to execute the remote script.${RESET}"
+    fi
+}
+
+# -----------------------------------
+# Main logic - infinite loop
+# -----------------------------------
+
+while true
+do
+    show_banner_0
+    show_menu_0
+done

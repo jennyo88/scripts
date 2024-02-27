@@ -1,0 +1,369 @@
+#!/usr/bin/env bash
+
+# -----------------------------------
+# BANNERS
+# -----------------------------------
+
+# Function to display the main menu banner
+show_banner_0() {
+clear
+echo "${BLUE}"
+echo " ╔═════════════════════════════════════════════════╗ "
+echo " ║          Converting Files - Service Menu        ║ "
+echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+show_banner_1() {
+echo "${BLUE}"
+echo " ╔═════════════════════════════════════════════════╗ "
+echo " ║                                                 ║ "
+echo " ║                     VIDEOS                      ║ "
+echo " ║                                                 ║ "
+echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+show_banner_2() {
+echo "${BLUE}"
+echo " ╔═════════════════════════════════════════════════╗ "
+echo " ║                                                 ║ "
+echo " ║                      SUBS                       ║ "
+echo " ║                                                 ║ "
+echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+show_banner_3() {
+echo "${BLUE}"
+echo " ╔═════════════════════════════════════════════════╗ "
+echo " ║                                                 ║ "
+echo " ║                    CLEAN-UP                     ║ "
+echo " ║                                                 ║ "
+echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# -----------------------------------
+# MENUS
+# -----------------------------------
+
+# Function for displaying the main menu
+show_menu_0() {
+show_banner_0
+echo ""
+echo ""
+echo "		SCRIPTS"
+echo " 1. For videos"
+echo " 2. For subtitles"
+echo " 3. For clean-up"
+echo ""
+echo ""
+echo " 0. Exit script"
+echo ""
+
+# Prompting the user to select an option
+echo -e "${BLUE}"
+prompt "Select: " ans
+echo "${RESET}"
+
+# Handling the user's choice using a case statement
+case $ans in
+[vV]|[vV][iI][dD][eE][oO][sS]|"1")
+show_menu_1
+;;
+[sS]|[sS][uU][bB][sS]|"2")
+show_menu_2
+;;
+[cC]|[cC][lL][eE][aA][nN][uU][pP]|"3")
+show_menu_3
+;;
+[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+# Exiting script
+goodbye
+;;
+# Hidden options
+[xX][2][6][5]|[1][6])
+clear
+show_banner_1
+x265
+;;
+[mM][3][uU][8]|[1][2])
+clear
+show_banner_1
+m3u8
+;;
+[yY][dD][lL]|[1][3])
+clear
+show_banner_1
+ydl
+;;
+[tT][uU][bB][iI]|[1][5])
+clear
+show_banner_1
+tubi
+;;
+[mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
+clear
+show_banner_1
+metadata
+;;
+[pP][lL][eE][xX]|[1][7])
+clear
+show_banner_1
+plex
+;;
+[aA][lL][lL]|[1][8])
+clear
+show_banner_1
+video_sub && sleep 1
+c_all
+;;
+[eE][xX][tT][rR][aA][cC][tT]|[2][2])
+clear
+show_banner_2
+extract_srt
+;;
+[vV][tT][tT]|[2][3])
+clear
+show_banner_2
+convert_srt
+;;
+[cC][aA][lL][lL]|[3][4])
+clear
+show_banner_3
+c_all
+;;
+# Handling invalid options
+*)
+echo -e "Invalid option. Please enter a valid option."
+sleep 1
+show_menu_0
+;;
+esac
+}
+
+
+# Function for displaying the VIDEOS menu
+show_menu_1() {
+show_banner_0
+show_banner_1
+echo ""
+echo "  1. Go back to Main Menu"
+echo ""
+echo "		DOWNLOAD"
+echo "  2. Download m3u8 playlist"
+echo "  3. Download using youtube-dl"
+echo "  4. Download using yt-dlp"
+echo "  5. Download from tubi"
+echo ""
+echo " 		CONVERT"
+echo "  6. Convert video to x265"
+echo "  7. Convert ONLY video"
+echo "  8. Convert video & subtitles"
+echo "  9. Encode metadata"
+echo ""
+echo " 10. Go to SUBS Menu"
+echo " 11. Go to CLEAN-UP Menu"
+echo ""
+echo ""
+echo "  0. Exit script"
+echo ""
+
+# Prompting the user to select an option
+echo -e "${BLUE}"
+prompt "Select: " ans
+echo "${RESET}"
+
+# Handling the user's choice using a case statement
+case $ans in
+[mM][aA][iI][nN]|"1")
+clear
+show_banner_0
+show_menu_0
+;;
+[mM]|[mM][3][uU][8]|[dD][2]|"2")
+clear
+show_banner_1
+m3u8
+;;
+[yY]|[yY][dD][lL]|[dD][3]|"3")
+clear
+show_banner_1
+ydl
+;;
+[yY][tT]|[dD][4]|"4")
+clear
+show_banner_1
+ytdl
+;;
+[tT]|[tT][uU][bI][iI]|[dD][5]|"5")
+clear
+show_banner_1
+tubi
+;;
+[xX]|[xX][2][6][5]|[cC][6]|"6")
+clear
+show_banner_1
+x265
+;;
+[vV]|[vI][iI][vV][eE][oO]|[cC][7]|"7")
+clear
+show_banner_0
+plex
+c_ts
+;;
+[aA]|[aA][lL][lL]|[cC][8]|"8")
+clear
+show_banner_0
+video_sub && sleep 1
+c_ts
+c_mkv
+;;
+[lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][9]|"9")
+clear
+show_banner_1
+metadata
+;;
+[sS]|[sS][uU][bB][sS]|"10")
+show_banner_2
+show_menu_2
+;;
+[cC]|[cC][lL][eE][aA][nN][uU][pP]|"11")
+show_banner_3
+show_menu_3
+;;
+[eE]|[eE][xX][iI][Tt]|"0")
+# Exiting the menu
+goodbye
+;;
+# Handling invalid options
+*)
+echo -e "Invalid option. Please enter a valid option."
+pause
+show_menu_1
+;;
+esac
+}
+
+# Function for displaying the SUBS menu
+show_menu_2() {
+show_banner_0
+show_banner_2
+echo ""
+echo ""
+echo " 1. Go back to Main Menu"
+echo ""
+echo " 2. Extract subtitles"
+echo " 3. Convert subtitles"
+echo ""
+echo " 4. Go to VIDEOS Menu"
+echo " 5. Go to CLEAN-UP Menu"
+echo ""
+echo ""
+echo " 0. Exit script"
+echo ""
+
+# Prompting the user to select an option
+echo -e "${BLUE}"
+prompt "Select: " ans
+echo "${RESET}"
+
+# Handling the user's choice using a case statement
+case $ans in
+[mM][aA][iI][nN]|"1")
+show_banner_0
+show_menu_0
+;;
+[eE]|[eE][xX][tT][rR][aA][cC][tT]|"2")
+clear
+show_banner_2
+extract_srt
+;;
+[cC]|[cC][oO][nN][vV][eE][rR][tT]|"3")
+clear
+show_banner_2
+convert_srt
+;;
+[vV]|[vV][iI][dD][eE][oO][sS]|"4")
+show_banner_1
+show_menu_1
+;;
+[cC]|[cC][lL][eE][aA][nN][uU][pP]|"5")
+show_banner_3
+show_menu_3
+;;
+[eE]|[eE][xX][iI][tT]|[qQ]|"0")
+# Exiting the menu
+goodbye
+;;
+# Handling invalid options
+*)
+echo -e "Invalid option. Please enter a valid option."
+pause
+show_menu_2
+;;
+esac
+}
+
+# Function for displaying the CLEAN-UP menu
+show_menu_3() {
+show_banner_0
+show_banner_3
+echo ""
+echo ""
+echo " 1. Go back to Main Menu"
+echo ""
+echo " 2. Clear folder ts"
+echo " 3. Clear folder mkv"
+echo " 4. Clear both folders"
+echo ""
+echo " 5. Go to VIDEOS Menu"
+echo " 6. Go to SUBS Menu"
+echo ""
+echo ""
+echo " 0. Exit script"
+echo ""
+
+# Prompting the user to select an option
+echo -e "${BLUE}"
+prompt "Select: " ans
+echo "${RESET}"
+
+# Handling the user's choice using a case statement
+case $ans in
+[mM][aA][iI][nN]|"1")
+show_banner_0
+show_menu_0
+;;
+[c][tT][sS]|"2")
+clear
+show_banner_3
+c_ts
+;;
+[c][mM][kK][vV]|"3")
+clear
+show_banner_3
+c_mkv
+;;
+[cC][aA][lL][lL]|"4")
+clear
+show_banner_3
+c_all
+;;
+[vV]|[vV][iI][dD][eE][oO][sS]|"5")
+show_banner_1
+show_menu_1
+;;
+[sS]|[sS][uU][bB][sS]|"6")
+show_banner_2
+show_menu_2
+;;
+"0")
+# Exiting the menu
+goodbye
+;;
+# Handling invalid options
+*)
+echo -e "Invalid option. Please enter a valid option."
+pause
+show_menu_3
+;;
+esac
+}

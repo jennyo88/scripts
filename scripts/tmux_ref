@@ -1,0 +1,111 @@
+#!/usr/bin/env_bash
+
+# TMUX REFERENCE SCRIPT
+
+# ANSI color codes
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+RESET='\033[0m'
+
+while true; do
+    clear
+    echo "==================== TMUX REFERENCE SCRIPT ===================="
+    echo "Press Ctrl+C to exit at any time."
+    echo ""
+    echo " 1. Create New Session"
+    echo " 2. Attach to Existing Session"
+    echo " 3. Detach Current Session"
+    echo " 4. List Sessions"
+    echo ""
+    echo " 5. Create New Window"
+    echo " 6. Rename Window"
+    echo " 7. Move to Next Window"
+    echo " 8. Move to Previous Window"
+    echo " 9. Split Window Horizontally"
+    echo "10. Split Window Vertically"
+    echo ""
+    echo "11. List Panes"
+    echo "12. Swap Panes"
+    echo ""
+    echo "13. Detach from Current Session"
+    echo "14. List Clients"
+    echo ""
+    echo "15. Kill Session"
+    echo ""
+    echo " 0. Exit"
+    echo "==============================================================="
+
+    read -p "Enter your choice (0-15): " choice
+
+    case $choice in
+        1)  # Create New Session
+            read -p "Enter session name: " session_name
+            tmux new -s "$session_name"
+            ;;
+        2)  # Attach to Existing Session
+            tmux list-sessions
+            read -p "Enter session name to attach: " session_name
+            tmux a -t "$session_name"
+            ;;
+        3)  # Detach Current Session
+            tmux detach
+            ;;
+        4)  # List Sessions
+            tmux ls
+            read -p "Press Enter to continue..."
+            ;;
+        5)  # Create New Window
+            read -p "Enter name: " window_name
+            tmux new-window -n "$window_name"
+            ;;
+        6)  # Rename Window
+            read -p "Enter name old name: " "window_old_name"
+            read -p "Enter name new name: " "window_new_name"
+            tmux rename-window -t "$window_old_name" "$window_new_name"
+            ;;
+        7)  # Move to Next Window
+            tmux select-window -n
+            ;;
+        8)  # Move to Previous Window
+            tmux select-window -p
+            ;;
+        9)  # Split Window Horizontally
+            tmux split-window -h
+            ;;
+        10) # Split Window Vertically
+            tmux split-window -v
+            ;;
+        11) # List Panes
+            tmux list-panes
+            read -p "Press Enter to continue..."
+            ;;
+        12) # Swap Panes
+            tmux swap-pane -U
+            ;;
+        13) # Detach from Current Session
+            tmux detach-client
+            ;;
+        14) # List Clients
+            tmux list-clients
+            read -p "Press Enter to continue..."
+            ;;
+        15) # Kill Session
+            tmux list-sessions
+            read -p "Enter session name to kill: " session_name
+            if tmux has-session -t "$session_name" 2>/dev/null; then
+                tmux kill-ses -t "$session_name"
+                echo -e "${GREEN}Session '$session_name' has been killed.${RESET}"
+            else
+                echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
+            fi
+            ;;
+        0)  # Exit
+            echo -e "${GREEN}Exiting...${RESET}"
+            exit 0
+            ;;
+        *)  # Invalid choice
+            echo -e "${RED}Invalid choice. Please enter a number between 0 and 15.${RESET}"
+            read -p "Press Enter to continue..."
+            ;;
+    esac
+done

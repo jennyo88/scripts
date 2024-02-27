@@ -7,11 +7,11 @@ A collection of bash scripts for various file conversion and system update tasks
 - [Description](#description)
 - [Scripts](#scripts)
   - [convert](#convert)
-  - [linux](#linux)
-    - [update-debian](#update-debian)
-    - [update-fedora](#update-fedora)
-    - [upinst](#upinst)
-- [Usage](#usage)
+  - [tmux_ref](#tmux_ref)
+  - [remote_menu](#remote_menu)
+  - [update-debian](#update-debian)
+  - [update-fedora](#update-fedora)
+  - [upinst](#upinst)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -21,69 +21,25 @@ This repository contains a set of bash scripts designed for different tasks. The
 ## Scripts
 
 ### convert
+`convert` is a script with service menu for converting media files. Anything you might need for your videos and subtitles.
 
-**Description:**
-A bash script for performing system updates on Debian-based systems.
+### tmux_ref
+`tmux_ref` is a bash script that serves as a quick reference guide for using tmux, a terminal multiplexer. It provides concise commands and tips for basic tmux operations, managing windows and panes, session management, and miscellaneous tasks. Customize your tmux experience with this handy script!
 
-**Usage:**
-```bash
-./convert
-```
+### remote
+`remote` is a bash script for seamlessly executing remote scripts from GitHub. Simply provide your GitHub username, repository name, and script path to effortlessly run scripts hosted on your repository. Customize execution parameters or use default values. Use with caution, and verify script sources for security.
 
-### Linux
+### update-debian
+`update-debian` is a prompted update script for Debian systems.
 
-Linux related scripts.
+### update-fedora
+`update-fedora` is a prompted update script for Fedora systems.
 
-#### update-debian
-
-**Description:**
-A prompted update script for Debian systems.
-
-**Usage:**
-```bash
-sudo ./update-debian
-```
-
-**Options:**
-
-`-h` or `--help`: Display usage information.
-
-#### update-fedora
-
-**Description:**
-A prompted update script for Fedora systems.
-
-**Usage:**
-```bash
-sudo ./update-fedora
-```
-
-**Options:**
-
-`-h` or `--help`: Display usage information.
+### upinst
+`upinst` is a bash script with options for installing, updating, and managing Debian-based systems.
 
 
-#### upinst
-
-**Description:**
-A bash script with options for installing, updating, and managing Debian-based systems.
-
-**Usage:**
-```bash
-sudo ./upinst [options]
-```
-
-**Options:**
-
-`-i`: Install
-`-u`: Update check
-`-U`: Upgrade
-`-r`: Uninstall
-`-R`: Reboot
-`-m`: Show interactive menu
-`-h`: Show help
-
-**Usage Examples:**
+***Usage Examples:***
 ```bash
 # Install a package
 sudo ./upinst -i package_name
@@ -106,10 +62,6 @@ sudo ./upinst -m
 # Display help
 sudo ./upinst -h
 ```
-
-## Usage
-Refer to each script's individual section for specific usage instructions.
-Make sure to check the respective scripts for details on how to use them effectively.
 
 ## Contributing
 
