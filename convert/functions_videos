@@ -520,7 +520,7 @@ tubi() {
 
 	echo -e "Download complete!\a"
 	pause
-	show_menu_1
+	show_menu_1 
 }
 
 # Function to update language metadata in MP4 video files
