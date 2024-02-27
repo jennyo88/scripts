@@ -456,7 +456,7 @@ show_menu_4() {
       ;;
     [lL]|[lL][iI][sS][tT]|"5")
       tmux list-sessions
-      pause
+      read -rp "Press ENTER to continue..." fackEnterKey
       ;;
     [vV]|[vV][iI][dD][eE][oO][sS]|"6")
       show_banner_1
