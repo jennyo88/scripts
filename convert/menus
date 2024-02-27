@@ -416,19 +416,17 @@ show_menu_4() {
   show_banner_4
   echo ""
   echo ""
-  echo "  1. Go back to MAIN menu"
+  echo " 1. Go back to MAIN menu"
   echo ""
-  echo "  2. Create new session"
-  echo "  3. Attach to session"
-  echo "  4. Detach from session"
-  echo "  5. List sessions"
-  echo "  6. Split Horizontally"
-  echo "  7. Split Vertically"
+  echo " 2. Create new session"
+  echo " 3. Attach to session"
+  echo " 4. Detach from session"
+  echo " 5. List sessions"
   echo ""
   echo ""
-  echo "  8. Go to VIDEOS menu"
-  echo "  9. Go to SUBS menu"
-  echo " 10. Go to CLEAN-UP menu"
+  echo " 6. Go to VIDEOS menu"
+  echo " 7. Go to SUBS menu"
+  echo " 8. Go to CLEAN-UP menu"
   echo ""
   echo ""
   echo " 0. Exit script"
@@ -441,39 +439,33 @@ show_menu_4() {
 
   # Handling the user's choice using a case statement
   case $ans in
-    [mM][aA][iI][nN]|"1")
+    [mM]|"1")
       show_banner_0
       show_menu_0
       ;;
-    [nN][sS]|"2")
+    [[sS]|"2")
       read -p "Enter session name: " session_name
-      tmux new -s "$session_name"
+      tmux new-session -A -s "$session_name"
       ;;
-    [aA]|[aA][tT][tT][aA][cC][hH]|"3")
+    [aA]|"3")
       read -p "Enter session name to attach: " session_name
-      tmux a -t "$session_name"
+      tmux attach-session -t "$session_name"
       ;;
-    [dD]|[dD][eE][tT][aA][cC][hH]|"4")
+    [dD]|"4")
       tmux detach
       ;;
     [lL]|[lL][iI][sS][tT]|"5")
-      tmux ls
+      tmux list-sessions
       ;;
-    [sS][hH]|"6")
-      tmux split-window -h
-      ;;
-    [sS][vV]|"7")
-      tmux split-window -v
-      ;;
-    [vV]|[vV][iI][dD][eE][oO][sS]|"8")
+    [vV]|[vV][iI][dD][eE][oO][sS]|"6")
       show_banner_1
       show_menu_1
       ;;
-    [sS]|[sS][uU][bB][sS]|"9")
+    [sS]|[sS][uU][bB][sS]|"7")
       show_banner_2
       show_menu_2
       ;;
-    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"10")
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"8")
       show_banner_3
       show_menu_3
       ;;
