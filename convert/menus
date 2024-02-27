@@ -455,8 +455,12 @@ show_menu_4() {
       tmux detach
       ;;
     [lL]|[lL][iI][sS][tT]|"5")
+      echo " List of sessions: \n"
+      echo ""
       tmux list-sessions
+      echo -e "${MAIN_MENU_COLOR}"
       read -rp "Press ENTER to continue..." fackEnterKey
+      echo "${RESET}"
       ;;
     [vV]|[vV][iI][dD][eE][oO][sS]|"6")
       show_banner_1
