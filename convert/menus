@@ -449,30 +449,26 @@ show_menu_4() {
       tmux new-session -A -s "$session_name"
       ;;
     [aA]|"3")
-      echo -e "${MAIN_MENU_COLOR}"
       echo -e "\nList of sessions: \n"
-      echo "${RESET}"
       tmux list-sessions
-      echo -e "${MAIN_MENU_COLOR}"
       echo ""
+      echo -e "${MAIN_MENU_COLOR}"
       read -p "Enter session name to attach: " session_name
       echo "${RESET}"
       tmux attach-session -t "$session_name"
       ;;
     [kK]|"4")
-      echo -e "${MAIN_MENU_COLOR}"
       echo -e "\nList of sessions: \n"
-      echo "${RESET}"
       tmux list-sessions
-      echo -e "${MAIN_MENU_COLOR}"
       echo ""
+      echo -e "${MAIN_MENU_COLOR}"
       read -p "Enter session name to kill: " session_name
       echo "${RESET}"
       if tmux has-session -t "$session_name" 2>/dev/null; then
           tmux kill-ses -t "$session_name"
-          echo -e "${GREEN}Session '$session_name' has been killed.${RESET}"
+          echo -e "${OK}Session '$session_name' has been killed.${RESET}"
       else
-          echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
+          echo -e "${ERROR}Error: Session '$session_name' does not exist.${RESET}"
       fi
       show_menu_4
       ;;
