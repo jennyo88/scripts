@@ -3,8 +3,8 @@
 # MAIN
 # Author: Jennifer Romero
 # Description: This script sources a menu-driven interface to convert files
-# Version: 5.0
-# Last Updated: Feb 26, 2024
+# Version: 5.1
+# Last Updated: Feb 27, 2024
 # GitHub Repository: https://github.com/jennyo88/scripts/convert/main
 
 
@@ -19,7 +19,7 @@ script_urls=(
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_srt"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_cleanup"
-  # "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
   # Add more script URLs as needed
 )
 
