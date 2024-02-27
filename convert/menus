@@ -464,6 +464,7 @@ show_menu_4() {
       else
           echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
       fi
+      show_menu_4
       ;;
     [vV]|[vV][iI][dD][eE][oO][sS]|"5")
       show_banner_1
