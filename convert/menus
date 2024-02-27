@@ -420,13 +420,12 @@ show_menu_4() {
   echo ""
   echo " 2. Create new session"
   echo " 3. Attach to session"
-  echo " 4. Detach from session"
-  echo " 5. List sessions"
+  echo " 4. Kill session"
   echo ""
   echo ""
-  echo " 6. Go to VIDEOS menu"
-  echo " 7. Go to SUBS menu"
-  echo " 8. Go to CLEAN-UP menu"
+  echo " 5. Go to VIDEOS menu"
+  echo " 6. Go to SUBS menu"
+  echo " 7. Go to CLEAN-UP menu"
   echo ""
   echo ""
   echo " 0. Exit script"
@@ -448,30 +447,32 @@ show_menu_4() {
       tmux new-session -A -s "$session_name"
       ;;
     [aA]|"3")
+      echo -e "\nList of sessions: \n"
+      tmux list-sessions
+      echo ""
       read -p "Enter session name to attach: " session_name
       tmux attach-session -t "$session_name"
       ;;
-    [dD]|"4")
-      tmux detach
-      ;;
-    [lL]|[lL][iI][sS][tT]|"5")
+    [kK]|"4")
       echo -e "\nList of sessions: \n"
-      echo ""
       tmux list-sessions
-      echo -e "${MAIN_MENU_COLOR}"
-      read -rp "Press ENTER to continue..." fackEnterKey
-      echo "${RESET}"
-      show_menu_4
+      read -p "Enter session name to kill: " session_name
+      if tmux has-session -t "$session_name" 2>/dev/null; then
+          tmux kill-ses -t "$session_name"
+          echo -e "${GREEN}Session '$session_name' has been killed.${RESET}"
+      else
+          echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
+      fi
       ;;
-    [vV]|[vV][iI][dD][eE][oO][sS]|"6")
+    [vV]|[vV][iI][dD][eE][oO][sS]|"5")
       show_banner_1
       show_menu_1
       ;;
-    [sS]|[sS][uU][bB][sS]|"7")
+    [sS]|[sS][uU][bB][sS]|"6")
       show_banner_2
       show_menu_2
       ;;
-    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"8")
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"7")
       show_banner_3
       show_menu_3
       ;;
