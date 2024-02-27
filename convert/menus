@@ -4,17 +4,31 @@
 # BANNERS
 # -----------------------------------
 
+load_colors() {
+  MAIN_MENU_COLOR=$'\e[38;5;39m'      # Blue color
+  MENU_1_COLOR=$'\e[38;5;208m'        # Orange color
+  MENU_2_COLOR=$'\e[1;32m'            # Green color (bold)
+  MENU_3_COLOR=$'\e[1;36m'            # Cyan color (bold)
+  MENU_4_COLOR=$'\e[38;5;165m'        # Purple color
+  ERROR=$'\e[1;31m'                   # Red color (bold)
+  RESET=$'\e[0m'                      # Reset color attributes
+}
+
+# -----------------------------------
+# BANNERS
+# -----------------------------------
+
 # Function to display the main menu banner
 show_banner_0() {
   clear
-  echo "${BLUE}"
+  echo "${MAIN_MENU_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║          Converting Files - Service Menu        ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
 show_banner_1() {
-  echo "${BLUE}"
+  echo "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                                                 ║ "
   echo " ║                     VIDEOS                      ║ "
@@ -23,7 +37,7 @@ show_banner_1() {
 }
 
 show_banner_2() {
-  echo "${BLUE}"
+  echo "${MENU_2_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                                                 ║ "
   echo " ║                      SUBS                       ║ "
@@ -32,12 +46,20 @@ show_banner_2() {
 }
 
 show_banner_3() {
-  echo "${BLUE}"
+  echo "${MENU_3_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                                                 ║ "
   echo " ║                    CLEAN-UP                     ║ "
   echo " ║                                                 ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# Function to display the TMUX menu banner
+show_banner_4() {
+  echo "${MENU_4_COLOR}
+  echo "╔═════════════════════════════════════════════════╗"
+  echo "║                     TMUX                        ║"
+  echo "╚═════════════════════════════════════════════════╝${RESET}"
 }
 
 # -----------------------------------
