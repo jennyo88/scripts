@@ -422,7 +422,7 @@ ytdl() {
 # Function for converting video files and extracting subtitles
 video_sub() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
 	echo " ╔═════════════════════════════════════════════════╗ "
 	echo " ║                Video & Subs SCRIPT              ║ "
 	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -476,7 +476,7 @@ video_sub() {
 tubi() {
 	check_ffmpeg
 	check_wget
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
 	echo " ╔═════════════════════════════════════════════════╗ "
 	echo " ║                   tubi SCRIPT                   ║ "
 	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -526,7 +526,7 @@ tubi() {
 # Function to update language metadata in MP4 video files
 metadata() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
 	echo " ╔═════════════════════════════════════════════════╗ "
 	echo " ║          Encode Language Metadata SCRIPT        ║ "
 	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
@@ -580,7 +580,7 @@ metadata() {
 # Function to convert TS to MKV for PLEX compatibility
 plex() {
 	check_ffmpeg
-	echo -e "${BLUE}"
+	echo -e "${MENU_1_COLOR}"
 	echo " ╔═════════════════════════════════════════════════╗ "
 	echo " ║               plex TS to MKV SCRIPT             ║ "
 	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
