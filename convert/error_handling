@@ -40,6 +40,15 @@ check_wget() {
 	fi
 }
 
+check_tmux() {
+	if command -v tmux &> /dev/null; then
+		return 0  # Success
+	else
+		echo -e "${ERROR}Error: tmux is not installed. Please install it before running this script.${RESET}"
+		return 1  # Failure
+	fi
+}
+
 # -----------------------------------
 # ABORT
 # -----------------------------------
