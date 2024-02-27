@@ -84,7 +84,7 @@ show_menu_0() {
   echo ""
 
   # Prompting the user to select an option
-  echo -e "${BLUE}"
+  echo -e "${MAIN_MENU_COLOR}"
   prompt "Select: " ans
   echo "${RESET}"
 
@@ -195,7 +195,7 @@ show_menu_1() {
   echo ""
 
   # Prompting the user to select an option
-  echo -e "${BLUE}"
+  echo -e "${MAIN_MENU_COLOR}"
   prompt "Select: " ans
   echo "${RESET}"
 
@@ -294,7 +294,7 @@ show_menu_2() {
   echo ""
 
   # Prompting the user to select an option
-  echo -e "${BLUE}"
+  echo -e "${MAIN_MENU_COLOR}"
   prompt "Select: " ans
   echo "${RESET}"
 
@@ -360,7 +360,7 @@ show_menu_3() {
   echo ""
 
   # Prompting the user to select an option
-  echo -e "${BLUE}"
+  echo -e "${MAIN_MENU_COLOR}"
   prompt "Select: " ans
   echo "${RESET}"
 
@@ -455,7 +455,7 @@ show_menu_4() {
       tmux detach
       ;;
     [lL]|[lL][iI][sS][tT]|"5")
-      echo " List of sessions: \n"
+      echo -e "\nList of sessions: \n"
       echo ""
       tmux list-sessions
       echo -e "${MAIN_MENU_COLOR}"
