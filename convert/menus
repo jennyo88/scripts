@@ -461,6 +461,7 @@ show_menu_4() {
       echo -e "${MAIN_MENU_COLOR}"
       read -rp "Press ENTER to continue..." fackEnterKey
       echo "${RESET}"
+      show_menu_4
       ;;
     [vV]|[vV][iI][dD][eE][oO][sS]|"6")
       show_banner_1
