@@ -489,8 +489,10 @@ tubi() {
   # Loop through the specified range of episodes
   for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
     # Prompting the user for video and audio URLs for each episode
-    read -p "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
-    read -p "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
+    printf "Enter the web address for video file of episode %02d: " "${episode_number}"
+		read -r video_url
+    printf "Enter the web address for audio file of episode %02d: " "${episode_number}"
+		read -r audio_url
 
     # Generating file names based on user input
     video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
