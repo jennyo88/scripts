@@ -474,141 +474,135 @@ video_sub() {
 
 # Function for downloading and merging video and audio files for Tubi episodes
 tubi() {
-	check_ffmpeg
-	check_wget
-	echo -e "${MENU_1_COLOR}"
-	echo " ╔═════════════════════════════════════════════════╗ "
-	echo " ║                   tubi SCRIPT                   ║ "
-	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  check_ffmpeg
+  check_wget
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                   tubi SCRIPT                   ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
+  # Prompting the user for show details
+  prompt "Enter the name of the show: " show_name
+  prompt "Enter the first episode number: " first_episode
+  prompt "Enter the last episode number: " last_episode
 
-	# Prompting the user for show details
-	prompt "Enter the name of the show: " show_name
+  # Loop through the specified range of episodes
+  for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
+    # Prompting the user for video and audio URLs for each episode
+    prompt "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
+    prompt "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
 
-	prompt "Enter the first episode number: " first_episode
+    # Generating file names based on user input
+    video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
+    audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
+    output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
 
-	prompt "Enter the last episode number: " last_episode
+    # Downloading video and audio files
+    printf "Downloading video for episode %02d...\n" "${episode_number}"
+    wget -O "${video_file}" "${video_url}"
 
-	# Loop through the specified range of episodes
-	for ((episode_number = first_episode; episode_number <= last_episode; episode_number++))
-	do
-		# Prompting the user for video and audio URLs for each episode
-		prompt "Enter the web address for video file of episode %02d: " "${episode_number}" video_url
+    printf "Downloading audio for episode %02d...\n" "${episode_number}"
+    wget -O "${audio_file}" "${audio_url}"
 
-		prompt "Enter the web address for audio file of episode %02d: " "${episode_number}" audio_url
+    # Merging video and audio files using FFmpeg
+    ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
 
-		# Generating file names based on user input
-		video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
-		audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
-		output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
+    printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
 
-		# Downloading video and audio files
-		printf "Downloading video for episode %02d...\n" "${episode_number}"
-		wget -O "${video_file}" "${video_url}"
+    # Removing downloaded video and audio files
+    rm "${video_file}" "${audio_file}"
+  done
 
-		printf "Downloading audio for episode %02d...\n" "${episode_number}"
-		wget -O "${audio_file}" "${audio_url}"
-
-		# Merging video and audio files using FFmpeg
-		ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
-
-		printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
-
-		# Removing downloaded video and audio files
-		rm "${video_file}" "${audio_file}"
-	done
-
-	echo -e "Download complete!\a"
-	pause
-	show_menu_1 
+  echo -e "Download complete!\a"
+  pause
+  show_menu_1
 }
 
 # Function to update language metadata in MP4 video files
 metadata() {
-	check_ffmpeg
-	echo -e "${MENU_1_COLOR}"
-	echo " ╔═════════════════════════════════════════════════╗ "
-	echo " ║          Encode Language Metadata SCRIPT        ║ "
-	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  check_ffmpeg
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║          Encode Language Metadata SCRIPT        ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-	# Prompting the user to enter the folder path
-	prompt "Enter the folder path where the video files are located: " folder_path
+  # Prompting the user to enter the folder path
+  prompt "Enter the folder path where the video files are located: " folder_path
 
-	# Checking if the folder exists
-	if [ -d "$folder_path" ]; then
-		# Creating the Metadata folder if it doesn't exist
-		mkdir -p "$folder_path/Metadata"
+  # Checking if the folder exists
+  if [ -d "$folder_path" ]; then
+    # Creating the Metadata folder if it doesn't exist
+    mkdir -p "$folder_path/Metadata"
 
-		# Moving to the specified folder
-		cd "$folder_path"
+    # Moving to the specified folder
+    cd "$folder_path"
 
-		# Looping through each file in the folder
-		for file in *
-		do
-			# Checking if the file is an .mp4 video file
-			if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
-				# Prompting the user to enter the three-letter language code
-				prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
+    # Looping through each file in the folder
+    for file in *
+    do
+      # Checking if the file is an .mp4 video file
+      if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
+        # Prompting the user to enter the three-letter language code
+        prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
 
-				# Checking if the user entered "abort" to stop the script
-				if [[ "$language" == "abort" ]]
-				then
-					echo "Script aborted by user."
-					exit 1
-				fi
+        # Checking if the user entered "abort" to stop the script
+        if [[ "$language" == "abort" ]]
+        then
+          echo "Script aborted by user."
+          exit 1
+        fi
 
-				# Setting the output file name
-				output_file="Metadata/$file"
+        # Setting the output file name
+        output_file="Metadata/$file"
 
-				# Using ffmpeg to change the metadata language and save the output file
-				ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"
+        # Using ffmpeg to change the metadata language and save the output file
+        ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"
 
-				echo "Updated metadata for $file"
-			fi
-		done
+        echo "Updated metadata for $file"
+      fi
+    done
 
-		echo "Metadata files are saved in $folder_path/Metadata"
-	else
-			echo "Folder not found."
-	fi
+    echo "Metadata files are saved in $folder_path/Metadata"
+  else
+    echo "Folder not found."
+  fi
 
-	echo -e "Metadata has been encoded!\a"
-	pause
-	show_menu_1
+  echo -e "Metadata has been encoded!\a"
+  pause
+  show_menu_1
 }
 
 # Function to convert TS to MKV for PLEX compatibility
 plex() {
-	check_ffmpeg
-	echo -e "${MENU_1_COLOR}"
-	echo " ╔═════════════════════════════════════════════════╗ "
-	echo " ║               plex TS to MKV SCRIPT             ║ "
-	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+  check_ffmpeg
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║               plex TS to MKV SCRIPT             ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
+  # Prompting the user for the source extension (e.g., ts)
+  prompt "Source extension? : " srcExt
 
-	# Prompting the user for the source extension (e.g., ts)
-	prompt "Source extension? : " srcExt
+  # Prompting the user for the destination extension (e.g., mkv)
+  prompt "Destination extension? : " destExt
 
-	# Prompting the user for the destination extension (e.g., mkv)
-	prompt "Destination extension? : " destExt
+  # Prompting the user for the source directory
+  prompt "Source directory? : " srcDir
 
-	# Prompting the user for the source directory
-	prompt "Source directory? : " srcDir
+  # Prompting the user for the destination directory
+  prompt "Destination directory? : " destDir
 
-	# Prompting the user for the destination directory
-	prompt "Destination directory? : " destDir
+  # Loop through each file in the source directory with the specified source extension
+  for filename in "$srcDir"/*.$srcExt ; do
+    # Extracting the base name and path without the extension
+    basePath=${filename%.*}
+    baseName=${basePath##*/}
 
-	# Loop through each file in the source directory with the specified source extension
-	for filename in "$srcDir"/*.$srcExt ; do
-	# Extracting the base name and path without the extension
-		basePath=${filename%.*}
-		baseName=${basePath##*/}
+    # Using FFmpeg to convert TS to MKV and save the file in the destination directory
+    ffmpeg -i "$filename" -map 0 -c copy "$destDir"/"$baseName"."$destExt"
+  done
 
-		# Using FFmpeg to convert TS to MKV and save the file in the destination directory
-		ffmpeg -i $filename -map 0 -c copy "$destDir"/"$baseName"."$destExt"
-	done
-
-	echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-	pause
-	show_menu_1
+  echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+  pause
+  show_menu_1
 }
