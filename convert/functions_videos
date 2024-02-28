@@ -146,49 +146,51 @@ ydl() {
         # Generate filename and download video
         filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
 
-        # Downloading video and converting subtitles
-			  if youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
-			    youtube-dl --list-subs --skip-download "$episode_url" | grep -q -E 'en|es'; then
-			
-			    # Download 'en' and 'es' subtitles if available
-			    youtube-dl --write-sub --sub-lang en,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
-			
-			  else
-			    # If 'en' and 'es' subtitles are not available, try 'en-US' subtitles
-			    if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-US'; then
-			      youtube-dl --write-sub --sub-lang en-US --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
-			
-			    else
-			      # If 'en-US' subtitles are not available, try 'en-CA' subtitles
-			      if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-CA'; then
-			        youtube-dl --write-sub --sub-lang en-CA --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
-			      fi
-			    fi
-			  fi
-			
-			  printf "\nConverting subtitles to SRT format...\n"
-			  vtt_files=("${filename%.*}"*.vtt)
-			
-			  for vtt_file in "${vtt_files[@]}"; do
-			    srt_file="${vtt_file%.*}.srt"
-			
-			    # Check if the VTT file exists before conversion
-			    if [ -e "$vtt_file" ]; then
-			      ffmpeg -i "$vtt_file" "$srt_file" -y
-			
-			      # Check if conversion was successful before removing the VTT file
-			      if [ $? -eq 0 ]; then
-			        rm "$vtt_file"
-			        printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
-			      else
-			        printf "${ERROR}Error converting %s to %s. Retaining the VTT file.${RESET}\n" "$vtt_file" "$srt_file"
-			      fi
-			    else
-			      printf "${ERROR}Error: VTT file %s not found for conversion.${RESET}\n" "$vtt_file"
-			    fi
-			  done
-			
-			  printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+        # Download 'en' and 'es' subtitles if available
+        if youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
+          youtube-dl --list-subs --skip-download "$episode_url" | grep -q -E 'en|es'; then
+
+          # Download 'en' and 'es' subtitles if available
+          youtube-dl --write-sub --sub-lang en,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
+
+        else
+          # If 'en' and 'es' subtitles are not available, try 'en-US' subtitles
+          if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-US'; then
+            youtube-dl --write-sub --sub-lang en-US --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
+
+          else
+            # If 'en-US' subtitles are not available, try 'en-CA' subtitles
+            if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-CA'; then
+              youtube-dl --write-sub --sub-lang en-CA --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
+            fi
+          fi
+        fi
+
+        printf "\nConverting subtitles to SRT format...\n"
+        vtt_files=("${filename%.*}"*.vtt)
+
+        for vtt_file in "${vtt_files[@]}"; do
+          srt_file="${vtt_file%.*}.srt"
+
+          # Check if the VTT file exists before conversion
+          if [ -e "$vtt_file" ]; then
+            ffmpeg -i "$vtt_file" "$srt_file" -y
+
+            # Check if conversion was successful before removing the VTT file
+            if [ $? -eq 0 ]; then
+              rm "$vtt_file"
+              printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+            else
+              printf "${ERROR}Error converting %s to %s. Retaining the VTT file.${RESET}\n" "$vtt_file" "$srt_file"
+            fi
+          else
+            printf "${ERROR}Error: VTT file %s not found for conversion.${RESET}\n" "$vtt_file"
+          fi
+        done
+
+        printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+
+      done
 
     elif [ "$type" == "movie" ]; then
       # For movies, prompt for movie details and download
@@ -205,9 +207,11 @@ ydl() {
       printf "\nDownloading %s...\n" "$filename"
       youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
-      # Download subtitles and convert to SRT format
-      printf "\nDownloading subtitles for %s.\n" "$filename"
-      youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+      # Download 'en' and 'es' subtitles if available
+      if youtube-dl --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
+        youtube-dl --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+      fi
+
       printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
 
     else
@@ -254,6 +258,11 @@ ydl() {
         printf "\nDownloading %s...\n" "$filename"
         youtube-dl -f best "$episode_url" --add-metadata -o "$filename"
 
+        # Download 'en' and 'es' subtitles if available
+        if youtube-dl --list-subs --skip-download "$episode_url" | grep -q -E 'en|es'; then
+          youtube-dl --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"
+        fi
+
         printf "\nDownloaded %s.\n" "$filename"
       done
 
@@ -274,6 +283,11 @@ ydl() {
       printf "\nDownloading %s...\n" "$filename"
       youtube-dl -f best "$movie_url" --add-metadata -o "$filename"
 
+      # Download 'en' and 'es' subtitles if available
+      if youtube-dl --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
+        youtube-dl --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+      fi
+
       printf "\nDownloaded %s.\n" "$filename"
 
     else
@@ -291,6 +305,8 @@ ydl() {
   pause
   show_menu_1
 }
+
+
 
 # Fork function for YT-DLP instead of YOUTUBE-DL
 ytdl() {
