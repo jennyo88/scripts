@@ -148,14 +148,34 @@ ydl() {
 
 				# Downloading video and converting subtitles
 				if youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$episode_url" --add-metadata -o "$filename" &&
-					youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs srt --skip-download -o "${filename%.*}" "$episode_url"; then
-					printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+				    youtube-dl --write-sub --sub-lang en,en-US,en-CA,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"; then
+				
+				  printf "\nConverting subtitles to SRT format...\n"
+				  vtt_files=("${filename%.*}"*.vtt)
+				
+				  for vtt_file in "${vtt_files[@]}"; do
+				    srt_file="${vtt_file%.*}.srt"
+				
+				    # Check if the VTT file exists before conversion
+				    if [ -e "$vtt_file" ]; then
+				      ffmpeg -i "$vtt_file" "$srt_file" -y
+				
+				      # Check if conversion was successful before removing the VTT file
+				      if [ $? -eq 0 ]; then
+				        rm "$vtt_file"
+				        printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+				      else
+				        printf "${ERROR}Error converting %s to %s. Retaining the VTT file.${RESET}\n" "$vtt_file" "$srt_file"
+				      fi
+				    else
+				      printf "${ERROR}Error: VTT file %s not found for conversion.${RESET}\n" "$vtt_file"
+				    fi
+				  done
+				
+				  printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
 				else
-					echo -e "${ERROR}Error during download of ${filename}${RESET}"
+				  echo -e "${ERROR}Error during download of ${filename}${RESET}"
 				fi
-			done
-
-			printf "\nAll episodes downloaded successfully.\n"
 
 		elif [ "$type" == "movie" ]; then
 			# For movies, prompt for movie details and download
