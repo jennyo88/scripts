@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+# MAIN
+# Author: Jennifer Romero
+# Description: This script sources a menu-driven interface to convert files
+# Version: 5.1
+# Last Updated: Feb 27, 2024
+# GitHub Repository: https://github.com/jennyo88/scripts/convert/main
+
+
+# -----------------------------------
+# SOURCE SCRIPTS
+# -----------------------------------
+
+# List of script URLs to download and source
+script_urls=(
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_srt"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_cleanup"
+  # "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
+  # Add more script URLs as needed
+)
+
+# Function to source a script without download output
+source_script() {
+  local script_url=$1
+  local script_name=$(basename "${script_url}")
+
+  # Download the script silently
+  if curl -fsSL "${script_url}" -o "${script_name}" >/dev/null 2>&1; then
+    # Source the script if download is successful
+    source "${script_name}"
+  else
+    echo "Failed to download script: ${script_url}"
+    exit 1
+  fi
+}
+
+# Function to remove downloaded script files
+cleanup() {
+  for url in "${script_urls[@]}"; do
+    local script_name=$(basename "${url}")
+    rm -f "${script_name}"
+  done
+}
+
+# Set up a trap to run the cleanup function on script exit
+trap cleanup EXIT
+
+# Iterate through the list of script URLs and source each one
+for url in "${script_urls[@]}"; do
+  source_script "${url}"
+done
+
+# Now you can use functions from the sourced scripts
+# Call the functions or execute any code as needed
+
+
+# -----------------------------------
+# MAIN MENU & COLORS
+# -----------------------------------
+main_menu="0"
+
+# Calling the load_colors() function to set color variables
+load_colors # Only loaded once
+
+# -----------------------------------
+# INFINITE LOOP
+# -----------------------------------
+
+while true
+do
+  show_banner_0 && show_menu_0
+done

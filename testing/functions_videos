@@ -1,0 +1,296 @@
+# -------------------------------------------------------
+# x265 / m3u8 / ydl or ytdl / video_sub / tubi / metadata 
+# -------------------------------------------------------
+
+# Function for converting video files to x265 format using FFmpeg
+x265() {
+	check_ffmpeg
+	echo -e "${MENU_1_COLOR}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                    x265 SCRIPT                  ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+	# Prompt user for source extension (e.g. mkv, mp4, or avi)
+	prompt "\nSource extension? (mkv, mp4, or avi) : " srcExt
+
+	# Prompt user for destination extension (mkv or mp4)
+	prompt "\nDestination extension? (mkv or mp4; default: mp4) : " destExt
+	destExt=${destExt:-mp4}
+
+	# Prompt user for for source directory
+	prompt "\nSource directory? : " srcDir
+
+	# Prompt user for for destination directory
+	prompt "\nDestination directory? (default: DONE): " destDir
+	destDir=${destDir:-DONE}
+
+	# Loop through each file in the source directory with the specified source extension
+	for filename in "$srcDir"/*.$srcExt
+	do
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+
+		# Using FFmpeg to convert the source file to x265 format with the specified destination extension
+		if ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"; then
+			echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+		else
+			echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
+		fi
+	done
+	pause
+	show_menu_1
+}
+
+# Function for converting M3U8 stream to TS format using FFmpeg
+m3u8() {
+	check_ffmpeg
+	echo -e "${MENU_1_COLOR}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                 M3U8 to TS SCRIPT               ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+	# Prompt user for destination extension
+	prompt "\nDestination extension? (default: ts): " destExt "ts"
+
+	# Prompt user for destination directory
+	prompt "\nDestination directory? (default: ts): " destDir "ts"
+
+	# Prompt user for source web address
+	prompt "\nSource web-address? : " srcAdd
+
+	# Prompt user for movie details
+	prompt "\nMovie name? (include periods between words) : " baseName
+
+	prompt "\nMovie release year? : " baseYear
+
+	prompt "\nScene/channel of the movie? (default: TCM) : " baseScene "TCM"
+
+	prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p; default: 720p): " baseResolution "720p"
+
+	# Prompt user for movie language (three-letter code)
+	validLanguageCode=false
+	while [ "$validLanguageCode" = false ]
+	do
+		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho; default: eng): " language "eng"
+
+		if [ ${#language} -eq 3 ]
+		then
+			validLanguageCode=true
+		else
+			echo "Invalid language code. Please enter a three-letter code."
+		fi
+	done
+
+	# Create a directory based on movie name and release year
+	dirName="${baseName} (${baseYear})"
+	newname=`echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' `
+
+	mkdir "$dirName"
+	mv "$dirName" "$newname"
+	mv "$newname" ./DONE/
+
+	# Download M3U8 stream and convert to TS format using FFmpeg
+	if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
+		echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+		sleep 1
+		show_menu_1
+	else
+		echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
+	fi
+}
+
+# Function for downloading Movies & TV Shows from YouTube or other sites using Youtube-DL
+# file [functions_ydl]
+
+# Fork function for YT-DLP instead of YOUTUBE-DL
+# file [functions_ytdl]
+
+# Function for converting video files and extracting subtitles
+video_sub() {
+	check_ffmpeg
+	echo -e "${MENU_1_COLOR}"
+	echo " ╔═════════════════════════════════════════════════╗ "
+	echo " ║                Video & Subs SCRIPT              ║ "
+	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+
+	# Loop through each .ts file in the 'ts' directory
+	for filename in ts/*.ts
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+
+		# Using FFmpeg to convert .ts to .mkv with the same metadata
+		ffmpeg -i "$filename" -map 0 -c copy -map_metadata 0 "mkv/$baseName.mkv"
+	done
+
+	# Pause for a short duration
+	sleep 1
+
+	# Loop through each .ts file again
+	for filename in ts/*.ts
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+
+		# Using FFmpeg to extract subtitles from .ts and save as .srt
+		ffmpeg -f lavfi -i "movie="$filename"[out0+subcc]" -map s srt/"$baseName".en.srt
+	done
+
+	# Pause for a short duration
+	sleep 1
+
+	# Loop through each .mkv file in the 'mkv' directory
+	for filename in mkv/*.mkv
+	do
+		# Extracting the base name and path without the extension
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+
+		# Using FFmpeg to convert .mkv to .mp4 with specific settings
+		ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4"
+	done
+
+	echo -e "Conversion complete!\a"
+	pause
+	show_menu_1
+}
+
+# Function for downloading and merging video and audio files for Tubi episodes
+tubi() {
+  check_ffmpeg
+  check_wget
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                   tubi SCRIPT                   ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+  # Prompting the user for show details
+  prompt "Enter the name of the show: " show_name
+  prompt "Enter the first episode number: " first_episode
+  prompt "Enter the last episode number: " last_episode
+
+  # Loop through the specified range of episodes
+  for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
+    # Prompting the user for video and audio URLs for each episode
+    printf "Enter the web address for video file of episode %02d: " "${episode_number}"
+		read -r video_url
+    printf "Enter the web address for audio file of episode %02d: " "${episode_number}"
+		read -r audio_url
+
+    # Generating file names based on user input
+    video_file="${show_name}_video_episode_$(printf "%02d" "${episode_number}").mp4"
+    audio_file="${show_name}_audio_episode_$(printf "%02d" "${episode_number}").mp4"
+    output_file="${show_name}.S01E$(printf "%02d" "${episode_number}").WEBRip.x264.mp4"
+
+    # Downloading video and audio files
+    printf "Downloading video for episode %02d...\n" "${episode_number}"
+    wget -O "${video_file}" "${video_url}"
+
+    printf "Downloading audio for episode %02d...\n" "${episode_number}"
+    wget -O "${audio_file}" "${audio_url}"
+
+    # Merging video and audio files using FFmpeg
+    ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
+
+    printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
+
+    # Removing downloaded video and audio files
+    rm "${video_file}" "${audio_file}"
+  done
+
+  echo -e "Download complete!\a"
+  pause
+  show_menu_1
+}
+
+# Function to update language metadata in MP4 video files
+metadata() {
+  check_ffmpeg
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║          Encode Language Metadata SCRIPT        ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+  # Prompting the user to enter the folder path
+  prompt "Enter the folder path where the video files are located: " folder_path
+
+  # Checking if the folder exists
+  if [ -d "$folder_path" ]; then
+    # Creating the Metadata folder if it doesn't exist
+    mkdir -p "$folder_path/Metadata"
+
+    # Moving to the specified folder
+    cd "$folder_path"
+
+    # Looping through each file in the folder
+    for file in *
+    do
+      # Checking if the file is an .mp4 video file
+      if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" && $(file -b --mime-type "$file" | grep -c "video/mp4") -eq 1 ]]; then
+        # Prompting the user to enter the three-letter language code
+        prompt "Enter the three-letter language code for $file (e.g., eng, spa, fre, zho): " language
+
+        # Checking if the user entered "abort" to stop the script
+        if [[ "$language" == "abort" ]]
+        then
+          echo "Script aborted by user."
+          exit 1
+        fi
+
+        # Setting the output file name
+        output_file="Metadata/$file"
+
+        # Using ffmpeg to change the metadata language and save the output file
+        ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "$output_file"
+
+        echo "Updated metadata for $file"
+      fi
+    done
+
+    echo "Metadata files are saved in $folder_path/Metadata"
+  else
+    echo "Folder not found."
+  fi
+
+  echo -e "Metadata has been encoded!\a"
+  pause
+  show_menu_1
+}
+
+# Function to convert TS to MKV for PLEX compatibility
+plex() {
+  check_ffmpeg
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║               plex TS to MKV SCRIPT             ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+  # Prompting the user for the source extension (e.g., ts)
+  prompt "Source extension? : " srcExt
+
+  # Prompting the user for the destination extension (e.g., mkv)
+  prompt "Destination extension? : " destExt
+
+  # Prompting the user for the source directory
+  prompt "Source directory? : " srcDir
+
+  # Prompting the user for the destination directory
+  prompt "Destination directory? : " destDir
+
+  # Loop through each file in the source directory with the specified source extension
+  for filename in "$srcDir"/*.$srcExt ; do
+    # Extracting the base name and path without the extension
+    basePath=${filename%.*}
+    baseName=${basePath##*/}
+
+    # Using FFmpeg to convert TS to MKV and save the file in the destination directory
+    ffmpeg -i "$filename" -map 0 -c copy "$destDir"/"$baseName"."$destExt"
+  done
+
+  echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+  pause
+  show_menu_1
+}

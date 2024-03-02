@@ -1,0 +1,78 @@
+tmux_command() {
+  show_banner_0
+  show_banner_4
+  echo ""
+  echo ""
+  echo " 1. Go back to MAIN menu"
+  echo ""
+  echo " 2. Create new session"
+  echo " 3. Attach to session"
+  echo " 4. Kill session"
+  echo ""
+  echo ""
+  echo " 5. Go to VIDEOS menu"
+  echo " 6. Go to SUBS menu"
+  echo " 7. Go to CLEAN-UP menu"
+  echo ""
+  echo ""
+  echo " 0. Exit script"
+  echo ""
+
+  # Prompting the user to select an option
+  echo -e "${MAIN_MENU_COLOR}"
+  prompt "Select: " ans
+  echo "${RESET}"
+
+  # Handling the user's choice using a case statement
+  case $ans in
+    [mM]|"1")
+      show_banner_0
+      show_menu_0
+      ;;
+    [[sS]|"2")
+      read -p "Enter session name: " session_name
+      tmux new-session -A -s "$session_name"
+      ;;
+    [aA]|"3")
+      echo -e "\nList of sessions: \n"
+      tmux list-sessions
+      echo ""
+      read -p "Enter session name to attach: " session_name
+      tmux attach-session -t "$session_name"
+      ;;
+    [kK]|"4")
+      echo -e "\nList of sessions: \n"
+      tmux list-sessions
+      read -p "Enter session name to kill: " session_name
+      if tmux has-session -t "$session_name" 2>/dev/null; then
+          tmux kill-ses -t "$session_name"
+          echo -e "${GREEN}Session '$session_name' has been killed.${RESET}"
+      else
+          echo -e "${RED}Error: Session '$session_name' does not exist.${RESET}"
+      fi
+      ;;
+    [vV]|[vV][iI][dD][eE][oO][sS]|"5")
+      show_banner_1
+      show_menu_1
+      ;;
+    [sS]|[sS][uU][bB][sS]|"6")
+      show_banner_2
+      show_menu_2
+      ;;
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"7")
+      show_banner_3
+      show_menu_3
+      ;;
+    [eE]|[eE][xX][iI][tT]|[qQ]|"0")
+      # Exiting the menu
+      goodbye
+      ;;
+    # Handling invalid options
+    *)
+      echo -e "${ERROR}" "Invalid option. Please enter a valid option." "${RESET}"
+      pause
+      show_menu_4
+      ;;
+  esac
+}
+
