@@ -193,7 +193,7 @@ show_menu_1() {
         [pP][aA][yY][rR][oO][lL][lL]|"4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
             ;;
-	[tT][eE][sS][tT][iI][nN][gG])|"5")
+	[tT][eE][sS][tT][iI][nN][gG]|"5")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/testing/main)"
             ;;
         [mM][oO][rR][eE]|"6")
