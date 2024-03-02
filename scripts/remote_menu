@@ -142,6 +142,9 @@ show_menu_0() {
         [cC]|[cC][oO][nN][vV][eE][rR][tT]|[1][1])
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
             ;;
+	[tT][eE][sS][tT][iI][nN][gG])
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/testing/main)"
+            ;;
         # Handling invalid options
         *)
             echo -e "Invalid option. Please enter a valid option."
@@ -158,12 +161,13 @@ show_menu_1() {
     echo ""
     echo " 1. Go back to Main Menu"
     echo ""
-    echo " 2. convert            - Converting files"
-    echo " 3. tmux_ref           - tmux reference"
-    echo " 4. test               - Payroll TEST script"
-    echo " 5. more"
+    echo " 2. convert               - Converting files"
+    echo " 3. tmux_ref              - tmux reference"
+    echo " 4. payroll               - Payroll TEST script"
+    echo " 5. testing               - Converting TESTING script"   
+    echo " 6. more"
     echo ""
-    echo " 6. Go to OTHER SCRIPTS Menu"
+    echo " 7. Go to OTHER SCRIPTS Menu"
     echo ""
     echo ""
     echo " 0. Exit script"
@@ -186,13 +190,16 @@ show_menu_1() {
         [tT]|[tT][mM][uU][xX]|"3")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
             ;;
-        [tT][eE][sS][tT]|"4")
+        [pP][aA][yY][rR][oO][lL][lL]|"4")
             bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
             ;;
-        [mM][oO][rR][eE]|"5")
+	[tT][eE][sS][tT][iI][nN][gG])|"5")
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/testing/main)"
+            ;;
+        [mM][oO][rR][eE]|"6")
             execute_bash_script
             ;;
-	[oO]|[oO][tT][hH][eE][rR]|"6")
+	[oO]|[oO][tT][hH][eE][rR]|"7")
             show_banner_2
             show_menu_2
             ;;
