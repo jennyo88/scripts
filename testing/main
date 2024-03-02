@@ -14,14 +14,14 @@
 
 # List of script URLs to download and source
 script_urls=(
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_srt"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_cleanup"
-  # "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/error_handling"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/menus"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_videos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_ydl"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_ytdlp"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_srt"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_cleanup"
+  # "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/tmux"
   # Add more script URLs as needed
 )
 
