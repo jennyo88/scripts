@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Prompt the user for the website URL
 read -p "Enter the website URL: " website_url
