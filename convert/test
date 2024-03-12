@@ -4,14 +4,17 @@
 read -p "Enter the website URL: " website_url
 
 # Use curl to fetch the website content
-website_content=$(curl -s $website_url)
+website_content=$(curl -s "$website_url")
 
 # Use grep to extract URLs with a specific extension (e.g., ".mp4")
 filtered_urls=$(echo "$website_content" | grep -o -E "https?://[^\"]+" | grep "\.mp4$")
 
-# Output the filtered URLs with line numbers
+# Extract file names from URLs
+file_names=$(echo "$filtered_urls" | awk -F / '{print $NF}')
+
+# Output the filtered URLs with names and line numbers
 echo "Choose two files to combine:"
-echo "$filtered_urls" | cat -n
+paste <(echo "$file_names" | cat -n) <(echo "$filtered_urls")
 
 # Prompt the user to enter the numbers of the two files to combine
 read -p "Enter the number of the first file: " selection1
