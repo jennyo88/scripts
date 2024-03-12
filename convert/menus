@@ -123,6 +123,11 @@ show_menu_0() {
       show_banner_1
       ydl
       ;;
+    [tT][uU][bB][iI])
+      clear
+      show_banner_1
+      tubi
+      ;;
     [oO][tT][hH][eE][rR]|[1][5])
       clear
       show_banner_1
@@ -178,18 +183,19 @@ show_menu_1() {
   echo "    DOWNLOAD"
   echo "  2. Download m3u8 playlist"
   echo "  3. Download from YOUTUBE"
-  echo "  4. Download using yt-dlp"
-  echo "  5. Download from OTHER"
+  echo "  4. Download from tubi"
+  echo "  5. Download using yt-dlp"
+  echo "  6. Download from OTHER"
   echo ""
   echo "    CONVERT"
-  echo "  6. Convert video to x265"
-  echo "  7. Convert ONLY video"
-  echo "  8. Convert video & subtitles"
-  echo "  9. Encode metadata"
+  echo "  7. Convert video to x265"
+  echo "  8. Convert ONLY video"
+  echo "  9. Convert video & subtitles"
+  echo " 10. Encode metadata"
   echo ""
-  echo " 10. Go to SUBS menu"
-  echo " 11. Go to CLEAN-UP menu"
-  echo " 12. Go to TMUX menu"
+  echo " 11. Go to SUBS menu"
+  echo " 12. Go to CLEAN-UP menu"
+  echo " 13. Go to TMUX menu"
   echo ""
   echo ""
   echo "  0. Exit script"
@@ -222,43 +228,48 @@ show_menu_1() {
       show_banner_1
       ytdl
       ;;
-    [oO][tT][hH][eE][rR]|[dD][5]|"5")
+    [tT][uU][bB][iI]|[dD][5]|"5")
+      clear
+      show_banner_1
+      tubi
+      ;;
+    [oO][tT][hH][eE][rR]|[dD][6]|"6")
       clear
       show_banner_1
       ydl_other
       ;;
-    [xX]|[xX][2][6][5]|[cC][6]|"6")
+    [xX]|[xX][2][6][5]|[cC][7]|"7")
       clear
       show_banner_1
       x265
       ;;
-    [vV]|[vI][iI][vV][eE][oO]|[cC][7]|"7")
+    [vV]|[vI][iI][vV][eE][oO]|[cC][8]|"8")
       clear
       show_banner_0
       plex
       c_ts
       ;;
-    [aA]|[aA][lL][lL]|[cC][8]|"8")
+    [aA]|[aA][lL][lL]|[cC][9]|"9")
       clear
       show_banner_0
       video_sub && sleep 1
       c_ts
       c_mkv
       ;;
-    [lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][9]|"9")
+    [lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][10]|"10")
       clear
       show_banner_1
       metadata
       ;;
-    [sS]|[sS][uU][bB][sS]|"10")
+    [sS]|[sS][uU][bB][sS]|"11")
       show_banner_2
       show_menu_2
       ;;
-    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"11")
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"12")
       show_banner_3
       show_menu_3
       ;;
-    [tT]|[tT][mM][uU][xX]|"12")
+    [tT]|[tT][mM][uU][xX]|"13")
       show_banner_4
       show_menu_4
       ;;
