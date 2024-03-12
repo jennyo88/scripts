@@ -89,7 +89,7 @@ tubi() {
     exit 1
   fi
 
-  echo -e "Download complete!\a
+  echo -e "Download complete!\a"
   pause
   show_menu_1
 }
