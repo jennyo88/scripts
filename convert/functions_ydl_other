@@ -1,5 +1,5 @@
 # Function to display the menu header
-display_menu_header() {
+display_menu_header_ydl() {
   echo -e "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                 Movies & TV Shows               ║ "
@@ -105,7 +105,7 @@ download_movie() {
 
 # Main function
 ydl_other() {
-  display_menu_header
+  display_menu_header_ydl
   prompt_for_type
 
   if [ "$type" == "tv" ]; then
