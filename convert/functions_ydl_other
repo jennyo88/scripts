@@ -20,51 +20,11 @@ prompt_for_show_details() {
   prompt "Enter the last episode number: " last_episode
 }
 
-# Function to download video and subtitles with fallback for 'en' language
-download_video_and_subtitles() {
-  youtube-dl -f 'best' "$episode_url" --add-metadata -o "$filename" &&
-    youtube-dl --list-subs --skip-download "$episode_url" | grep -q -E 'en|es' &&
-    youtube-dl --write-sub --sub-lang en,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url" ||
-    download_fallback_en_subtitles
+# Function to download video
+download_video() {
+  youtube-dl -f 'best' "$episode_url" --add-metadata -o "$filename"
 }
 
-# Function to download fallback 'en' subtitles (en-US or en-CA)
-download_fallback_en_subtitles() {
-  # If 'en' subtitles are not available, try 'en-US' subtitles
-  if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-US'; then
-    youtube-dl --write-sub --sub-lang en-US --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
-  else
-    # If 'en-US' subtitles are not available, try 'en-CA' subtitles
-    if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-CA'; then
-      youtube-dl --write-sub --sub-lang en-CA --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
-    fi
-  fi
-}
-
-# Function to convert subtitles to SRT format
-convert_subtitles() {
-  printf "\nConverting subtitles to SRT format...\n"
-  vtt_files=("${filename%.*}"*.vtt)
-
-  for vtt_file in "${vtt_files[@]}"; do
-    srt_file="${vtt_file%.*}.srt"
-
-    # Check if the VTT file exists before conversion
-    if [ -e "$vtt_file" ]; then
-      ffmpeg -i "$vtt_file" "$srt_file" -y
-
-      # Check if conversion was successful before removing the VTT file
-      if [ $? -eq 0 ]; then
-        rm "$vtt_file"
-        printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
-      else
-        printf "${ERROR}Error converting %s to %s. Retaining the VTT file.${RESET}\n" "$vtt_file" "$srt_file"
-      fi
-    else
-      printf "${ERROR}Error: VTT file %s not found for conversion.${RESET}\n" "$vtt_file"
-    fi
-  done
-}
 
 # Function to handle TV show downloads
 download_tv_show() {
@@ -83,8 +43,8 @@ download_tv_show() {
     fi
 
     filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
-    download_video_and_subtitles && convert_subtitles
-    printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+    download_video
+    printf "\nDownloaded for %s.\n" "$filename"
   done
 }
 
@@ -94,13 +54,7 @@ download_movie() {
   printf "\nDownloading %s...\n" "$filename"
   youtube-dl -f 'best' "$movie_url" --add-metadata -o "$filename"
 
-  # Download 'en' and 'es' subtitles if available
-  if youtube-dl --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
-    youtube-dl --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
-  fi
-
-  convert_subtitles
-  printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+  printf "\nDownloaded for %s.\n" "$filename"
 }
 
 # Main function
