@@ -1,5 +1,5 @@
 # Function to display the menu header
-display_menu_header() {
+display_menu_header_ytdlp() {
   echo -e "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                 Movies & TV Shows               ║ "
@@ -110,7 +110,7 @@ download_movie() {
 
 # Main function
 ytdl() {
-  display_menu_header
+  display_menu_header_ytdlp
   prompt_for_platform
 
   if [ "$platform" == "youtube" ]; then
