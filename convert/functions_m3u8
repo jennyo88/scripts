@@ -1,0 +1,59 @@
+m3u8() {
+    check_ffmpeg
+    echo -e "${MENU_1_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                 M3U8 to TS SCRIPT               ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+    # Get user input
+    get_user_input
+
+    # Create directory based on movie name and release year
+    create_directory
+
+    # Download M3U8 stream and convert to TS format using FFmpeg
+    convert_m3u8_to_ts
+
+    # Display completion message
+    display_completion_message
+}
+
+get_user_input() {
+    prompt "Destination extension? (default: ts): " destExt "ts"
+    prompt "Destination directory? (default: ts): " destDir "ts"
+    prompt "Source web-address? : " srcAdd
+    prompt "Movie name? (include periods between words) : " baseName
+    prompt "Movie release year? : " baseYear
+    prompt "Scene/channel of the movie? (default: TCM) : " baseScene "TCM"
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p | default: 720p): " baseResolution "720p"
+
+    # Get valid language code
+    validLanguageCode=false
+    while [ "$validLanguageCode" = false ]; do
+        prompt "Movie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho | default: eng): " language "eng"
+        [ ${#language} -eq 3 ] && validLanguageCode=true || echo "Invalid language code. Please enter a three-letter code."
+    done
+}
+
+create_directory() {
+    dirName="${baseName} (${baseYear})"
+    newname=$(echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' )
+    mkdir "$dirName"
+    mv "$dirName" "$newname"
+    mv "$newname" ./DONE/
+}
+
+convert_m3u8_to_ts() {
+    if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
+        echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+        sleep 1
+        show_menu_1
+    else
+        echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
+    fi
+}
+
+display_completion_message() {
+    # Display any completion message if needed
+    echo "Task completed successfully!"
+}
