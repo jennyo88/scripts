@@ -126,7 +126,7 @@ show_menu_0() {
     [tT][uU][bB][iI]|[1][5])
       clear
       show_banner_1
-      tubi
+      ydl_other
       ;;
     [mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
       clear
@@ -177,9 +177,9 @@ show_menu_1() {
   echo ""
   echo "    DOWNLOAD"
   echo "  2. Download m3u8 playlist"
-  echo "  3. Download using youtube-dl"
+  echo "  3. Download from YOUTUBE"
   echo "  4. Download using yt-dlp"
-  echo "  5. Download from tubi"
+  echo "  5. Download from OTHER"
   echo ""
   echo "    CONVERT"
   echo "  6. Convert video to x265"
@@ -222,10 +222,10 @@ show_menu_1() {
       show_banner_1
       ytdl
       ;;
-    [tT]|[tT][uU][bI][iI]|[dD][5]|"5")
+    [oO][tT][hH][eE][rR]|[dD][5]|"5")
       clear
       show_banner_1
-      tubi
+      ydl_other
       ;;
     [xX]|[xX][2][6][5]|[cC][6]|"6")
       clear
