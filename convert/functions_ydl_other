@@ -1,0 +1,129 @@
+# Function to display the menu header
+display_menu_header() {
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                 Movies & TV Shows               ║ "
+  echo " ║              YOUTUBE-DL to MP4 SCRIPT           ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
+# Function to prompt user for type (TV show or movie)
+prompt_for_type() {
+  prompt "\nIs it a TV show or a movie? (Enter 'tv' or 'movie'; default: tv): " type "tv"
+}
+
+# Function to prompt user for show details
+prompt_for_show_details() {
+  prompt "\nEnter the show name (include periods between words): " show_name
+  prompt "Enter the season number (two digits; default: 01): " season_number "01"
+  prompt "Enter the first episode number: " first_episode
+  prompt "Enter the last episode number: " last_episode
+}
+
+# Function to download video and subtitles with fallback for 'en' language
+download_video_and_subtitles() {
+  youtube-dl -f 'best' "$episode_url" --add-metadata -o "$filename" &&
+    youtube-dl --list-subs --skip-download "$episode_url" | grep -q -E 'en|es' &&
+    youtube-dl --write-sub --sub-lang en,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url" ||
+    download_fallback_en_subtitles
+}
+
+# Function to download fallback 'en' subtitles (en-US or en-CA)
+download_fallback_en_subtitles() {
+  # If 'en' subtitles are not available, try 'en-US' subtitles
+  if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-US'; then
+    youtube-dl --write-sub --sub-lang en-US --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
+  else
+    # If 'en-US' subtitles are not available, try 'en-CA' subtitles
+    if youtube-dl --list-subs --skip-download "$episode_url" | grep -q 'en-CA'; then
+      youtube-dl --write-sub --sub-lang en-CA --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url"
+    fi
+  fi
+}
+
+# Function to convert subtitles to SRT format
+convert_subtitles() {
+  printf "\nConverting subtitles to SRT format...\n"
+  vtt_files=("${filename%.*}"*.vtt)
+
+  for vtt_file in "${vtt_files[@]}"; do
+    srt_file="${vtt_file%.*}.srt"
+
+    # Check if the VTT file exists before conversion
+    if [ -e "$vtt_file" ]; then
+      ffmpeg -i "$vtt_file" "$srt_file" -y
+
+      # Check if conversion was successful before removing the VTT file
+      if [ $? -eq 0 ]; then
+        rm "$vtt_file"
+        printf "Converted %s to %s and removed the VTT file.\n" "$vtt_file" "$srt_file"
+      else
+        printf "${ERROR}Error converting %s to %s. Retaining the VTT file.${RESET}\n" "$vtt_file" "$srt_file"
+      fi
+    else
+      printf "${ERROR}Error: VTT file %s not found for conversion.${RESET}\n" "$vtt_file"
+    fi
+  done
+}
+
+# Function to handle TV show downloads
+download_tv_show() {
+  show_folder="${show_name}_OTHER"
+  mkdir -p "$show_folder"
+
+  for ((episode = first_episode; episode <= last_episode; episode++)); do
+    episode_number=$(printf "%02d" "$episode")
+
+    printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
+    read -r episode_url
+
+    if [ -z "$episode_url" ]; then
+      printf "Skipping Season %s Episode %s.\n" "$season_number" "$episode_number"
+      continue
+    fi
+
+    filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+    download_video_and_subtitles && convert_subtitles
+    printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+  done
+}
+
+# Function to handle movie downloads
+download_movie() {
+  filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+  printf "\nDownloading %s...\n" "$filename"
+  youtube-dl -f 'best' "$movie_url" --add-metadata -o "$filename"
+
+  # Download 'en' and 'es' subtitles if available
+  if youtube-dl --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
+    youtube-dl --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+  fi
+
+  convert_subtitles
+  printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
+}
+
+# Main function
+ydl() {
+  display_menu_header
+  prompt_for_type
+
+  if [ "$type" == "tv" ]; then
+    prompt_for_show_details
+    download_tv_show
+    
+  elif [ "$type" == "movie" ]; then
+    prompt "\nEnter the name of the movie (include periods between words): " movie_name
+    prompt "\nEnter the year of the movie : " movie_year
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+    prompt "Enter the movie URL: " movie_url
+
+    download_movie
+  else
+    printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+    exit 1
+  fi
+
+  pause
+  show_menu_1
+}
