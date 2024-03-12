@@ -28,7 +28,6 @@ if [ -z "$selected_url1" ] || [ -z "$selected_url2" ]; then
 fi
 
 # Use ffmpeg to combine the selected files (modify this as needed)
-ffmpeg -i "$selected_url1" -i "$selected_url2" -c:v copy -c:a copy "${output_file}"
-ffmpeg -i "$selected_url1" -i "$selected_url2"
+ffmpeg -i "$selected_url1" -i "$selected_url2" -filter_complex "[0:v][1:v]concat=n=2:v=1:a=0[outv]" -map "[outv]" -strict -2 output_combined.mp4
 
 echo "Combination complete!"
