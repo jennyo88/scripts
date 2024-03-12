@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Prompt the user for the website URL
+read -p "Enter the website URL: " website_url
+
+# Use curl to fetch the website content
+website_content=$(curl -s $website_url)
+
+# Use grep to extract URLs with a specific extension (e.g., ".mp4")
+filtered_urls=$(echo "$website_content" | grep -o -E "https?://[^\"]+" | grep "\.mp4$")
+
+# Output the filtered URLs with line numbers
+echo "Choose two files to combine:"
+echo "$filtered_urls" | cat -n
+
+# Prompt the user to enter the numbers of the two files to combine
+read -p "Enter the number of the first file: " selection1
+read -p "Enter the number of the second file: " selection2
+
+# Get the selected URLs based on the user's input
+selected_url1=$(echo "$filtered_urls" | sed -n "${selection1}p")
+selected_url2=$(echo "$filtered_urls" | sed -n "${selection2}p")
+
+# Check if the selections are valid
+if [ -z "$selected_url1" ] || [ -z "$selected_url2" ]; then
+    echo "Invalid selection. Exiting."
+    exit 1
+fi
+
+# Use ffmpeg to combine the selected files (modify this as needed)
+ffmpeg -i "$selected_url1" -i "$selected_url2" -c:v copy -c:a copy "${output_file}"
+ffmpeg -i "$selected_url1" -i "$selected_url2"
+
+echo "Combination complete!"
