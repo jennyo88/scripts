@@ -1,5 +1,5 @@
 # -------------------------------------------------------
-# x265 / m3u8 / ydl or ytdl / video_sub / tubi / metadata 
+# x265 / m3u8 / video_sub / metadata 
 # -------------------------------------------------------
 
 # Function for converting video files to x265 format using FFmpeg
@@ -98,12 +98,6 @@ m3u8() {
 		echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
 	fi
 }
-
-# Function for downloading Movies & TV Shows from YouTube or other sites using Youtube-DL
-# file [functions_ydl]
-
-# Fork function for YT-DLP instead of YOUTUBE-DL
-# file [functions_ytdl]
 
 # Function for converting video files and extracting subtitles
 video_sub() {
