@@ -3,8 +3,8 @@
 # MAIN
 # Author: Jennifer Romero
 # Description: This script sources a menu-driven interface to convert files
-# Version: 5.1
-# Last Updated: Feb 27, 2024
+# Version: 6.1
+# Last Updated: Mar 12, 2024
 # GitHub Repository: https://github.com/jennyo88/scripts/convert/main
 
 
@@ -17,6 +17,7 @@ script_urls=(
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_m3u8"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl_other"
   # "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
