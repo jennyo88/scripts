@@ -1,57 +1,59 @@
-# Function for converting M3U8 stream to TS format using FFmpeg
 m3u8() {
-	check_ffmpeg
-	echo -e "${MENU_1_COLOR}"
-	echo " ╔═════════════════════════════════════════════════╗ "
-	echo " ║                 M3U8 to TS SCRIPT               ║ "
-	echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+    check_ffmpeg
+    echo -e "${MENU_1_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║                 M3U8 to TS SCRIPT               ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
-	# Prompt user for destination extension
-	prompt "\nDestination extension? (default: ts): " destExt "ts"
+    # Get user input
+    get_user_input
 
-	# Prompt user for destination directory
-	prompt "\nDestination directory? (default: ts): " destDir "ts"
+    # Create directory based on movie name and release year
+    create_directory
 
-	# Prompt user for source web address
-	prompt "\nSource web-address? : " srcAdd
+    # Download M3U8 stream and convert to TS format using FFmpeg
+    convert_m3u8_to_ts
 
-	# Prompt user for movie details
-	prompt "\nMovie name? (include periods between words) : " baseName
+    # Display completion message
+    display_completion_message
+}
 
-	prompt "\nMovie release year? : " baseYear
+get_user_input() {
+    prompt "Destination extension? (default: ts): " destExt "ts"
+    prompt "Destination directory? (default: ts): " destDir "ts"
+    prompt "Source web-address? : " srcAdd
+    prompt "Movie name? (include periods between words) : " baseName
+    prompt "Movie release year? : " baseYear
+    prompt "Scene/channel of the movie? (default: TCM) : " baseScene "TCM"
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p | default: 720p): " baseResolution "720p"
 
-	prompt "\nScene/channel of the movie? (default: TCM) : " baseScene "TCM"
+    # Get valid language code
+    validLanguageCode=false
+    while [ "$validLanguageCode" = false ]; do
+        prompt "Movie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho | default: eng): " language "eng"
+        [ ${#language} -eq 3 ] && validLanguageCode=true || echo "Invalid language code. Please enter a three-letter code."
+    done
+}
 
-	prompt "\nEnter the resolution (e.g., 480p, 720p, 1080p | default: 720p): " baseResolution "720p"
+create_directory() {
+    dirName="${baseName} (${baseYear})"
+    newname=$(echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' )
+    mkdir "$dirName"
+    mv "$dirName" "$newname"
+    mv "$newname" ./DONE/
+}
 
-	# Prompt user for movie language (three-letter code)
-	validLanguageCode=false
-	while [ "$validLanguageCode" = false ]
-	do
-		prompt "\nMovie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho | default: eng): " language "eng"
+convert_m3u8_to_ts() {
+    if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
+        echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+        sleep 1
+        show_menu_1
+    else
+        echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
+    fi
+}
 
-		if [ ${#language} -eq 3 ]
-		then
-			validLanguageCode=true
-		else
-			echo "Invalid language code. Please enter a three-letter code."
-		fi
-	done
-
-	# Create a directory based on movie name and release year
-	dirName="${baseName} (${baseYear})"
-	newname=`echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' `
-
-	mkdir "$dirName"
-	mv "$dirName" "$newname"
-	mv "$newname" ./DONE/
-
-	# Download M3U8 stream and convert to TS format using FFmpeg
-	if ffmpeg -i $srcAdd -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language=$language "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
-		echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-		sleep 1
-		show_menu_1
-	else
-		echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
-	fi
+display_completion_message() {
+    # Display any completion message if needed
+    echo "Task completed successfully!"
 }
