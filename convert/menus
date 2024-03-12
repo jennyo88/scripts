@@ -123,7 +123,7 @@ show_menu_0() {
       show_banner_1
       ydl
       ;;
-    [tT][uU][bB][iI]|[1][5])
+    [oO][tT][hH][eE][rR]|[1][5])
       clear
       show_banner_1
       ydl_other
