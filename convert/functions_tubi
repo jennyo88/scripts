@@ -92,3 +92,4 @@ tubi() {
   echo -e "Download complete!\a
   pause
   show_menu_1
+}
