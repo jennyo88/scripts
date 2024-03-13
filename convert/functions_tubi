@@ -52,7 +52,7 @@ tubi() {
     prompt "Enter the last episode number: " last_episode
 
     # Loop through the specified range of episodes
-    for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
+    for ((episode_number = 10#$first_episode; episode_number <= 10#$last_episode; episode_number++)); do
       # Prompting the user for video and audio URLs for each episode
       printf "Enter the web address for video file of episode %02d: " "${episode_number}"
       read -r video_url
