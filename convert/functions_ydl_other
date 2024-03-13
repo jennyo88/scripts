@@ -59,7 +59,7 @@ download_other_movie() {
 
 # Main function
 ydl_other() {
-  display_menu_header_ydl
+  display_menu_header_other_ydl
   prompt_for_other_type
 
   if [ "$type" == "tv" ]; then
