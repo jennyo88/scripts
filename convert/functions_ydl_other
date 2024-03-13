@@ -21,13 +21,13 @@ prompt_for_show_details() {
 }
 
 # Function to download video
-download_video() {
+download_other_video() {
   youtube-dl -f 'best' "$episode_url" --add-metadata -o "$filename"
 }
 
 
 # Function to handle TV show downloads
-download_tv_show() {
+download__other_tv_show() {
   show_folder="${show_name}_OTHER"
   mkdir -p "$show_folder"
 
@@ -43,13 +43,13 @@ download_tv_show() {
     fi
 
     filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
-    download_video
+    download_other_video
     printf "\nDownloaded for %s.\n" "$filename"
   done
 }
 
 # Function to handle movie downloads
-download_movie() {
+download_other_movie() {
   filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
   printf "\nDownloading %s...\n" "$filename"
   youtube-dl -f 'best' "$movie_url" --add-metadata -o "$filename"
@@ -64,7 +64,7 @@ ydl_other() {
 
   if [ "$type" == "tv" ]; then
     prompt_for_show_details
-    download_tv_show
+    download_other_tv_show
     
   elif [ "$type" == "movie" ]; then
     prompt "\nEnter the name of the movie (include periods between words): " movie_name
@@ -72,7 +72,7 @@ ydl_other() {
     prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
     prompt "Enter the movie URL: " movie_url
 
-    download_movie
+    download_other_movie
   else
     printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
     exit 1
