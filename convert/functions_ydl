@@ -16,6 +16,7 @@ prompt_for_type() {
 prompt_for_show_details() {
   prompt "\nEnter the show name (include periods between words): " show_name
   prompt "Enter the season number (two digits; default: 01): " season_number "01"
+  prompt "Enter video resolution (e.g. 480p, 720p, or 1080p | default: 1080p): " show_resolution "1080p"
   prompt "Enter the first episode number: " first_episode
   prompt "Enter the last episode number: " last_episode
 }
@@ -82,7 +83,7 @@ download_tv_show() {
       continue
     fi
 
-    filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+    filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.mp4"
     download_video_and_subtitles && convert_subtitles
     printf "\nDownloaded and converted subtitles for %s.\n" "$filename"
   done
@@ -90,7 +91,7 @@ download_tv_show() {
 
 # Function to handle movie downloads
 download_movie() {
-  filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+  filename="${movie_name}.${movie_year}.${movie_resolution}.WEBRip.x264.mp4"
   printf "\nDownloading %s...\n" "$filename"
   youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
 
@@ -115,7 +116,7 @@ ydl() {
   elif [ "$type" == "movie" ]; then
     prompt "\nEnter the name of the movie (include periods between words): " movie_name
     prompt "\nEnter the year of the movie : " movie_year
-    prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " resolution
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " movie_resolution
     prompt "Enter the movie URL: " movie_url
 
     download_movie
