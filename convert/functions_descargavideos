@@ -35,35 +35,33 @@ download_video_and_subtitles() {
     show_folder="${show_name}"
     mkdir -p "$show_folder"
 
-    # Loop through each episode
-    for ((episode_number = 10#$first_episode; episode_number <= 10#$last_episode; episode_number++)); do
-        episode_number=$(printf "%02d" "$episode_number")
-        video_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.mp4"
-        subtitle_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.es.srt"
+# Loop through each episode
+for ((episode_number = 10#$first_episode; episode_number <= 10#$last_episode; episode_number++)); do
+    episode_number=$(printf "%02d" "$episode_number")
+    video_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.mp4"
+    subtitle_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.es.srt"
 
-        # Prompt user for episode URL
-        prompt "Enter the URL for Season $season_number Episode $episode_number (or leave blank to skip): " episode_url
+    # Prompt user for episode URL
+    prompt "Enter the URL for Season $season_number Episode $episode_number (or leave blank to skip): " episode_url
 
-        if [ -z "$episode_url" ]; then
-            printf "Skipping Season $season_number Episode $episode_number.\n"
+    if [ -z "$episode_url" ]; then
+        printf "Skipping Season $season_number Episode $episode_number.\n"
+    else
+        # Download video with Spanish language metadata
+        ffmpeg -i "$episode_url" -metadata:s:a:0 language=spa -c copy "$video_filename"
+
+        # Prompt user for subtitle URL
+        prompt "Enter the URL for subtitles for Season $season_number Episode $episode_number (or leave blank if none): " subtitle_url
+
+        # Download subtitles if URL provided
+        if [ -n "$subtitle_url" ]; then
+            ffmpeg -i "$subtitle_url" -c:s srt -metadata:s:s:0 language=spa "$subtitle_filename"
         else
-            # Prompt user if subtitles are needed
-            prompt "Do you want to download subtitles for Season $season_number Episode $episode_number? (yes/no): " download_subtitles "no"
-
-            if [ "$download_subtitles" == "yes" ]; then
-                prompt "Enter the URL for subtitles for Season $season_number Episode $episode_number (or leave blank if none): " subtitle_url
-            fi
-
-            # Download video with Spanish language metadata
-            ffmpeg -i "$episode_url" -metadata:s:a:0 language=spa -c copy "$video_filename"
-
-            # Download subtitles if URL provided
-            if [ -n "$subtitle_url" ]; then
-                ffmpeg -i "$subtitle_url" -c:s srt -metadata:s:s:0 language=spa "$subtitle_filename"
-            fi
+            printf "No subtitle URL provided for Season $season_number Episode $episode_number.\n"
         fi
-    done
-}
+    fi
+done
+
 
 # Download movie
 download_movie() {
