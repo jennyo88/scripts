@@ -133,6 +133,11 @@ show_menu_0() {
       show_banner_1
       ydl_other
       ;;
+    [dD][eE][sS][cC][aA][rR][gG][aA])
+      clear
+      show_banner_1
+      descargavideos
+      ;;
     [mM][eE][tT][aA][dD][aA][tT][aA]|[1][9])
       clear
       show_banner_1
@@ -183,19 +188,20 @@ show_menu_1() {
   echo "    DOWNLOAD"
   echo "  2. Download m3u8 playlist"
   echo "  3. Download from YOUTUBE"
-  echo "  4. Download from tubi"
-  echo "  5. Download using yt-dlp"
-  echo "  6. Download from OTHER"
+  echo "  4. Download from OTHER"
+  echo "  5. Download from tubi"
+  echo "  6. Download using yt-dlp"
+  echo "  7. Download from descargavideos"
   echo ""
   echo "    CONVERT"
-  echo "  7. Convert video to x265"
-  echo "  8. Convert ONLY video"
-  echo "  9. Convert video & subtitles"
-  echo " 10. Encode metadata"
+  echo "  8. Convert video to x265"
+  echo "  9. Convert ONLY video"
+  echo " 10. Convert video & subtitles"
+  echo " 11. Encode metadata"
   echo ""
-  echo " 11. Go to SUBS menu"
-  echo " 12. Go to CLEAN-UP menu"
-  echo " 13. Go to TMUX menu"
+  echo " 12. Go to SUBS menu"
+  echo " 13. Go to CLEAN-UP menu"
+  echo " 14. Go to TMUX menu"
   echo ""
   echo ""
   echo "  0. Exit script"
@@ -218,58 +224,63 @@ show_menu_1() {
       show_banner_1
       m3u8
       ;;
-    [yY]|[yY][dD][lL]|[dD][3]|"3")
+    [yY][dD][lL]|[dD][3]|"3")
       clear
       show_banner_1
       ydl
       ;;
-    [yY][tT]|[dD][4]|"4")
+    [oO][tT][hH][eE][rR]|[dD][4]|"4")
       clear
       show_banner_1
-      ytdl
+      ydl_other
       ;;
     [tT][uU][bB][iI]|[dD][5]|"5")
       clear
       show_banner_1
       tubi
       ;;
-    [oO][tT][hH][eE][rR]|[dD][6]|"6")
+    [yY][tT]|[dD][6]|"6")
       clear
       show_banner_1
-      ydl_other
+      ytdl
       ;;
-    [xX]|[xX][2][6][5]|[cC][7]|"7")
+    [dD][eE][sS][cC][aA][rR][gG][aA]|[dD][7]|"7")
+      clear
+      show_banner_1
+      descargavideos
+      ;;
+    [xX]|[xX][2][6][5]|[cC][8]|"8")
       clear
       show_banner_1
       x265
       ;;
-    [vV]|[vI][iI][vV][eE][oO]|[cC][8]|"8")
+    [vV]|[vI][iI][vV][eE][oO]|[cC][9]|"9")
       clear
       show_banner_0
       plex
       c_ts
       ;;
-    [aA]|[aA][lL][lL]|[cC][9]|"9")
+    [aA]|[aA][lL][lL]|[cC][10]|"10")
       clear
       show_banner_0
       video_sub && sleep 1
       c_ts
       c_mkv
       ;;
-    [lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][10]|"10")
+    [lL]|[mM][eE][tT][aA][dD][aA][tT][aA]|[cC][11]|"11")
       clear
       show_banner_1
       metadata
       ;;
-    [sS]|[sS][uU][bB][sS]|"11")
+    [sS]|[sS][uU][bB][sS]|"12")
       show_banner_2
       show_menu_2
       ;;
-    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"12")
+    [cC]|[cC][lL][eE][aA][nN][uU][pP]|"13")
       show_banner_3
       show_menu_3
       ;;
-    [tT]|[tT][mM][uU][xX]|"13")
+    [tT]|[tT][mM][uU][xX]|"14")
       show_banner_4
       show_menu_4
       ;;
