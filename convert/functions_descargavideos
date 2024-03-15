@@ -86,10 +86,24 @@ download_movie_dvideos() {
 
 # Main function
 descargavideos() {
-  load_colors
   display_menu_header_dvideos
+  prompt_for_type__dvideos
 
-  descargavideos
+  if [ "$type" == "tv" ]; then
+    prompt_for_show_details_dvideos
+    download_tv_show_dvideos
+    
+  elif [ "$type" == "movie" ]; then
+    prompt "\nEnter the name of the movie (include periods between words): " movie_name
+    prompt "\nEnter the year of the movie : " movie_year
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " movie_resolution
+    prompt "Enter the movie URL: " movie_url
+
+    download_movie_dvideos
+  else
+    printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+    exit 1
+  fi
 
   pause
   show_menu_1
