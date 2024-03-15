@@ -72,7 +72,7 @@ download_tv_show() {
   show_folder="${show_name}_YouTube"
   mkdir -p "$show_folder"
 
-  for ((episode = first_episode; episode <= last_episode; episode++)); do
+  for ((episode = 10#$first_episode; episode <= 10#$last_episode; episode++)); do
     episode_number=$(printf "%02d" "$episode")
 
     printf "\nEnter the URL for Season %s Episode %s (or leave it blank to skip): " "$season_number" "$episode_number"
