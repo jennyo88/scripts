@@ -3,24 +3,7 @@ display_menu_header_dvideos() {
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                 Movies & TV Shows               ║ "
   echo " ║             DESCARGAVIDEOS.TV  SCRIPT           ║ "
-  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-}
-
-# Prompt user for type (TV show or movie)
-prompt_for_type_dvideos() {
-  if [ "$type" == "tv" ]; then
-    # Prompt user for TV show details
-    prompt_for_show_details_dvideos
-    download_video_and_subtitles_dvideos
-  elif [ "$type" == "movie" ]; then
-    # Prompt user for movie details
-    prompt_for_movie_details_dvideos
-    download_movie_dvideos
-  else
-    # Invalid input
-    echo "Invalid type. Please enter 'tv' or 'movie'."
-    exit 1
-  fi
+  echo " ╚═════════════════════════════════════════════════╝ ${RESET}"
 }
 
 # Prompt user for show details
@@ -38,6 +21,11 @@ prompt_for_movie_details_dvideos() {
   prompt "Enter the year of the movie : " movie_year
   prompt "Enter the resolution (e.g., 480p, 720p, 1080p | default: 720p): " movie_resolution "720p"
   prompt "Enter the movie URL: " movie_url
+}
+
+# Prompt user for type (TV show or movie)
+prompt_for_type_dvideos() {
+  prompt "Enter 'tv' for TV show or 'movie' for movie (default: tv): " type "tv"
 }
 
 # Download video and subtitles for TV show
@@ -101,4 +89,3 @@ descargavideos() {
   pause
   show_menu_1
 }
-
