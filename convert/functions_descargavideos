@@ -1,4 +1,4 @@
-descargavideos() {
+display_menu_header_dvideos() {
     echo -e "${MENU_1_COLOR}"
     echo " ╔═════════════════════════════════════════════════╗ "
     echo " ║                 Movies & TV Shows               ║ "
