@@ -1,5 +1,4 @@
-# Display menu header
-display_menu_header() {
+descargavideos() {
     echo -e "${MENU_1_COLOR}"
     echo " ╔═════════════════════════════════════════════════╗ "
     echo " ║                 Movies & TV Shows               ║ "
