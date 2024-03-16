@@ -1,3 +1,9 @@
+#
+# visit: https://www.descargavideos.tv/
+# grab show's name from https://www.rtve.es/play/series/ | https://www.rtve.es/play/cine/
+# use google to find the episode's link
+# format of the name is https://www.rtve.es/play/videos/name-of-show/name-of-show-capitulo-1
+#
 # Display menu header
 display_menu_header_dvideos() {
   echo -e "${MENU_1_COLOR}"
