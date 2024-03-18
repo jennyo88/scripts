@@ -1,0 +1,75 @@
+#!/bin/bash
+
+usage() {
+    echo "Usage: $0 [city]"
+    echo "Description: This script retrieves weather information for a specified city."
+    echo "Arguments:"
+    echo "  city        Name of the city for which you want to retrieve weather information."
+    echo "              If the city name contains spaces, enclose it in single quotes."
+    echo "Example:"
+    echo "  $0 London"
+    echo "  $0 'Los Angeles'"
+    exit 1
+}
+
+# Function to display weather icon
+print_weather_icon() {
+    case "$1" in
+        "Clear Sky")
+            echo -e "\xE2\x98\x80"  # Unicode character for sun
+            ;;
+        "Partly Cloudy")
+            echo -e "\xE2\x9B\x85"  # Unicode character for sun behind cloud
+            ;;
+        "Overcast")
+            echo -e "\xE2\x98\x81"  # Unicode character for cloud (overcast)
+            ;;
+        "Mainly Clear")
+            echo -e "\xE2\x98\xBD"  # Unicode character for sun behind cloud (mostly clear)
+            ;;
+        "Rain")
+            echo -e "\xE2\x98\x94"  # Unicode character for umbrella with rain drops
+            ;;
+        "Snow")
+            echo -e "\xE2\x9D\x84"  # Unicode character for snowflake
+            ;;
+        *)
+            echo ""  # Empty string if weather condition is not recognized
+            ;;
+    esac
+}
+
+# Check if an argument is provided
+if [ $# -ne 1 ]; then
+    usage
+fi
+
+# Navigate to the script's directory
+cd /home/jennyo/Apps/Weather-Cli/ || { echo "Failed to navigate to the Weather-Cli directory"; exit 1; }
+
+# Execute the Weather-Cli script with the 'get' command and the provided city argument
+weather_output=$(./weather-Cli get "$1")
+
+# Extract city
+city=$(echo "$weather_output" | sed -n '/City\/Country/p' | awk -F': ' '{print $2}')
+
+# Extract weather condition
+weather_condition=$(echo "$weather_output" | sed -n '/Weather Condition/p' | awk -F': ' '{print $2}')
+
+# Extract temperature in Celsius
+temperature_celsius=$(echo "$weather_output" | sed -n '/Temperature/p' | awk '{print $2}' | sed 's/[^0-9.]*//g')
+
+# Extract Real Feel temperature in Celsius
+real_feel_celsius=$(echo "$weather_output" | sed -n '/Real Feel/p' | awk '{print $3}' | sed 's/[^0-9.]*//g')
+
+# Convert temperatures from Celsius to Fahrenheit
+temperature_fahrenheit=$(echo "scale=2; ($temperature_celsius * 9/5) + 32" | bc)
+real_feel_fahrenheit=$(echo "scale=2; ($real_feel_celsius * 9/5) + 32" | bc)
+
+# Print weather icon
+weather_icon=$(print_weather_icon "$weather_condition")
+
+# Print weather information with icon and temperature
+echo "City: $city"
+echo "Weather Condition: $weather_icon $weather_condition"
+echo "Temperature: $temperature_fahrenheit°F (Feels Like: $real_feel_fahrenheit°F)"
