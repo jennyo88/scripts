@@ -14,7 +14,7 @@ usage() {
 
 # Function to display weather icon
 print_weather_icon() {
-    case "$2" in
+    case "$1" in
         "Clear Sky")
             echo -e "\xE2\x98\x80"  # Unicode character for sun
             ;;
@@ -48,19 +48,19 @@ fi
 cd /home/jennyo/Apps/Weather-Cli/ || { echo "Failed to navigate to the Weather-Cli directory"; exit 1; }
 
 # Execute the Weather-Cli script with the 'get' command and the provided city argument
-weather_output=$(./weather-Cli get "$2")
+weather_output=$(./weather-Cli get "$1")
 
 # Extract city
-city=$(echo "$weather_output" | sed -n '/City\/Country/p' | awk -F': ' '{print $3}')
+city=$(echo "$weather_output" | sed -n '/City\/Country/p' | awk -F': ' '{print $2}')
 
 # Extract weather condition
-weather_condition=$(echo "$weather_output" | sed -n '/Weather Condition/p' | awk -F': ' '{print $3}')
+weather_condition=$(echo "$weather_output" | sed -n '/Weather Condition/p' | awk -F': ' '{print $2}')
 
 # Extract temperature in Celsius
-temperature_celsius=$(echo "$weather_output" | sed -n '/Temperature/p' | awk '{print $3}' | sed 's/[^0-9.]*//g')
+temperature_celsius=$(echo "$weather_output" | sed -n '/Temperature/p' | awk '{print $2}' | sed 's/[^0-9.]*//g')
 
 # Extract Real Feel temperature in Celsius
-real_feel_celsius=$(echo "$weather_output" | sed -n '/Real Feel/p' | awk '{print $4}' | sed 's/[^0-9.]*//g')
+real_feel_celsius=$(echo "$weather_output" | sed -n '/Real Feel/p' | awk '{print $3}' | sed 's/[^0-9.]*//g')
 
 # Convert temperatures from Celsius to Fahrenheit
 temperature_fahrenheit=$(echo "scale=2; ($temperature_celsius * 9/5) + 32" | bc)
