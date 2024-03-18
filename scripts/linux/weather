@@ -14,7 +14,7 @@ usage() {
 
 # Function to display weather icon
 print_weather_icon() {
-    case "$1" in
+    case "$2" in
         "Clear Sky")
             echo -e "\xE2\x98\x80"  # Unicode character for sun
             ;;
@@ -48,7 +48,7 @@ fi
 cd /home/jennyo/Apps/Weather-Cli/ || { echo "Failed to navigate to the Weather-Cli directory"; exit 1; }
 
 # Execute the Weather-Cli script with the 'get' command and the provided city argument
-weather_output=$(./weather-Cli get "$1")
+weather_output=$(./weather-Cli get "$2")
 
 # Extract city
 city=$(echo "$weather_output" | sed -n '/City\/Country/p' | awk -F': ' '{print $2}')
