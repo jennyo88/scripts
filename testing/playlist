@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Check if youtube-dl and ffmpeg are installed
+if ! [ -x "$(command -v youtube-dl)" ]; then
+  echo 'Error: youtube-dl is not installed. Install it from https://github.com/ytdl-org/youtube-dl' >&2
+  exit 1
+fi
+
+if ! [ -x "$(command -v ffmpeg)" ]; then
+  echo 'Error: ffmpeg is not installed. Install it from https://ffmpeg.org/' >&2
+  exit 1
+fi
+
+# Prompt for playlist URL
+read -p "Enter the URL of the playlist: " playlist_url
+
+# Prompt for download option
+read -p "Do you want to download the whole playlist? [Y/n]: " download_whole_playlist
+
+if [[ $download_whole_playlist == "n" || $download_whole_playlist == "N" ]]; then
+    # Prompt for items to download
+    read -p "Enter the item numbers to download (e.g., 1,2,5-7): " playlist_items
+    playlist_items_option="--playlist-items $playlist_items"
+else
+    playlist_items_option=""
+fi
+
+# Download the playlist with subtitles in VTT format
+youtube-dl -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' --yes-playlist --write-sub --sub-lang en,es $playlist_items_option -o '%(playlist)s/%(title)s.%(season_number)s.%(episode_number)s.%(height)s.%(vcodec)s.%(ext)s' "$playlist_url"
+
+# Convert subtitles from VTT to SRT using FFmpeg
+for file in *.vtt; do
+    ffmpeg -i "$file" "${file%.vtt}.srt"
+    rm "$file"  # Remove the original VTT file
+done
