@@ -3,7 +3,7 @@
 # Define the fixed path to the scripts on GitHub
 SCRIPT_URL="https://github.com/jennyo88/scripts/raw/main/books/overdrive"
 
-# Fetch and run the fixed script from GitHub
+# Function to fetch and run the fixed script from GitHub
 fetch_and_run_fixed_script() {
     local script_url=$1
     local audiobook_file=$2
@@ -23,38 +23,52 @@ fetch_and_run_fixed_script() {
     fi
 }
 
-# Prompt user to enter the audiobook file name
-read -p "Enter name of the audiobook file: " audiobook_file
-
-# Run the fixed script with the provided audiobook file name
-fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
-
-# List directories in the current directory with numbers
-echo "List of directories in the current directory:"
-directories=($(ls -d */))
-for ((i=0; i<${#directories[@]}; i++)); do
-    echo "$i. ${directories[$i]}"
+# List all files with .odm extension
+echo "List of audiobook files (.odm) in the current directory:"
+audiobook_files=($(ls *.odm))
+for ((i=0; i<${#audiobook_files[@]}; i++)); do
+    echo "$i. ${audiobook_files[$i]}"
 done
 
-
-# Prompt user to choose the directory number
-read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
+# Prompt user to choose the audiobook file number
+read -p "Enter the number corresponding to the audiobook file: " selected_index
 
 # Validate user input
-if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
-    old_folder_name="${directories[$selected_index]}"
-    echo "Selected folder: $old_folder_name"
+if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#audiobook_files[@]} ]]; then
+    audiobook_file="${audiobook_files[$selected_index]}"
+    echo "Selected audiobook file: $audiobook_file"
 
-    # Modify the folder name to the desired format
-    new_folder_name=$(echo "$old_folder_name" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
+    # Run the fixed script with the provided audiobook file name
+    fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
 
-    # Rename the folder to the new format
-    mv "$old_folder_name" "$new_folder_name"
-    echo "Folder renamed to: $new_folder_name"
+    # List directories in the current directory with numbers
+    echo "List of directories in the current directory:"
+    directories=($(ls -d */))
+    for ((i=0; i<${#directories[@]}; i++)); do
+        echo "$i. ${directories[$i]}"
+    done
 
-    # Run pybind program with the chosen folder name
-    echo "Running pybind with folder: $new_folder_name"
-    python pybind.py -d "$new_folder_name"
+    # Prompt user to choose the directory number
+    read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
+
+    # Validate user input
+    if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
+        old_folder_name="${directories[$selected_index]}"
+        echo "Selected folder: $old_folder_name"
+
+        # Modify the folder name to the desired format
+        new_folder_name=$(echo "$old_folder_name" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
+
+        # Rename the folder to the new format
+        mv "$old_folder_name" "$new_folder_name"
+        echo "Folder renamed to: $new_folder_name"
+
+        # Run pybind program with the chosen folder name
+        echo "Running pybind with folder: $new_folder_name"
+        python pybind.py -d "$new_folder_name"
+    else
+        echo "Invalid selection. Exiting..."
+    fi
 else
     echo "Invalid selection. Exiting..."
 fi
