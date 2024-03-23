@@ -23,47 +23,25 @@ fetch_and_run_fixed_script() {
   fi
 }
 
-# List all files with .odm extension
-echo "List of audiobook files (.odm) in the current directory:"
-audiobook_files=($(ls *.odm))
-for ((i=0; i<${#audiobook_files[@]}; i++)); do
-  echo "$i. ${audiobook_files[$i]}"
+# List directories in the current directory
+echo "List of directories in the current directory:"
+directories=($(ls -d */))
+for directory in "${directories[@]}"; do
+  echo "$directory"
 done
 
-# Prompt user to choose the audiobook file number
-echo ""
-read -p "Enter the number corresponding to the audiobook file: " selected_index
+# Prompt user to enter the old folder name
+read -p "Enter the name of the folder created by overdrive: " old_folder_name
 
-# Validate user input
-if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#audiobook_files[@]} ]]; then
-  audiobook_file="${audiobook_files[$selected_index]}"
-  echo "Selected audiobook file: $audiobook_file"
-
-  # Run the fixed script with the provided audiobook file name
-  fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
-
-  # List directories in the current directory with numbers
-  echo "List of directories in the current directory:"
-  directories=($(ls -d */))
-  for ((i=0; i<${#directories[@]}; i++)); do
-    echo "$i. ${directories[$i]}"
-  done
-  
-  # Prompt user to enter the old folder name
-  read -p "Enter the book you want to bind: " old_folder_name
-  
-  # Validate if the old folder name exists
-  if [[ ! -d "$old_folder_name" ]]; then
-    echo "Error: Folder '$old_folder_name' does not exist."
-    exit 1
-  fi
-  
-  # Prompt user to enter the new folder name
-  read -p "Enter the new folder name (including any spaces): " new_folder_name
-  
-  # Rename the folder to the new folder name
-  mv "$old_folder_name" "$new_folder_name"
-  pybind -d "$new_folder_name"
-else
-  echo "Invalid selection. Exiting..."
+# Validate if the old folder name exists
+if [[ ! -d "$old_folder_name" ]]; then
+  echo "Error: Folder '$old_folder_name' does not exist."
+  exit 1
 fi
+
+# Prompt user to enter the new folder name
+read -p "Enter the new folder name (including any spaces): " new_folder_name
+
+# Rename the folder to the new folder name
+mv "$old_folder_name" "$new_folder_name"
+pybind -d "$new_folder_name"
