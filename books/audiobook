@@ -38,11 +38,13 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
   selected_directory="${directories[$selected_index]}"
   echo "Selected folder: $selected_directory"
 
-  # Run the fixed script with the provided audiobook file name
-  fetch_and_run_fixed_script "$SCRIPT_URL" "$selected_directory"
+  # Modify the folder name to the desired format
+  new_folder_name=$(echo "$selected_directory" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
 
-  # Rename the folder to the new folder name
+  # Rename the folder to the new format
   mv "$selected_directory" "$new_folder_name"
+  echo "Folder renamed to: $new_folder_name"
+
   pybind -d "$new_folder_name"
 else
   echo "Invalid selection. Exiting..."
