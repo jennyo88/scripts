@@ -333,7 +333,7 @@ download() {
   for CoverUrl in $(extract_coverUrl "$metadata_path" | head -1); do
     >&2 printf 'Using CoverUrl=%s\n' "$CoverUrl"
     if [[ -n "$CoverUrl" ]]; then
-        cover_output=$dir/folder.jpg
+        cover_output=$dir/cover.jpg
         >&2 printf 'Downloading %s\n' "$cover_output"
         if curl "${CURLOPTS[@]}" \
             -o "$cover_output" \
