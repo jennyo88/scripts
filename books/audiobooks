@@ -1,28 +1,5 @@
 #!/usr/bin/env bash
 
-# Define the fixed path to the scripts on GitHub
-SCRIPT_URL="https://github.com/jennyo88/scripts/raw/main/books/overdrive"
-
-# Function to fetch and run the fixed script from GitHub
-fetch_and_run_fixed_script() {
-    local script_url=$1
-    local audiobook_file=$2
-
-    # Fetch the fixed script
-    wget -q -O "overdrive" "$script_url"
-
-    # Check if the script was fetched successfully
-    if [ $? -eq 0 ]; then
-        echo "Running fixed script: overdrive.sh"
-        # Run the fetched script with provided audiobook file name
-       bash "overdrive" download "$audiobook_file"
-        # Remove the fetched script
-        rm "overdrive"
-    else
-        echo "Failed to fetch script: $script_url"
-    fi
-}
-
 # List all files with .odm extension
 echo "List of audiobook files (.odm) in the current directory:"
 audiobook_files=($(ls *.odm))
@@ -31,6 +8,7 @@ for ((i=0; i<${#audiobook_files[@]}; i++)); do
 done
 
 # Prompt user to choose the audiobook file number
+echo ""
 read -p "Enter the number corresponding to the audiobook file: " selected_index
 
 # Validate user input
@@ -39,7 +17,7 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
     echo "Selected audiobook file: $audiobook_file"
 
     # Run the fixed script with the provided audiobook file name
-    fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
+    ~/.local/bin/overdrive download "$audiobook_file"
 
     # List directories in the current directory with numbers
     echo "List of directories in the current directory:"
