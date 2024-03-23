@@ -65,7 +65,7 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
 
         # Run pybind program with the chosen folder name
         echo "Running pybind with folder: $new_folder_name"
-        python pybind.py -d "$new_folder_name"
+        pybind -d "$new_folder_name"
     else
         echo "Invalid selection. Exiting..."
     fi
