@@ -15,7 +15,7 @@ fetch_and_run_fixed_script() {
     if [ $? -eq 0 ]; then
         echo "Running fixed script: overdrive.sh"
         # Run the fetched script with provided audiobook file name
-        bash overdrive download "$audiobook_file"
+       bash "overdrive" download "$audiobook_file"
         # Remove the fetched script
         rm "overdrive"
     else
