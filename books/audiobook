@@ -13,7 +13,7 @@ fetch_and_run_fixed_script() {
 
     # Check if the script was fetched successfully
     if [ $? -eq 0 ]; then
-        echo "Running fixed script: overdrive"
+        echo "Running fixed script: overdrive.sh"
         # Run the fetched script with provided audiobook file name
         bash "overdrive" "$audiobook_file"
         # Remove the fetched script
@@ -31,20 +31,30 @@ fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
 
 # List directories in the current directory with numbers
 echo "List of directories in the current directory:"
-directories=($(find . -maxdepth 1 -type d))
+directories=($(ls -d */))
 for ((i=0; i<${#directories[@]}; i++)); do
     echo "$i. ${directories[$i]}"
 done
 
+
 # Prompt user to choose the directory number
-read -p "Enter the number corresponding to the folder to run pybind: " selected_index
+read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
 
 # Validate user input
 if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
-    pybind_folder="${directories[$selected_index]}"
-    echo "Running pybind with folder: $pybind_folder"
+    old_folder_name="${directories[$selected_index]}"
+    echo "Selected folder: $old_folder_name"
+
+    # Modify the folder name to the desired format
+    new_folder_name=$(echo "$old_folder_name" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
+
+    # Rename the folder to the new format
+    mv "$old_folder_name" "$new_folder_name"
+    echo "Folder renamed to: $new_folder_name"
+
     # Run pybind program with the chosen folder name
-    pybind -d "$pybind_folder"
+    echo "Running pybind with folder: $new_folder_name"
+    python pybind.py -d "$new_folder_name"
 else
     echo "Invalid selection. Exiting..."
 fi
