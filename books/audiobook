@@ -48,23 +48,20 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
     for ((i=0; i<${#directories[@]}; i++)); do
         echo "$i. ${directories[$i]}"
     done
-
+    
     # Prompt user to choose the directory number
     read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
-
+    
     # Validate user input
     if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
         old_folder_name="${directories[$selected_index]}"
         echo "Selected folder: $old_folder_name"
-
+    
         # Prompt user to enter the new folder name
         read -p "Enter the new folder name (including any spaces): " new_folder_name
-
+    
         # Rename the folder to the new folder name
         mv "$old_folder_name" "$new_folder_name"
-
-        # Run pybind program with the chosen folder name
-        echo "Running pybind with folder: $new_folder_name"
         pybind -d "$new_folder_name"
     else
         echo "Invalid selection. Exiting..."
