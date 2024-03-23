@@ -1,54 +1,54 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# Define the fixed path to the scripts on GitHub
-SCRIPT_URL="https://github.com/jennyo88/scripts/raw/main/books/overdrive"
+# Define the GitHub repository URL
+repo_url="https://github.com/username/repository"
 
-# Function to fetch and run the fixed script from GitHub
-fetch_and_run_fixed_script() {
-  local script_url=$1
-  local audiobook_file=$2
+# Function to fetch and run a script from GitHub
+fetch_and_run_script() {
+    local script_name=$1
+    local arg1=$2
+    local script_url="${repo_url}/raw/main/${script_name}"
 
-  # Fetch the fixed script
-  wget -q -O "overdrive" "$script_url"
+    # Fetch the script
+    wget -q -O "$script_name" "$script_url"
 
-  # Check if the script was fetched successfully
-  if [ $? -eq 0 ]; then
-    echo "Running fixed script: overdrive"
-    # Run the fetched script with provided audiobook file name as argument
-    bash "overdrive" download "$audiobook_file"
-    # Remove the fetched script
-    rm "overdrive"
-  else
-    echo "Failed to fetch script: $script_url"
-  fi
+    # Check if the script was fetched successfully
+    if [ $? -eq 0 ]; then
+        echo "Running script: $script_name"
+        # Run the fetched script with provided argument
+        bash "$script_name" "$arg1"
+        # Remove the fetched script
+        rm "$script_name"
+    else
+        echo "Failed to fetch script: $script_url"
+    fi
 }
 
-# Run the fixed script with the provided audiobook file name
-fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
+# Prompt user to enter the audiobook file name
+read -p "Enter name of the audiobook file: " audiobook_file
+
+# Run the overdrive script with the provided audiobook file name
+fetch_and_run_script "overdrive" "$audiobook_file"
+
+
+# Function to transform the folder name
+transform_folder_name() {
+    local old_name="$1"
+    # Replace spaces with underscores and capitalize letters after spaces
+    new_name=$(echo "$old_name" | sed -r 's/([[:space:]]+)([[:alpha:]])/\U\2/g; s/[[:space:]]+/_/g')
+    echo "$new_name"
+}
 
 # List directories in the current directory
-echo "List of directories in the current directory:"
-directories=($(find . -maxdepth 1 -type d | sed 's|./||'))
-for ((i=0; i<${#directories[@]}; i++)); do
-  echo "$i. ${directories[$i]}"
-done
+echo "List of directories in current directory:"
+ls -d */
 
-# Prompt user to choose the directory number
-read -p "Enter the number corresponding the book you want to bind: " selected_index
+# Prompt user to choose the folder name
+read -p "Enter name of the book to bin: " overdrive_folder
 
-# Validate user input
-if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
-  selected_directory="${directories[$selected_index]}"
-  echo "Selected folder: $selected_directory"
+# Transform the folder name
+transformed_folder=$(transform_folder_name "$overdrive_folder")
 
-  # Modify the folder name to the desired format
-  new_folder_name=$(echo "$selected_directory" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
-
-  # Rename the folder to the new format
-  mv "$selected_directory" "$new_folder_name"
-  echo "Folder renamed to: $new_folder_name"
-
-  pybind -d "$new_folder_name"
-else
-  echo "Invalid selection. Exiting..."
-fi
+# Run the pybind program with the transformed folder name
+echo "Running pybind with folder: $transformed_folder"
+pybind -d "$transformed_folder"
