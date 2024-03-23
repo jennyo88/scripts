@@ -1,5 +1,28 @@
 #!/usr/bin/env bash
 
+# Define the fixed path to the scripts on GitHub
+SCRIPT_URL="https://github.com/jennyo88/scripts/raw/main/books/overdrive"
+
+# Function to fetch and run the fixed script from GitHub
+fetch_and_run_fixed_script() {
+    local script_url=$1
+    local audiobook_file=$2
+
+    # Fetch the fixed script
+    wget -q -O "overdrive" "$script_url"
+
+    # Check if the script was fetched successfully
+    if [ $? -eq 0 ]; then
+        echo "Running fixed script: overdrive"
+        # Run the fetched script with provided audiobook file name as argument
+        bash "overdrive" download "$audiobook_file"
+        # Remove the fetched script
+        rm "overdrive"
+    else
+        echo "Failed to fetch script: $script_url"
+    fi
+}
+
 # List all files with .odm extension
 echo "List of audiobook files (.odm) in the current directory:"
 audiobook_files=($(ls *.odm))
@@ -17,7 +40,7 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
     echo "Selected audiobook file: $audiobook_file"
 
     # Run the fixed script with the provided audiobook file name
-    ~/.local/bin/overdrive download "$audiobook_file"
+    fetch_and_run_fixed_script "$SCRIPT_URL" "$audiobook_file"
 
     # List directories in the current directory with numbers
     echo "List of directories in the current directory:"
@@ -34,12 +57,11 @@ if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -l
         old_folder_name="${directories[$selected_index]}"
         echo "Selected folder: $old_folder_name"
 
-        # Modify the folder name to the desired format
-        new_folder_name=$(echo "$old_folder_name" | awk '{print toupper(substr($1,1,1))substr($1,2)"_"toupper(substr($2,1,1))substr($2,2)}' | sed 's/ //g')
+        # Prompt user to enter the new folder name
+        read -p "Enter the new folder name (including any spaces): " new_folder_name
 
-        # Rename the folder to the new format
+        # Rename the folder to the new folder name
         mv "$old_folder_name" "$new_folder_name"
-        echo "Folder renamed to: $new_folder_name"
 
         # Run pybind program with the chosen folder name
         echo "Running pybind with folder: $new_folder_name"
