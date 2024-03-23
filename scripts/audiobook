@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# Function to fetch and run a script from GitHub
+fetch_and_run_script() {
+    local script_name=$1
+    local arg1=$2
+    local script_url="https://github.com/jennyo88/scripts/raw/main/scripts/${script_name}"
+
+    # Fetch the script
+    wget -q -O "$script_name" "$script_url"
+
+    # Check if the script was fetched successfully
+    if [ $? -eq 0 ]; then
+        echo "Running script: $script_name"
+        # Run the fetched script with provided argument
+        bash "$script_name" "$arg1"
+        # Remove the fetched script
+        rm "$script_name"
+    else
+        echo "Failed to fetch script: $script_url"
+    fi
+}
+
+# Prompt user to enter the audiobook file name
+read -p "Enter name of the audiobook file: " audiobook_file
+
+# Run the audiobook script with the provided audiobook file name
+fetch_and_run_script "audiobook" "$audiobook_file"
+
+# List directories in the current directory with numbers
+echo "List of directories in current directory:"
+directories=($(find . -maxdepth 1 -type d))
+for ((i=0; i<${#directories[@]}; i++)); do
+    echo "$i. ${directories[$i]}"
+done
+
+# Prompt user to choose the directory number
+read -p "Enter the number corresponding to the folder to run pybind: " selected_index
+
+# Validate user input
+if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
+    pybind_folder="${directories[$selected_index]}"
+    echo "Running pybind with folder: $pybind_folder"
+    # Run pybind program with the chosen folder name
+    python pybind.py -d "$pybind_folder"
+else
+    echo "Invalid selection. Exiting..."
+fi
