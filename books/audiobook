@@ -25,9 +25,9 @@ fetch_and_run_fixed_script() {
 
 # List directories in the current directory
 echo "List of directories in the current directory:"
-directories=($(ls -d */))
-for directory in "${directories[@]}"; do
-  echo "$directory"
+shopt -s nullglob
+for directory in */; do
+  echo "${directory%/}"
 done
 
 # Prompt user to enter the old folder name
