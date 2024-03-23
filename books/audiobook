@@ -23,25 +23,27 @@ fetch_and_run_fixed_script() {
   fi
 }
 
-# List directories in the current directory
+# List directories in the current directory with numbers
 echo "List of directories in the current directory:"
-shopt -s nullglob
-for directory in */; do
-  echo "${directory%/}"
+directories=($(find . -maxdepth 1 -type d -printf "%f\n"))
+for ((i=0; i<${#directories[@]}; i++)); do
+  echo "$i. ${directories[$i]}"
 done
 
-# Prompt user to enter the old folder name
-read -p "Enter the name of the folder created by overdrive: " old_folder_name
+# Prompt user to choose the directory number
+read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
 
-# Validate if the old folder name exists
-if [[ ! -d "$old_folder_name" ]]; then
-  echo "Error: Folder '$old_folder_name' does not exist."
-  exit 1
+# Validate user input
+if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
+  selected_directory="${directories[$selected_index]}"
+  echo "Selected folder: $selected_directory"
+
+  # Prompt user to enter the new folder name
+  read -p "Enter the new folder name (including any spaces): " new_folder_name
+
+  # Rename the folder to the new folder name
+  mv "$selected_directory" "$new_folder_name"
+  pybind -d "$new_folder_name"
+else
+  echo "Invalid selection. Exiting..."
 fi
-
-# Prompt user to enter the new folder name
-read -p "Enter the new folder name (including any spaces): " new_folder_name
-
-# Rename the folder to the new folder name
-mv "$old_folder_name" "$new_folder_name"
-pybind -d "$new_folder_name"
