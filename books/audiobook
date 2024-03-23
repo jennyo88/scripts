@@ -31,15 +31,15 @@ for ((i=0; i<${#directories[@]}; i++)); do
 done
 
 # Prompt user to choose the directory number
-read -p "Enter the number corresponding to the folder created by overdrive: " selected_index
+read -p "Enter the number corresponding the book you want to bind: " selected_index
 
 # Validate user input
 if [[ $selected_index =~ ^[0-9]+$ && $selected_index -ge 0 && $selected_index -lt ${#directories[@]} ]]; then
   selected_directory="${directories[$selected_index]}"
   echo "Selected folder: $selected_directory"
 
-  # Prompt user to enter the new folder name
-  read -p "Enter the new folder name (including any spaces): " new_folder_name
+  # Run the fixed script with the provided audiobook file name
+  fetch_and_run_fixed_script "$SCRIPT_URL" "$selected_directory"
 
   # Rename the folder to the new folder name
   mv "$selected_directory" "$new_folder_name"
