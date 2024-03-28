@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if youtube-dl and ffmpeg are installed
-if ! [ -x "$(command -v youtube-dl)" ]; then
-  echo 'Error: youtube-dl is not installed. Install it from https://github.com/ytdl-org/youtube-dl' >&2
+if ! [ -x "$(command -v yt-dlp)" ]; then
+  echo 'Error: yt-dlp is not installed. Install it from https://github.com/yt-dlp/yt-dlp' >&2
   exit 1
 fi
 
