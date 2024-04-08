@@ -1,39 +1,8 @@
 #!/usr/bin/env bash
 
-## SAMPLE
-## ./compare_outputs.sh -p sample.com -c sample.com
-## ./compare_outputs.sh --ping sample.com --curl sample.com
-
-# Default values for flags
-ping_url=""
-curl_url=""
-
-# Parse command-line arguments
-while [[ $# -gt 0 ]]; do
-    key="$1"
-    case $key in
-        -p|--ping)
-            ping_url="$2"
-            shift
-            shift
-            ;;
-        -c|--curl)
-            curl_url="$2"
-            shift
-            shift
-            ;;
-        *)
-            echo "Unknown option: $1"
-            exit 1
-            ;;
-    esac
-done
-
-# Check if both ping and curl URLs are provided
-if [ -z "$ping_url" ] || [ -z "$curl_url" ]; then
-    echo "Usage: $0 -p <ping_url> -c <curl_url>"
-    exit 1
-fi
+# Predefined URLs for ping and curl
+ping_url="war6000.mooo.com"
+curl_url="icanhazip.com"
 
 # Function to extract IP address from ping output
 get_ip_from_ping() {
@@ -55,9 +24,7 @@ curl_ip=$(get_ip_from_curl "$curl_output")
 
 # Compare IP addresses (ignoring trailing characters such as colons)
 if [ "${ping_ip%"${ping_ip##*[![:space:]]}"}" = "${curl_ip%"${curl_ip##*[![:space:]]}"}" ]; then
-    echo "The IP addresses extracted from ping and curl outputs are the same: $ping_ip"
+    echo "VPN down"
 else
-    echo "The IP addresses extracted from ping and curl outputs are different:"
-    echo "Ping IP: $ping_ip"
-    echo "Curl IP: $curl_ip"
+    echo "Canada"
 fi
