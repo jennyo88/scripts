@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 # Predefined URLs for ping and curl
-ping_url="war6000.mooo.com"
-curl_url="icanhazip.com"
+ping_url="sample.com"
+curl_url="sample.com"
 
-# Function to extract IP address from ping output
+# Function to extract IP address from ping output using awk
 get_ip_from_ping() {
-    echo "$1" | head -n 1 | awk '{print $3}' | sed 's/[():]//g'
+    echo "$1" | awk 'NR==1 {gsub(/[()]/,"",$3); print $3}'
 }
 
 # Extract IP address from curl output
