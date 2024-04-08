@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 # Bash script to compare two outputs provided as command-line arguments.
+##
+## Sample command:
+## ./compare_outputs.sh "$(ping -c 4 example.com)" "$(curl -s https://example.com)"
+##
 
 # Check if the number of arguments is not equal to 2
 if [ "$#" -ne 2 ]; then
@@ -12,18 +16,15 @@ fi
 ping_output="$1"
 curl_output="$2"
 
-# Compare outputs line by line
-IFS=$'\n' read -r -a lines1 <<< "$ping_output"
-IFS=$'\n' read -r -a lines2 <<< "$curl_output"
-
-for i in "${!lines1[@]}"; do
-    if [ "${lines1[$i]}" != "${lines2[$i]}" ]; then
-        echo "The outputs differ at line $((i+1)):"
-        echo "Ping Output: ${lines1[$i]}"
-        echo "Curl Output: ${lines2[$i]}"
-        exit 0
-    fi
-done
-
-# If no differences found
-echo "The outputs are the same."
+# Compare outputs
+if [ "$ping_output" = "$curl_output" ]; then
+    echo "The outputs are the same."
+else
+    echo "The outputs differ:"
+    echo ""
+    echo "Ping Output:"
+    echo "$ping_output"
+    echo ""
+    echo "Curl Output:"
+    echo "$curl_output"
+fi
