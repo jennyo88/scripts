@@ -4,9 +4,9 @@
 ping_url="sample.com"
 curl_url="sample.com"
 
-# Function to extract IP address from ping output using awk
+# Function to extract IP address from ping output
 get_ip_from_ping() {
-    echo "$1" | awk 'NR==1 {gsub(/[()]/,"",$3); print $3}'
+    echo "$1" | head -n 1 | awk '{print $3}' | sed 's/[():]//g'
 }
 
 # Extract IP address from curl output
