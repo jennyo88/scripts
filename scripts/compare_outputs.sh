@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
+# Set MQTT broker address and topic
+MQTTHOST="192.168.0.213"
+TOPIC="network/jail/burra"
+
 # Predefined URLs for ping and curl
-ping_url="sample.com"
-curl_url="sample.com"
+ping_url="war6000.mooo.com"
+curl_url="icanhazip.com"
 
 # Function to extract IP address from ping output
 get_ip_from_ping() {
@@ -24,7 +28,17 @@ curl_ip=$(get_ip_from_curl "$curl_output")
 
 # Compare IP addresses (ignoring trailing characters such as colons)
 if [ "${ping_ip%"${ping_ip##*[![:space:]]}"}" = "${curl_ip%"${curl_ip##*[![:space:]]}"}" ]; then
-    echo "VPN down"
+    VPNStat="OFF"
 else
-    echo "Canada"
+    VPNStat="ON"
+fi
+
+# Publish VPN status on MQTT
+/usr/local/bin/mosquito_pub -h "$MQTTHOST" -t "$TOPIC" -m "$VPNStat"
+
+# If VPNStat is "OFF", stop transmission service
+if [ "$VPNStat" = "OFF" ]; then
+    echo "Stopping transmission service..."
+    service transmission stop
+    exit 1
 fi
