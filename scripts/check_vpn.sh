@@ -48,6 +48,7 @@ fi
 
 # If VPNStat is "ON" and transmission service is not running, start the service
 if [ "$VPNStat" = "ON" ] && service transmission status | grep -q 'not running'; then
-    echo "VPN is ON and transmission service is not running, starting transmission service..."
+    echo "VPN is ON and transmission service is not running,"
+    echo "starting transmission service..."
     service transmission start
 fi
