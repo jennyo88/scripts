@@ -33,8 +33,11 @@ else
     VPNStat="ON"
 fi
 
+# Assign result to the variable VPNStat
+echo "VPNStat: $VPNStat"
+
 # Publish VPN status on MQTT
-/usr/local/bin/mosquito_pub -h "$MQTTHOST" -t "$TOPIC" -m "$VPNStat"
+/usr/local/bin/mosquitto_pub -h "$MQTTHOST" -t "$TOPIC" -m "$VPNStat"
 
 # If VPNStat is "OFF", stop transmission service
 if [ "$VPNStat" = "OFF" ]; then
