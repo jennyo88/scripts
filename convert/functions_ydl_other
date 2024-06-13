@@ -22,7 +22,7 @@ prompt_for_other_show_details() {
 
 # Function to download video
 download_other_video() {
-  yt-dlp -f 'best' "$episode_url" --add-metadata -o "$filename"
+  yt-dlp -f b "$episode_url" --add-metadata -o "$filename"
 }
 
 
@@ -52,7 +52,7 @@ download_other_tv_show() {
 download_other_movie() {
   filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
   printf "\nDownloading %s...\n" "$filename"
-  yt-dlp -f 'best' "$movie_url" --add-metadata -o "$filename"
+  yt-dlp -f b "$movie_url" --add-metadata -o "$filename"
 
   printf "\nDownloaded for %s.\n" "$filename"
 }
