@@ -1,4 +1,10 @@
-#!/bin/bash
+playlist() {
+  check_ffmpeg
+  check_wget
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                YDL Playlist Download            ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
 # Check if youtube-dl and ffmpeg are installed
 if ! [ -x "$(command -v yt-dlp)" ]; then
