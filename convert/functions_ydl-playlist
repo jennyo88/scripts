@@ -36,8 +36,8 @@ for dir in */; do
         done
         cd .. || exit 1
     fi
-done
 
-pause
-show_menu_1
+  echo -e "Download complete!\a"
+  pause
+  show_menu_1
 }
