@@ -1,11 +1,11 @@
 # Function to display the menu header
-display_menu_header_ydl-playlist() {
+ydl-playlist() {
   echo -e "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                 Movies & TV Shows               ║ "
   echo " ║            YOUTUBE-DL PLAYLIST SCRIPT           ║ "
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-}
+
 
 # Prompt for playlist URL
 read -p "Enter the URL of the playlist: " playlist_url
@@ -38,10 +38,6 @@ for dir in */; do
     fi
 done
 
-# Main function
-ydl-playlist() {
-  display_menu_header_ydl-playlist
-
-  pause
-  show_menu_1
+pause
+show_menu_1
 }
