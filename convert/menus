@@ -116,7 +116,7 @@ show_menu_0() {
     [pP][lL][aA][yY][lL][iI][sS][tT]|[1][1])
       clear
       show_banner_1
-      playlist
+      ydl-playlist
       ;;
     [mM][3][uU][8]|[1][2])
       clear
