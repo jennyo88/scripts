@@ -7,17 +7,6 @@ display_menu_header_ydl-playlist() {
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
-# Check if youtube-dl and ffmpeg are installed
-if ! [ -x "$(command -v yt-dlp)" ]; then
-  echo 'Error: yt-dlp is not installed. Install it from https://github.com/yt-dlp/yt-dlp' >&2
-  exit 1
-fi
-
-if ! [ -x "$(command -v ffmpeg)" ]; then
-  echo 'Error: ffmpeg is not installed. Install it from https://ffmpeg.org/' >&2
-  exit 1
-fi
-
 # Prompt for playlist URL
 read -p "Enter the URL of the playlist: " playlist_url
 
