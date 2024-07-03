@@ -47,3 +47,6 @@ for dir in */; do
         cd .. || exit 1
     fi
 done
+  pause
+  show_menu_1
+}
