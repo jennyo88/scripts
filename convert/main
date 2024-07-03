@@ -20,6 +20,7 @@ script_urls=(
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_m3u8"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_tubi"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl-playlist"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl_other"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_descargavideos"
   # "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
