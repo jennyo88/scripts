@@ -1,5 +1,5 @@
 # Function to display the menu header
-ydl-playlist() {
+playlist() {
   echo -e "${MENU_1_COLOR}"
   echo " ╔═════════════════════════════════════════════════╗ "
   echo " ║                 Movies & TV Shows               ║ "
