@@ -37,6 +37,28 @@ for dir in */; do
         cd .. || exit 1
     fi
 done
+
+# Main function
+ydl-playlist() {
+  display_menu_header_ydl
+  prompt_for_type_ydl
+
+  if [ "$type" == "tv" ]; then
+    prompt_for_show_details_ydl
+    download_tv_show_ydl
+    
+  elif [ "$type" == "movie" ]; then
+    prompt "\nEnter the name of the movie (include periods between words): " movie_name
+    prompt "\nEnter the year of the movie : " movie_year
+    prompt "Enter the resolution (e.g., 480p, 720p, 1080p): " movie_resolution
+    prompt "Enter the movie URL: " movie_url
+
+    download_movie_ydl
+  else
+    printf "\nInvalid type. Please enter 'tv' or 'movie'.\n"
+    exit 1
+  fi
+
   pause
   show_menu_1
 }
