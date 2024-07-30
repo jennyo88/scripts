@@ -97,7 +97,7 @@ download_movie_ydl() {
 
   # Download 'en' and 'es' subtitles if available
   if yt-dlp --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
-    yt-dlp --write-sub --sub-lang en,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
+    yt-dlp --write-sub --sub-lang en,en-US,es --convert-subs srt --skip-download -o "${filename%.*}" "$movie_url"
   fi
 
   convert_subtitles_ydl
