@@ -1,23 +1,15 @@
 import os
+import subprocess
 import time
 from datetime import datetime
-
-# Define paths for different playlists
-cartoon_playlist = "/home/jenny/playlists/cartoon_playlist.m3u"
-sitcom_playlist = "/home/jenny/playlists/sitcom_playlist.m3u"
-game_show_playlist = "/home/jenny/playlists/game_show_playlist.m3u"
-drama_playlist = "/home/jenny/playlists/drama_playlist.m3u"
-movie_playlist = "/home/jenny/playlists/movie_playlist.m3u"
-horror_playlist = "/home/jenny/playlists/horror_playlist.m3u"
-ads_playlist = "/home/jenny/playlists/ads.m3u"
-off_air_playlist = "/home/jenny/playlists/off_air.m3u"
 
 def play_vlc(playlist):
     command = f"DISPLAY=:0 cvlc --fullscreen --no-video-title-show --playlist-autostart --loop {playlist}"
     print(f"Running command: {command}")
-    result = os.system(command)
-    if result != 0:
-        print(f"Error running VLC command: {result}")
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"Return code: {result.returncode}")
+    print(f"STDOUT: {result.stdout.decode()}")
+    print(f"STDERR: {result.stderr.decode()}")
 
 def stop_vlc():
     print("Stopping VLC...")
@@ -45,9 +37,10 @@ def get_current_show():
 def play_ad():
     command = f"DISPLAY=:0 cvlc --no-video-title-show --playlist-autostart --loop {ads_playlist}"
     print(f"Running command: {command}")
-    result = os.system(command)
-    if result != 0:
-        print(f"Error running VLC command: {result}")
+    result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    print(f"Return code: {result.returncode}")
+    print(f"STDOUT: {result.stdout.decode()}")
+    print(f"STDERR: {result.stderr.decode()}")
 
 try:
     while True:
