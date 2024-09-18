@@ -1,4 +1,5 @@
 import os
+import subprocess
 import time
 from datetime import datetime
 
@@ -12,19 +13,19 @@ horror_playlist = "/home/jenny/playlists/horror_playlist.m3u"
 ads_playlist = "/home/jenny/playlists/ads.m3u"
 off_air_playlist = "/home/jenny/playlists/off_air.m3u"
 
-# Function to play video using VLC with PulseAudio
+# Function to play video using VLC on the default VGA monitor
 def play_vlc(playlist):
-    os.system(f"DISPLAY=:0 cvlc --aout=pulse --one-instance --no-playlist-enqueue --playlist-autostart --loop --no-video-title-show {playlist}")
+    # Set VLC to use the correct display environment (DISPLAY=:0 should work for most desktop setups)
+    command = f"DISPLAY=:0 cvlc --fullscreen --no-video-title-show --playlist-autostart --loop {playlist}"
+    print(f"Running command: {command}")
+    os.system(command)
 
 # Function to stop VLC
 def stop_vlc():
+    print("Stopping VLC...")
     os.system("pkill vlc")
 
-# Function to insert ads randomly with PulseAudio
-def play_ad():
-    os.system(f"DISPLAY=:0 cvlc --aout=pulse --one-instance --no-playlist-enqueue --no-video-title-show --playlist-autostart {ads_playlist}")
-
-# Schedule function based on current time
+# Get current show based on time
 def get_current_show():
     now = datetime.now()
     hour = now.hour
@@ -44,41 +45,35 @@ def get_current_show():
     else:
         return off_air_playlist
 
-# Wait for Bluetooth connection before starting
-def wait_for_bluetooth(mac_address):
-    print(f"Waiting for Bluetooth device {mac_address} to connect...")
-    while not is_bluetooth_connected(mac_address):
-        print("Bluetooth not connected. Checking again in 5 seconds...")
-        time.sleep(5)
-    print("Bluetooth connected!")
-    time.sleep(5)  # Wait an additional 5 seconds to ensure audio routing
+# Function to play ads randomly
+def play_ad():
+    command = f"DISPLAY=:0 cvlc --no-video-title-show --playlist-autostart --loop {ads_playlist}"
+    print(f"Running command: {command}")
+    os.system(command)
 
-def is_bluetooth_connected(mac_address):
-    result = os.popen(f"bluetoothctl info {mac_address}").read()
-    return "Connected: yes" in result
+# Main loop to manage the retro TV schedule
+try:
+    while True:
+        current_show = get_current_show()
 
-# Wait for Bluetooth connection before starting
-wait_for_bluetooth("00:25:DB:12:0F:C1")  # Replace with your Bluetooth MAC address
+        # Off-air hours (12:00 AM to 5:59 AM)
+        if current_show == off_air_playlist:
+            stop_vlc()
+            play_vlc(off_air_playlist)
+            time.sleep(60 * 60)  # Sleep for an hour before checking again
+        else:
+            stop_vlc()
+            play_vlc(current_show)
 
-# Main loop
-while True:
-    current_show = get_current_show()
+            # Play ads every 20 minutes (1200 seconds)
+            time.sleep(1200)
+            play_ad()
 
-    # Check if it's off-air hours (12:00 AM to 5:59 AM)
-    if current_show == off_air_playlist:
-        # Don't kill VLC, but switch to off-air playlist
-        play_vlc(off_air_playlist)
-        time.sleep(60 * 60)  # Check again in an hour
-    else:
-        # Play the current show
-        stop_vlc()  # Stop any previous instances
-        play_vlc(current_show)
+            # Resume the current show after the ad
+            stop_vlc()
+            play_vlc(current_show)
 
-        # Play ads every 20 minutes (1200 seconds)
-        time.sleep(1200)
-        stop_vlc()  # Stop current show before playing ads
-        play_ad()
-
-        # Resume the current show after the ad
-        stop_vlc()  # Stop the ad instance
-        play_vlc(current_show)
+except KeyboardInterrupt:
+    # Handle Ctrl+C and stop VLC
+    print("Script interrupted. Stopping VLC and exiting.")
+    stop_vlc()
