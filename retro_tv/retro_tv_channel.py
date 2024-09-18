@@ -14,7 +14,8 @@ ads_playlist = "/home/jenny/playlists/ads.m3u"
 off_air_playlist = "/home/jenny/playlists/off_air.m3u"
 
 def play_vlc(playlist):
-    command = f"DISPLAY=:0 vlc --fullscreen --no-video-title-show --playlist-autostart --loop {playlist}"
+    # Added --random to shuffle the playlist
+    command = f"DISPLAY=:0 vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random {playlist}"
     print(f"Running command: {command}")
     result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     print(f"Return code: {result.returncode}")
@@ -45,6 +46,7 @@ def get_current_show():
         return off_air_playlist
 
 def play_ad():
+    # Ads playlist will not be shuffled, typically used as interstitials
     command = f"DISPLAY=:0 vlc --no-video-title-show --playlist-autostart --loop {ads_playlist}"
     print(f"Running command: {command}")
     result = subprocess.run(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
