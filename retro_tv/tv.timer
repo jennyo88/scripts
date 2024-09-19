@@ -1,8 +1,8 @@
 [Unit]
-Description=Run Retro TV Script  # A short description indicating that this timer is used to run the Retro TV script.
+Description=Run Retro TV Script
 
 [Timer]
-OnBootSec=1min           # Starts the timer 1 minute after the system has booted.
+OnBootSec=1min
 
 # Weekday triggers
 OnCalendar=Mon..Fri 06:00:00 # Triggers at 6 AM weekdays - morning news.
@@ -45,7 +45,7 @@ OnCalendar=Sat,Sun 23:00:00 # Triggers at 11 PM weekends - talk shows.
 OnCalendar=Sat,Sun 05:00:00 # Triggers at 5 AM weekends - off_air.
 
 
-Unit=tv.service          # Specifies the service unit that this timer will trigger (tv.service).
+Unit=tv.service
 
 [Install]
-WantedBy=timers.target    # Ensures the timer is started as part of the system’s timer management.
+WantedBy=timers.target
