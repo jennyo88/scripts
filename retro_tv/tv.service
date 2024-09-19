@@ -1,1 +1,14 @@
+[Unit]
+Description=Retro TV Service  # A short description of the service.
+After=network.target          # Specifies that the service should start after the network is up.
 
+[Service]
+Type=simple                   # Specifies that the service will remain active as long as the process specified by ExecStart is running.
+ExecStart=/usr/local/bin/tv.sh # The command to run the TV service.
+Restart=on-failure            # Restarts the service if it exits with a failure.
+User=jenny                    # Specifies the user under which the service should run.
+Environment="DISPLAY=:0"       # Sets the display environment variable for GUI applications.
+Environment="PULSE_SERVER=unix:/run/user/1000/pulse/native" # Points to the PulseAudio server location.
+
+[Install]
+WantedBy=multi-user.target     # This ensures the service is started in multi-user mode (the default boot target for most systems).
