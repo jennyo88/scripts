@@ -15,6 +15,20 @@ morning_news_playlist() {
     vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/morning_news_playlist.m3u
 }
 
+# Function to start the evening news playlist
+evening_news_playlist() {
+    echo "Starting VLC with playlist: Evening News"
+    pkill -f vlc
+    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/evening_news_playlist.m3u
+}
+
+# Function to start the infomercial playlist
+infomercial_playlist() {
+    echo "Starting VLC with playlist: Infomercial"
+    pkill -f vlc
+    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/infomercial_playlist.m3u
+}
+
 # Function to start the game show playlist
 game_show_playlist() {
     echo "Starting VLC with playlist: Game Show"
@@ -36,13 +50,6 @@ cartoon_playlist() {
     vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/cartoon_playlist.m3u
 }
 
-# Function to start the evening news playlist
-evening_news_playlist() {
-    echo "Starting VLC with playlist: Evening News"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/evening_news_playlist.m3u
-}
-
 # Function to start the sitcom playlist
 sitcom_playlist() {
     echo "Starting VLC with playlist: Sitcom"
@@ -62,13 +69,6 @@ talk_show_playlist() {
     echo "Starting VLC with playlist: Talk Show"
     pkill -f vlc
     vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/talk_show_playlist.m3u
-}
-
-# Function to start the infomercial playlist
-infomercial_playlist() {
-    echo "Starting VLC with playlist: Infomercial"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/infomercial_playlist.m3u
 }
 
 # Function to start the late-night movie playlist
@@ -101,7 +101,13 @@ case "$current_day" in
             movie_playlist
         elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
             talk_show_playlist
-        elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 06 ]; then
+        elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 02 ]; then
+            movie_playlist            
+        elif [ "$current_hour" -ge 02 ] && [ "$current_hour" -lt 03 ]; then
+            infomercial_playlist  
+        elif [ "$current_hour" -ge 03 ] && [ "$current_hour" -lt 05 ]; then
+            late_night_movie_playlist                
+        elif [ "$current_hour" -ge 05 ] && [ "$current_hour" -lt 06 ]; then
             off_air_playlist
         fi
         ;;
@@ -110,20 +116,26 @@ case "$current_day" in
             cartoon_playlist
         elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 15 ]; then
             sports_playlist
-        elif [ "$current_hour" -ge 15 ] && [ "$current_hour" -lt 19 ]; then
+        elif [ "$current_hour" -ge 15 ] && [ "$current_hour" -lt 18 ]; then
             sitcom_playlist
+        elif [ "$current_hour" -ge 18 ] && [ "$current_hour" -lt 19 ]; then
+            evening_news_playlist
         elif [ "$current_hour" -ge 19 ] && [ "$current_hour" -lt 20 ]; then
             game_show_playlist
         elif [ "$current_hour" -ge 20 ] && [ "$current_hour" -lt 22 ]; then
             movie_playlist
-        elif [ "$current_hour" -ge 22 ] && [ "$current_hour" -lt 24 ]; then
+        elif [ "$current_hour" -ge 22 ] && [ "$current_hour" -lt 23 ]; then
             sitcom_playlist
+        elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
+            talk_show_playlist           
         elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 01 ]; then
             SNL_playlist
         elif [ "$current_hour" -ge 01 ] && [ "$current_hour" -lt 02 ]; then
             infomercial_playlist
         elif [ "$current_hour" -ge 02 ] && [ "$current_hour" -lt 04 ]; then
             late_night_movie_playlist
+        elif [ "$current_hour" -ge 04 ] && [ "$current_hour" -lt 05 ]; then
+            sitcom_playlist
         elif [ "$current_hour" -ge 05 ] && [ "$current_hour" -lt 06 ]; then
             off_air_playlist
         fi
@@ -133,16 +145,22 @@ case "$current_day" in
             morning_news_playlist
         elif [ "$current_hour" -ge 09 ] && [ "$current_hour" -lt 12 ]; then
             talk_show_playlist
-        elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 19 ]; then
+        elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 18 ]; then
             sports_playlist
+        elif [ "$current_hour" -ge 18 ] && [ "$current_hour" -lt 19 ]; then
+            evening_news_playlist            
         elif [ "$current_hour" -ge 19 ] && [ "$current_hour" -lt 20 ]; then
             game_show_playlist
-        elif [ "$current_hour" -ge 20 ] && [ "$current_hour" -lt 23 ]; then
+        elif [ "$current_hour" -ge 20 ] && [ "$current_hour" -lt 22 ]; then
             movie_playlist
         elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
+            talk_show_playlist            
+        elif [ "$current_hour" -ge 24 ] && [ "$current_hour" -lt 02 ]; then
             late_night_movie_playlist
-        elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 02 ]; then
+        elif [ "$current_hour" -ge 02 ] && [ "$current_hour" -lt 04 ]; then
             sitcom_playlist
+        elif [ "$current_hour" -ge 05 ] && [ "$current_hour" -lt 06 ]; then
+            off_air_playlist            
         fi
         ;;
 esac
