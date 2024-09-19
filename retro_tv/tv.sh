@@ -29,6 +29,13 @@ infomercial_playlist() {
     vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/infomercial_playlist.m3u
 }
 
+# Function to start the morning news playlist
+SNL_playlist() {
+    echo "Starting VLC with playlist: SNL"
+    pkill -f vlc
+    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/SNL_playlist.m3u
+}
+
 # Function to start the game show playlist
 game_show_playlist() {
     echo "Starting VLC with playlist: Game Show"
