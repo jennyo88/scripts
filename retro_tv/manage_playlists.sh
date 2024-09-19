@@ -1,9 +1,13 @@
 #!/bin/bash
 
 # Base directories for different types of content
-BASE_DIR_TV="///home/jenny/freenas/Media/m.tv/"
-BASE_DIR_ADS="///home/jenny/freenas/Media/m.fillers/"
-BASE_DIR_MOVIES="///home/jenny/freenas/Media/m.movie/"
+BASE_DIR_TV="/home/jenny/freenas/Media/m.tv/"
+BASE_DIR_MOVIES="/home/jenny/freenas/Media/m.movie/"
+BASE_DIR_NEWS_WEEKDAY_MORNING="/home/jenny/freenas/Media/m.fillers/news/weekday/morning/"
+BASE_DIR_NEWS_WEEKDAY_EVENING="/home/jenny/freenas/Media/m.fillers/news/weekday/evening/"
+BASE_DIR_NEWS_WEEKEND_MORNING="/home/jenny/freenas/Media/m.fillers/news/weekend/morning/"
+BASE_DIR_NEWS_WEEKEND_EVENING="/home/jenny/freenas/Media/m.fillers/news/weekend/evening/"
+BASE_DIR_INFOMERCIALS="/home/jenny/freenas/Media/m.fillers/infomercials/"
 
 # Playlist directory path
 PLAYLIST_DIR="/home/jenny/playlists"
@@ -40,11 +44,33 @@ choose_playlist() {
     fi
 }
 
+# Prompt user to select if playlist is for weekday or weekend
+echo "Is the playlist for a weekday or weekend?"
+echo "1: Weekday"
+echo "2: Weekend"
+read -p "Enter the number corresponding to your choice: " day_type
+
+case $day_type in
+    1)
+        echo "Selected: Weekday"
+        IS_WEEKEND=0
+        ;;
+    2)
+        echo "Selected: Weekend"
+        IS_WEEKEND=1
+        ;;
+    *)
+        echo "Invalid selection. Exiting."
+        exit 1
+        ;;
+esac
+
 # Prompt user to select content type
 echo "Select content type:"
 echo "1: TV Shows"
-echo "2: Ads"
-echo "3: Movies"
+echo "2: Movies"
+echo "3: News"
+echo "4: Infomercials"
 read -p "Enter the number corresponding to the content type: " content_type
 
 case $content_type in
@@ -52,10 +78,44 @@ case $content_type in
         BASE_DIR=$BASE_DIR_TV
         ;;
     2)
-        BASE_DIR=$BASE_DIR_ADS
+        BASE_DIR=$BASE_DIR_MOVIES
         ;;
     3)
-        BASE_DIR=$BASE_DIR_MOVIES
+        # If the user selects News, ask if it's for morning or evening
+        echo "Is the news for morning or evening?"
+        echo "1: Morning"
+        echo "2: Evening"
+        read -p "Enter the number corresponding to your choice: " news_time
+        if [ $IS_WEEKEND -eq 0 ]; then
+            case $news_time in
+                1)
+                    BASE_DIR=$BASE_DIR_NEWS_WEEKDAY_MORNING
+                    ;;
+                2)
+                    BASE_DIR=$BASE_DIR_NEWS_WEEKDAY_EVENING
+                    ;;
+                *)
+                    echo "Invalid selection. Exiting."
+                    exit 1
+                    ;;
+            esac
+        else
+            case $news_time in
+                1)
+                    BASE_DIR=$BASE_DIR_NEWS_WEEKEND_MORNING
+                    ;;
+                2)
+                    BASE_DIR=$BASE_DIR_NEWS_WEEKEND_EVENING
+                    ;;
+                *)
+                    echo "Invalid selection. Exiting."
+                    exit 1
+                    ;;
+            esac
+        fi
+        ;;
+    4)
+        BASE_DIR=$BASE_DIR_INFOMERCIALS
         ;;
     *)
         echo "Invalid selection. Exiting."
@@ -127,4 +187,3 @@ while true; do
 done
 
 echo "Playlist update complete."
-
