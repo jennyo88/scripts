@@ -4,46 +4,28 @@ Description=Run Retro TV Script
 [Timer]
 OnBootSec=1min
 
-# Weekday triggers
-OnCalendar=Mon..Fri 06:00:00 # Triggers at 6 AM weekdays - morning news.
-OnCalendar=Mon..Fri 09:00:00 # Triggers at 9 AM weekdays - game shows.
-OnCalendar=Mon..Fri 12:00:00 # Triggers at noon weekdays - soap operas.
-OnCalendar=Mon..Fri 15:00:00 # Triggers at 3 PM weekdays - cartoons.
-OnCalendar=Mon..Fri 18:00:00 # Triggers at 6 PM weekdays - evening news.
-OnCalendar=Mon..Fri 20:00:00 # Triggers at 8 PM weekdays - sitcoms.
-OnCalendar=Mon..Fri 21:00:00 # Triggers at 9 PM weekdays - movies.
-OnCalendar=Mon..Fri 23:00:00 # Triggers at 11 PM weekdays - talk shows.
-OnCalendar=Mon..Fri 00:00:00 # Triggers at midnight weekdays - movies.
-OnCalendar=Mon..Fri 02:00:00 # Triggers at 2 AM weekdays - infomercials.
-OnCalendar=Mon..Fri 03:00:00 # Triggers at 3 AM weekdays - late-night movies.
-OnCalendar=Mon..Fri 05:00:00 # Triggers at 5 AM weekdays - off_air.
-
-# Saturday triggers
-OnCalendar=Sat 06:00:00 # Triggers at 6 AM Saturdays - cartoons.
-OnCalendar=Sat 12:00:00 # Triggers at noon Saturdays - sports.
-OnCalendar=Sat 15:00:00 # Triggers at 3 PM Saturdays - sitcoms.
-OnCalendar=Sat 19:00:00 # Triggers at 7 PM Saturdays - game shows.
-OnCalendar=Sat 20:00:00 # Triggers at 8 PM Saturdays - movies.
-OnCalendar=Sat 22:00:00 # Triggers at 10 PM Saturdays - sitcoms.
-OnCalendar=Sat 00:00:00 # Triggers at midnight Saturdays - late night show SNL.
-OnCalendar=Sat 01:00:00 # Triggers at 1 AM Saturdays - infomercials.
-OnCalendar=Sat 02:00:00 # Triggers at 2 AM Saturdays - late-night movies.
-OnCalendar=Sat 04:00:00 # Triggers at 4 AM Saturdays - sitcoms.
-
-# Sunday triggers
-OnCalendar=Sun 06:00:00 # Triggers at 6 AM Sundays - morning news.
-OnCalendar=Sun 09:00:00 # Triggers at 9 AM Sundays - talk shows.
-OnCalendar=Sun 12:00:00 # Triggers at noon Sundays - sports.
-OnCalendar=Sun 19:00:00 # Triggers at 7 PM Sundays - game shows.
-OnCalendar=Sun 20:00:00 # Triggers at 8 PM Sundays - movies.
-OnCalendar=Sun 00:00:00 # Triggers at midnight Sundays - late-night movies.
-OnCalendar=Sun 02:00:00 # Triggers at 2 AM Sundays - sitcoms.
-
-# Weekend triggers
-OnCalendar=Sat,Sun 18:00:00 # Triggers at 6 PM weekends - evening weekend news.
-OnCalendar=Sat,Sun 23:00:00 # Triggers at 11 PM weekends - talk shows.
-OnCalendar=Sat,Sun 05:00:00 # Triggers at 5 AM weekends - off_air.
-
+OnCalendar=Mon..Fri 3:00:00
+OnCalendar=Mon..Fri 21:00:00
+OnCalendar=Mon..Sat 0:00:00
+OnCalendar=Mon..Sat 2:00:00
+OnCalendar=Mon..Sat 6:00:00
+OnCalendar=Mon..Sat 12:00:00
+OnCalendar=Mon..Sat 15:00:00
+OnCalendar=Mon..Sat 20:00:00
+OnCalendar=Mon..Sun 5:00:00
+OnCalendar=Mon..Sun 9:00:00
+OnCalendar=Mon..Sun 18:00:00
+OnCalendar=Mon..Sun 23:00:00
+OnCalendar=Sat 1:00:00
+OnCalendar=Sat 4:00:00
+OnCalendar=Sat 19:00:00
+OnCalendar=Sat 22:00:00
+OnCalendar=Sun 0:00:00
+OnCalendar=Sun 02:00:00
+OnCalendar=Sun 6:00:00
+OnCalendar=Sun 12:00:00
+OnCalendar=Sun 19:00:00
+OnCalendar=Sun 20:00:00
 
 Unit=tv.service
 
