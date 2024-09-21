@@ -1,88 +1,96 @@
 #!/usr/bin/env bash
 
+# Function to check if cvlc is running
+check_cvlc_running() {
+    if pgrep -x "cvlc" > /dev/null; then
+        echo "VLC is already running. Exiting..."
+        exit 1
+    fi
+}
+
 # Function to start the off-air playlist
 off_air_playlist() {
+    check_cvlc_running
     echo "Off-air period..."
-    echo "Starting VLC with playlist: Off-Air"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/off_air.m3u
+    echo "Starting DISPLAY=:0 cvlc with playlist: Off-Air"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/off_air.m3u
 }
 
 # Function to start the morning news playlist
 morning_news_playlist() {
-    echo "Starting VLC with playlist: Morning News"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/morning_news_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Morning News"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/morning_news_playlist.m3u
 }
 
 # Function to start the evening news playlist
 evening_news_playlist() {
-    echo "Starting VLC with playlist: Evening News"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/evening_news_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Evening News"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/evening_news_playlist.m3u
 }
 
 # Function to start the infomercial playlist
 infomercial_playlist() {
-    echo "Starting VLC with playlist: Infomercial"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/infomercial_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Infomercial"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/infomercial_playlist.m3u
 }
 
 # Function to start the morning news playlist
 SNL_playlist() {
-    echo "Starting VLC with playlist: SNL"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/SNL_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: SNL"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/SNL_playlist.m3u
 }
 
 # Function to start the game show playlist
 game_show_playlist() {
-    echo "Starting VLC with playlist: Game Show"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/game_show_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Game Show"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/game_show_playlist.m3u
 }
 
 # Function to start the soap opera playlist
 soap_opera_playlist() {
-    echo "Starting VLC with playlist: Soap Opera"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/soap_opera_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Soap Opera"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/soap_opera_playlist.m3u
 }
 
 # Function to start the cartoon playlist
 cartoon_playlist() {
-    echo "Starting VLC with playlist: Cartoon"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/cartoon_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Cartoon"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/cartoon_playlist.m3u
 }
 
 # Function to start the sitcom playlist
 sitcom_playlist() {
-    echo "Starting VLC with playlist: Sitcom"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/sitcom_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Sitcom"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/sitcom_playlist.m3u
 }
 
 # Function to start the movie playlist
 movie_playlist() {
-    echo "Starting VLC with playlist: Movie"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/movie_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Movie"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/movie_playlist.m3u
 }
 
 # Function to start the talk show playlist
 talk_show_playlist() {
-    echo "Starting VLC with playlist: Talk Show"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/talk_show_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Talk Show"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/talk_show_playlist.m3u
 }
 
 # Function to start the late-night movie playlist
 late_night_movie_playlist() {
-    echo "Starting VLC with playlist: Late-Night Movie"
-    pkill -f vlc
-    vlc --fullscreen --no-video-title-show --playlist-autostart --loop --random /home/jenny/playlists/late_night_movie_playlist.m3u
+    check_cvlc_running
+    echo "Starting DISPLAY=:0 cvlc with playlist: Late-Night Movie"
+    DISPLAY=:0 cvlc --fullscreen --aspect 16:9 --no-video-title-show --loop --random /home/jenny/playlists/late_night_movie_playlist.m3u
 }
 
 # Get the current day and hour
@@ -160,9 +168,11 @@ case "$current_day" in
             game_show_playlist
         elif [ "$current_hour" -ge 20 ] && [ "$current_hour" -lt 22 ]; then
             movie_playlist
+        elif [ "$current_hour" -ge 22 ] && [ "$current_hour" -lt 23 ]; then
+            sitcom_playlist            
         elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
             talk_show_playlist            
-        elif [ "$current_hour" -ge 24 ] && [ "$current_hour" -lt 02 ]; then
+        elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 02 ]; then
             late_night_movie_playlist
         elif [ "$current_hour" -ge 02 ] && [ "$current_hour" -lt 04 ]; then
             sitcom_playlist
