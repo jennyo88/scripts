@@ -1,3 +1,4 @@
+# source ~/my_python_envs/moviepy_env/bin/activate
 import os
 import random
 import datetime
