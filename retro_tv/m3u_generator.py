@@ -129,7 +129,7 @@ def generate_weekly_m3u():
     # Get today's schedule
     schedule = programming_schedule.get(current_day)
 
-    def fill_time_block(m3u_file, duration_required):
+def fill_time_block(m3u_file, duration_required):
     videos = read_m3u(m3u_file)
     selected_videos = []
     total_duration = 0
@@ -149,6 +149,7 @@ def generate_weekly_m3u():
             break
 
     return selected_videos, total_duration
+
 
 
     output_m3u = "#EXTM3U\n"
