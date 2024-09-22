@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tv generator-info-name="YourChannelGuide" generator-info-url="http://yourwebsite.com">
+    <!-- Channel information -->
+    <channel id="channel1">
+        <display-name>Retro Channel</display-name>
+        <icon src="http://yourwebsite.com/channel_logo.png" />
+    </channel>
+
+    <!-- Monday to Friday Schedule -->
+    <programme start="20240923060000 +0000" stop="20240923090000 +0000" channel="channel1">
+        <title>Morning News</title>
+        <desc>Start your day with the latest headlines.</desc>
+        <category>News</category>
+    </programme>
+    
+    <programme start="20240923090000 +0000" stop="20240923120000 +0000" channel="channel1">
+        <title>Game Shows</title>
+        <desc>Classic and fun game shows.</desc>
+        <category>Game Show</category>
+    </programme>
+    
+    <programme start="20240923120000 +0000" stop="20240923150000 +0000" channel="channel1">
+        <title>Soap Operas</title>
+        <desc>Drama-filled soap operas.</desc>
+        <category>Drama</category>
+    </programme>
+
+    <programme start="20240923150000 +0000" stop="20240923180000 +0000" channel="channel1">
+        <title>Cartoons</title>
+        <desc>Fun for all ages with classic cartoons.</desc>
+        <category>Children</category>
+    </programme>
+    
+    <programme start="20240923180000 +0000" stop="20240923200000 +0000" channel="channel1">
+        <title>Evening News</title>
+        <desc>Latest world and local news updates.</desc>
+        <category>News</category>
+    </programme>
+    
+    <programme start="20240923200000 +0000" stop="20240923210000 +0000" channel="channel1">
+        <title>Sitcoms</title>
+        <desc>Comedy sitcoms for family entertainment.</desc>
+        <category>Comedy</category>
+    </programme>
+    
+    <programme start="20240923210000 +0000" stop="20240923230000 +0000" channel="channel1">
+        <title>Movies</title>
+        <desc>Feature film of the night.</desc>
+        <category>Movie</category>
+    </programme>
+    
+    <programme start="20240923230000 +0000" stop="20240924000000 +0000" channel="channel1">
+        <title>Talk Shows</title>
+        <desc>Late-night talk shows with celebrity guests.</desc>
+        <category>Talk Show</category>
+    </programme>
+
+    <programme start="20240924000000 +0000" stop="20240924020000 +0000" channel="channel1">
+        <title>Late Night Movie</title>
+        <desc>End your day with a great movie.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240924020000 +0000" stop="20240924030000 +0000" channel="channel1">
+        <title>Infomercial</title>
+        <desc>Late-night infomercials.</desc>
+        <category>Infomercial</category>
+    </programme>
+    
+    <programme start="20240924030000 +0000" stop="20240924050000 +0000" channel="channel1">
+        <title>Late Night Movie</title>
+        <desc>Enjoy a late-night classic.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240924050000 +0000" stop="20240924060000 +0000" channel="channel1">
+        <title>Off-Air</title>
+        <desc>The channel is off the air.</desc>
+        <category>Off-Air</category>
+    </programme>
+    
+    <!-- Saturday Schedule -->
+    <programme start="20240928060000 +0000" stop="20240928120000 +0000" channel="channel1">
+        <title>Cartoons</title>
+        <desc>Saturday morning cartoons.</desc>
+        <category>Children</category>
+    </programme>
+
+    <programme start="20240928120000 +0000" stop="20240928150000 +0000" channel="channel1">
+        <title>Sports</title>
+        <desc>Weekend sports programs.</desc>
+        <category>Sports</category>
+    </programme>
+    
+    <programme start="20240928150000 +0000" stop="20240928180000 +0000" channel="channel1">
+        <title>Sitcoms</title>
+        <desc>Classic sitcoms.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240928180000 +0000" stop="20240928190000 +0000" channel="channel1">
+        <title>Evening News</title>
+        <desc>Stay informed with Saturday evening news.</desc>
+        <category>News</category>
+    </programme>
+
+    <programme start="20240928190000 +0000" stop="20240928200000 +0000" channel="channel1">
+        <title>Game Shows</title>
+        <desc>Classic game shows for your entertainment.</desc>
+        <category>Game Show</category>
+    </programme>
+
+    <programme start="20240928200000 +0000" stop="20240928220000 +0000" channel="channel1">
+        <title>Saturday Night Movie</title>
+        <desc>Enjoy the weekend with a feature film.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240928220000 +0000" stop="20240928230000 +0000" channel="channel1">
+        <title>Sitcoms</title>
+        <desc>Catch some laughs with popular sitcoms.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240928230000 +0000" stop="20240929000000 +0000" channel="channel1">
+        <title>Talk Show</title>
+        <desc>Late-night talk show to wind down.</desc>
+        <category>Talk Show</category>
+    </programme>
+
+    <programme start="20240929000000 +0000" stop="20240929010000 +0000" channel="channel1">
+        <title>Saturday Night Live</title>
+        <desc>Comedy sketches and live entertainment.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240929010000 +0000" stop="20240929020000 +0000" channel="channel1">
+        <title>Infomercial</title>
+        <desc>Late-night infomercials.</desc>
+        <category>Infomercial</category>
+    </programme>
+
+    <programme start="20240929020000 +0000" stop="20240929040000 +0000" channel="channel1">
+        <title>Late Night Movie</title>
+        <desc>Finish the night with a movie.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240929040000 +0000" stop="20240929050000 +0000" channel="channel1">
+        <title>Sitcom</title>
+        <desc>Classic sitcoms in the early hours.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240929050000 +0000" stop="20240929060000 +0000" channel="channel1">
+        <title>Off-Air</title>
+        <desc>The channel is off the air.</desc>
+        <category>Off-Air</category>
+    </programme>
+
+    <!-- Sunday Schedule -->
+    <programme start="20240930060000 +0000" stop="20240930090000 +0000" channel="channel1">
+        <title>Morning News</title>
+        <desc>Sunday morning news for the latest updates.</desc>
+        <category>News</category>
+    </programme>
+
+    <programme start="20240930090000 +0000" stop="20240930120000 +0000" channel="channel1">
+        <title>Talk Shows</title>
+        <desc>Popular talk shows to start your Sunday.</desc>
+        <category>Talk Show</category>
+    </programme>
+
+    <programme start="20240930120000 +0000" stop="20240930180000 +0000" channel="channel1">
+        <title>Sports</title>
+        <desc>Sunday sports marathon.</desc>
+        <category>Sports</category>
+    </programme>
+
+    <programme start="20240930180000 +0000" stop="20240930190000 +0000" channel="channel1">
+        <title>Evening News</title>
+        <desc>Stay updated with Sunday evening news.</desc>
+        <category>News</category>
+    </programme>
+
+    <programme start="20240930190000 +0000" stop="20240930200000 +0000" channel="channel1">
+        <title>Game Shows</title>
+        <desc>Entertaining game shows.</desc>
+        <category>Game Show</category>
+    </programme>
+
+    <programme start="20240930200000 +0000" stop="20240930220000 +0000" channel="channel1">
+        <title>Sunday Night Movie</title>
+        <desc>Enjoy a feature film to close the weekend.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240930220000 +0000" stop="20240930230000 +0000" channel="channel1">
+        <title>Sitcoms</title>
+        <desc>Comedy classics to lighten up the evening.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240930230000 +0000" stop="20240931000000 +0000" channel="channel1">
+        <title>Talk Show</title>
+        <desc>Talk shows to wrap up the night.</desc>
+        <category>Talk Show</category>
+    </programme>
+
+    <programme start="20240931000000 +0000" stop="20240931020000 +0000" channel="channel1">
+        <title>Late Night Movie</title>
+        <desc>A movie to end the weekend.</desc>
+        <category>Movie</category>
+    </programme>
+
+    <programme start="20240931020000 +0000" stop="20240931040000 +0000" channel="channel1">
+        <title>Sitcoms</title>
+        <desc>Late-night sitcoms.</desc>
+        <category>Comedy</category>
+    </programme>
+
+    <programme start="20240931050000 +0000" stop="20240931060000 +0000" channel="channel1">
+        <title>Off-Air</title>
+        <desc>The channel is off the air.</desc>
+        <category>Off-Air</category>
+    </programme>
+</tv>
