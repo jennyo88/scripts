@@ -129,6 +129,28 @@ def generate_weekly_m3u():
     # Get today's schedule
     schedule = programming_schedule.get(current_day)
 
+    def fill_time_block(m3u_file, duration_required):
+    videos = read_m3u(m3u_file)
+    selected_videos = []
+    total_duration = 0
+
+    while total_duration < duration_required and videos:
+        video = random.choice(videos)
+        video_length = get_video_length(video)
+
+        if video_length + total_duration <= duration_required:
+            selected_videos.append(video)
+            total_duration += video_length
+        else:
+            # Even if the video exceeds, you might want to still include it
+            # to match your rule of going slightly over the time limit
+            selected_videos.append(video)
+            total_duration += video_length
+            break
+
+    return selected_videos, total_duration
+
+
     output_m3u = "#EXTM3U\n"
 
     for m3u_file, title, category, block_length in schedule:
