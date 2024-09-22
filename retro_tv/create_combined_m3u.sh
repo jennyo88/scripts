@@ -15,7 +15,7 @@ get_video_duration() {
 
 # Read the XMLTV file
 while IFS= read -r line; do
-    # Extract channel ID, title, and duration from the XMLTV file
+    # Extract title, start and stop time from the XMLTV file
     title=$(echo "$line" | grep -oP '<title>\K[^<]+')
     duration_start=$(echo "$line" | grep -oP 'start="\K[^"]+')
     duration_end=$(echo "$line" | grep -oP 'stop="\K[^"]+')
