@@ -1,144 +1,163 @@
 import os
 import random
-from moviepy.video.io.VideoFileClip import VideoFileClip
+from datetime import datetime, timedelta
 
-# Define your programming blocks
-PROGRAMMING = {
-    "morning_news": "morning_news.m3u",
-    "game_shows": "game_shows.m3u",
-    "soap_operas": "soap_operas.m3u",
-    "cartoons": "cartoons.m3u",
-    "evening_news": "evening_news.m3u",
-    "sitcoms": "sitcoms.m3u",
-    "movies": "movies.m3u",
-    "talk_shows": "talk_shows.m3u",
-    "infomercials": "infomercials.m3u",
-    "late_night_movie": "late_night_movie.m3u",
-    "sports": "sports.m3u",
-    "SNL": "snl.m3u",
-    "off_air": "off_air.m3u",
+# Define the path to your playlists
+playlists_directory = "/home/jenny/playlists"
+
+# Define the programming schedule based on your specifications
+programming_schedule = {
+    "Mon": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
+        ("soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
+        ("cartoons.m3u", "Cartoons", "Children", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 120),   # 18:00 - 20:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),              # 20:00 - 21:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 21:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 02:00 - 03:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 03:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Tue": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
+        ("soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
+        ("cartoons.m3u", "Cartoons", "Children", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 120),   # 18:00 - 20:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),              # 20:00 - 21:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 21:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 02:00 - 03:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 03:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Wed": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
+        ("soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
+        ("cartoons.m3u", "Cartoons", "Children", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 120),   # 18:00 - 20:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),              # 20:00 - 21:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 21:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 02:00 - 03:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 03:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Thu": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
+        ("soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
+        ("cartoons.m3u", "Cartoons", "Children", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 120),   # 18:00 - 20:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),              # 20:00 - 21:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 21:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 02:00 - 03:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 03:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Fri": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
+        ("soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
+        ("cartoons.m3u", "Cartoons", "Children", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 120),   # 18:00 - 20:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),              # 20:00 - 21:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 21:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 02:00 - 03:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 03:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Sat": [
+        ("cartoons.m3u", "Cartoons", "Children", 360),  # 6:00 - 12:00
+        ("sports.m3u", "Sports", "Sports", 180),     # 12:00 - 15:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 180),        # 15:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 60),   # 18:00 - 19:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 60),   # 19:00 - 20:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 20:00 - 22:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),   # 22:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("SNL.m3u", "Variety", "Comedy", 60),  # 00:00 - 01:00
+        ("infomercials.m3u", "Infomercial", "Infomercial", 60),  # 01:00 - 02:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 02:00 - 04:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),  # 04:00 - 05:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    "Sun": [
+        ("morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 180),  # 9:00 - 12:00
+        ("sports.m3u", "Sports", "Sports", 360),     # 12:00 - 18:00
+        ("evening_news.m3u", "Evening News", "News", 60),   # 18:00 - 19:00
+        ("game_shows.m3u", "Game Shows", "Game Show", 60),   # 19:00 - 20:00
+        ("movies.m3u", "Movies", "Movie", 120),               # 20:00 - 22:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 60),   # 22:00 - 23:00
+        ("talk_shows.m3u", "Talk Shows", "Talk Show", 60),   # 23:00 - 24:00
+        ("late_night_movie.m3u", "Late Night Movie", "Movie", 120),  # 00:00 - 02:00
+        ("sitcoms.m3u", "Sitcoms", "Comedy", 120),  # 02:00 - 04:00
+        ("off_air.m3u", "Off-Air", "Off-Air", 60)             # 05:00 - 06:00
+    ],
+    # Continue with the rest of the days
 }
 
-# Function to get video length
-def get_video_length(video_path):
-    try:
-        with VideoFileClip(video_path) as video:
-            return video.duration
-    except Exception as e:
-        print(f"Error getting length for {video_path}: {e}")
-        return 0
+def read_m3u(file_path):
+    """Read an M3U file and return a list of video file paths."""
+    with open(file_path, 'r') as file:
+        return [line.strip() for line in file if line.strip()]
 
-# Function to read M3U file and return video paths
-def read_m3u(m3u_file):
-    with open(m3u_file, 'r') as file:
-        lines = file.readlines()
-    return [line.strip() for line in lines if line.strip() and not line.startswith('#')]
+def get_videos_for_block(playlist_name, block_length):
+    """Get random videos for a given block length from the corresponding playlist."""
+    file_path = os.path.join(playlists_directory, playlist_name)
+    videos = read_m3u(file_path)
+    selected_videos = []
+    total_length = 0
 
-# Function to determine the programming block based on the current time
-def determine_programming_block(current_hour, current_day):
-    if current_day in ["Mon", "Tue", "Wed", "Thu", "Fri"]:
-        if 6 <= current_hour < 9:
-            return "morning_news"
-        elif 9 <= current_hour < 12:
-            return "game_shows"
-        elif 12 <= current_hour < 15:
-            return "soap_operas"
-        elif 15 <= current_hour < 18:
-            return "cartoons"
-        elif 18 <= current_hour < 20:
-            return "evening_news"
-        elif 20 <= current_hour < 21:
-            return "sitcoms"
-        elif 21 <= current_hour < 23:
-            return "movies"
-        elif 23 <= current_hour < 24 or 0 <= current_hour < 2:
-            return "talk_shows"
-        elif 2 <= current_hour < 3:
-            return "infomercials"
-        elif 3 <= current_hour < 5:
-            return "late_night_movie"
-        elif 5 <= current_hour < 6:
-            return "off_air"
-    elif current_day == "Sat":
-        if 6 <= current_hour < 12:
-            return "cartoons"
-        elif 12 <= current_hour < 15:
-            return "sports"
-        elif 15 <= current_hour < 18:
-            return "sitcoms"
-        elif 18 <= current_hour < 19:
-            return "evening_news"
-        elif 19 <= current_hour < 20:
-            return "game_shows"
-        elif 20 <= current_hour < 22:
-            return "movies"
-        elif 22 <= current_hour < 23:
-            return "sitcoms"
-        elif 23 <= current_hour < 24 or 0 <= current_hour < 1:
-            return "talk_shows"
-        elif 1 <= current_hour < 2:
-            return "infomercials"
-        elif 2 <= current_hour < 4:
-            return "late_night_movie"
-        elif 4 <= current_hour < 5:
-            return "sitcoms"
-        elif 5 <= current_hour < 6:
-            return "off_air"
-    elif current_day == "Sun":
-        if 6 <= current_hour < 9:
-            return "morning_news"
-        elif 9 <= current_hour < 12:
-            return "talk_shows"
-        elif 12 <= current_hour < 18:
-            return "sports"
-        elif 18 <= current_hour < 19:
-            return "evening_news"
-        elif 19 <= current_hour < 20:
-            return "game_shows"
-        elif 20 <= current_hour < 22:
-            return "movies"
-        elif 22 <= current_hour < 23:
-            return "sitcoms"
-        elif 23 <= current_hour < 24 or 0 <= current_hour < 2:
-            return "talk_shows"
-        elif 2 <= current_hour < 4:
-            return "late_night_movie"
-        elif 4 <= current_hour < 6:
-            return "sitcoms"
-        elif 5 <= current_hour < 6:
-            return "off_air"
+    while total_length < block_length:
+        video = random.choice(videos)
+        video_length = get_video_length(video)  # Implement your own logic to get the video length
+        if total_length + video_length <= block_length:
+            selected_videos.append(video)
+            total_length += video_length
 
-    return None
+    return selected_videos
 
-# Function to generate weekly programming
-def generate_weekly_m3u():
-    weekly_playlist = []
-    current_day = os.popen('date +%a').read().strip()  # Get current day
-    current_hour = int(os.popen('date +%H').read().strip())  # Get current hour
+def generate_m3u_for_day(day):
+    """Generate an M3U playlist for a specific day based on the programming schedule."""
+    m3u_content = []
+    start_time = datetime.now().replace(hour=6, minute=0, second=0, microsecond=0)  # Starting at 6 AM
+    for entry in programming_schedule[day]:
+        playlist_file, title, category, block_length = entry
+        videos = get_videos_for_block(playlist_file, block_length)
+        for video in videos:
+            start_time_str = start_time.strftime('%Y%m%d%H%M%S +0000')
+            end_time = start_time + timedelta(seconds=block_length)
+            end_time_str = end_time.strftime('%Y%m%d%H%M%S +0000')
 
-    # Determine the programming block for the current time
-    programming_block = determine_programming_block(current_hour, current_day)
-    
-    if programming_block:
-        m3u_file = PROGRAMMING[programming_block]
-        videos = read_m3u(m3u_file)
-        block_length = 60 * 60  # Example: set block length to 1 hour (3600 seconds)
-        block_videos = []
+            m3u_content.append(f"#EXTINF:-1, {title} ({category})")
+            m3u_content.append(video)
+            start_time = end_time
 
-        # Gather enough videos for this block
-        while sum(get_video_length(v) for v in block_videos) < block_length:
-            selected_video = random.choice(videos)
-            block_videos.append(selected_video)
+    return m3u_content
 
-        weekly_playlist.extend(block_videos)
-    
-    # Write the new M3U file
-    output_file = 'weekly_programming.m3u'
-    with open(output_file, 'w') as file:
-        for video in weekly_playlist:
-            file.write(f"{video}\n")
-    
-    print(f"Generated weekly programming M3U file: {output_file}")
+def write_m3u_file(day):
+    """Write the generated M3U content to a file for the specified day."""
+    m3u_content = generate_m3u_for_day(day)
+    m3u_file_path = os.path.join(playlists_directory, f"{day.lower()}_program.m3u")
+    with open(m3u_file_path, 'w') as m3u_file:
+        m3u_file.write("#EXTM3U\n")
+        m3u_file.write("\n".join(m3u_content))
 
-# Example usage
-generate_weekly_m3u()
+def main():
+    for day in programming_schedule.keys():
+        write_m3u_file(day)
+
+if __name__ == "__main__":
+    main()
