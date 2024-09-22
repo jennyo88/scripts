@@ -6,7 +6,6 @@ from moviepy.editor import VideoFileClip
 # Define your programming schedule here
 programming_schedule = {
     "Mon": [
-    "Mon": [
         ("/home/jenny/playlists/morning_news.m3u", "Morning News", "News", 180),  # 6:00 - 9:00
         ("/home/jenny/playlists/game_shows.m3u", "Game Shows", "Game Show", 180),  # 9:00 - 12:00
         ("/home/jenny/playlists/soap_operas.m3u", "Soap Operas", "Drama", 180),     # 12:00 - 15:00
