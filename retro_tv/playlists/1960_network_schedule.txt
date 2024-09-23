@@ -1,0 +1,137 @@
+[ 1959 - 1960 ]
+MONDAY
+[Morning]
+0600 - 0900    Morning News
+0900 - 1100    Daytime Talk Show / Game Shows
+1100 - 1200    Soap Operas
+[Afternoon]
+1200 - 1300    Local News / Weather
+1300 - 1500    Soap Operas
+1500 - 1700    Children's Programming (Cartoons / Educational Shows)
+[Early Evening]
+1700 - 1800    Evening News
+1800 - 1900    Local News / Weather
+[Prime Time]
+1900 - 2000    Family Comedies
+2000 - 2100    Adventure Series
+2100 - 2300    Popular Dramas
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+TUESDAY
+[Morning]
+0600 - 0900    Morning News
+0900 - 1100    Daytime Talk Show / Game Shows
+1100 - 1200    Soap Operas
+[Afternoon]
+1200 - 1300    Local News / Weather
+1300 - 1500    Soap Operas
+1500 - 1700    Children's Programming (Cartoons / Educational Shows)
+[Early Evening]
+1700 - 1800    Evening News
+1800 - 1900    Local News / Weather
+[Prime Time]
+1900 - 2000    Crime Dramas
+2000 - 2100    Variety Shows
+2100 - 2300    Anthologies
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+WEDNESDAY
+[Morning]
+0600 - 0900    Morning News
+0900 - 1100    Daytime Talk Show / Game Shows
+1100 - 1200    Soap Operas
+[Afternoon]
+1200 - 1300    Local News / Weather
+1300 - 1500    Soap Operas
+1500 - 1700    Children's Programming (Cartoons / Educational Shows)
+[Early Evening]
+1700 - 1800    Evening News
+1800 - 1900    Local News / Weather
+[Prime Time]
+1900 - 2000    Family Comedies
+2000 - 2100    Adventure Series
+2100 - 2300    Anthologies
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+THURSDAY
+[Morning]
+0600 - 0900    Morning News
+0900 - 1100    Daytime Talk Show / Game Shows
+1100 - 1200    Soap Operas
+[Afternoon]
+1200 - 1300    Local News / Weather
+1300 - 1500    Soap Operas
+1500 - 1700    Children's Programming (Cartoons / Educational Shows)
+[Early Evening]
+1700 - 1800    Evening News
+1800 - 1900    Local News / Weather
+[Prime Time]
+1900 - 2000    Popular Dramas
+2000 - 2100    Game Shows
+2100 - 2300    Variety Specials
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+FRIDAY
+[Morning]
+0600 - 0900    Morning News
+0900 - 1100    Daytime Talk Show / Game Shows
+1100 - 1200    Soap Operas
+[Afternoon]
+1200 - 1300    Local News / Weather
+1300 - 1500    Soap Operas
+1500 - 1700    Children's Programming (Cartoons / Educational Shows)
+[Early Evening]
+1700 - 1800    Evening News
+1800 - 1900    Local News / Weather
+[Prime Time]
+1900 - 2000    Family Comedies
+2000 - 2100    Variety Shows
+2100 - 2300    Late Night Talk Shows
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+SATURDAY
+[Morning]
+0600 - 1000    Children's Programming
+1000 - 1200    Educational Shows
+[Afternoon]
+1200 - 1500    Sports Events
+1500 - 1700    Variety Shows
+[Early Evening]
+1700 - 1800    Local News
+1800 - 1900    Special Programming
+[Prime Time]
+1900 - 2100    Saturday Movie
+2100 - 2200    Popular Dramas
+2200 - 2300    Specials
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
+
+SUNDAY
+[Morning]
+0600 - 0800    Religious Programming
+0800 - 1100    Sports Events
+1100 - 1200    Morning News
+[Afternoon]
+1200 - 1600    Family Movies
+1600 - 1700    Specials
+[Early Evening]
+1700 - 1800    Local News / Weather
+1800 - 1900    Evening News
+[Prime Time]
+1900 - 2100    Popular Dramas
+2100 - 2200    Variety Shows
+2200 - 2300    Specials
+[Late Night]
+2300 - 0300    Late Night Movies
+0300 - 0600    Off Air
