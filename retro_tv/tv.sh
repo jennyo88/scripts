@@ -4,73 +4,79 @@
 off_air_playlist() {
     echo "Off-air period..."
     echo "Starting DISPLAY=:0 vlc with playlist: Off-Air"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/off_air.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/Other/off_air.m3u
 }
 
 # Function to start the morning news playlist
 morning_news_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Morning News"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/morning_news.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/News/morning_news.m3u
 }
 
 # Function to start the evening news playlist
 evening_news_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Evening News"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/evening_news.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/News/evening_news.m3u
 }
 
 # Function to start the infomercial playlist
 infomercials_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Infomercials"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/infomercials.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/Other/infomercials.m3u
 }
 
 # Function to start the morning news playlist
 snl_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: SNL"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/snl.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/snl.m3u
 }
 
 # Function to start the game show playlist
 game_shows_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Game Shows"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/game_shows.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/game_shows.m3u
 }
 
 # Function to start the soap opera playlist
 soap_operas_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Soap Operas"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/soap_operas.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/soap_operas.m3u
 }
 
 # Function to start the cartoon playlist
 cartoons_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Cartoons"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/cartoons.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/cartoons.m3u
+}
+
+# Function to start the cartoon playlist
+sports_playlist() {
+    echo "Starting DISPLAY=:0 vlc with playlist: Sports"
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/Other/sports.m3u
 }
 
 # Function to start the sitcom playlist
 sitcoms_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Sitcoms"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/sitcoms.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/sitcoms.m3u
 }
 
 # Function to start the movie playlist
 saturday_night_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Saturday Night"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/saturday_night.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/Movies/saturday_night.m3u
 }
 
 # Function to start the talk show playlist
 talk_shows_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Talk Shows"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/talk_shows.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/TV/talk_shows.m3u
 }
 
 # Function to start the late-night movie playlist
 horror_night_playlist() {
     echo "Starting DISPLAY=:0 vlc with playlist: Horror Night"
-    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/playlists/horror_night.m3u
+    DISPLAY=:0 vlc --fullscreen --aspect 16:9 --no-video-title-show --random /home/jenny/retro_tv/programming/Movies/horror_night.m3u
 }
 
 # Get the current day and hour
