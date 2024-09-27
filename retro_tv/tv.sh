@@ -100,7 +100,7 @@ case "$current_day" in
             sitcoms_playlist & sleep 60m && pkill vlc
         elif [ "$current_hour" -ge 21 ] && [ "$current_hour" -lt 23 ]; then
             saturday_night_playlist & sleep 2h && pkill vlc
-        elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 00 ]; then
+        elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
             talk_shows_playlist & sleep 60m && pkill vlc
         elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 02 ]; then
             saturday_night_playlist  & sleep 2h && pkill vlc
@@ -149,14 +149,14 @@ case "$current_day" in
         elif [ "$current_hour" -ge 12 ] && [ "$current_hour" -lt 18 ]; then
             sports_playlist & sleep 6h && pkill vlc
         elif [ "$current_hour" -ge 18 ] && [ "$current_hour" -lt 19 ]; then
-            evening_news_playlist & sleep 60m && pkill vlc  
+            evening_news_playlist & sleep 60m && pkill vlc
         elif [ "$current_hour" -ge 19 ] && [ "$current_hour" -lt 20 ]; then
             game_shows_playlist & sleep 60m && pkill vlc
         elif [ "$current_hour" -ge 20 ] && [ "$current_hour" -lt 22 ]; then
             saturday_night_playlist & sleep 2h && pkill vlc
         elif [ "$current_hour" -ge 22 ] && [ "$current_hour" -lt 23 ]; then
             sitcoms_playlist & sleep 60m && pkill vlc
-        elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 00 ]; then
+        elif [ "$current_hour" -ge 23 ] && [ "$current_hour" -lt 24 ]; then
             talk_shows_playlist & sleep 60m && pkill vlc
         elif [ "$current_hour" -ge 00 ] && [ "$current_hour" -lt 02 ]; then
             horror_night_playlist & sleep 2h && pkill vlc
