@@ -31,7 +31,7 @@ x265() {
 		baseName=${basePath##*/}
 
 		# Using FFmpeg to convert the source file to x265 format with the specified destination extension
-		if ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir"/"$baseName"."$destExt"; then
+		if ffmpeg -i "$filename" -c:v libx265 -c:a copy -c:s copy -threads 2 "$destDir"/"$baseName"."$destExt"; then
 			echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
 		else
 			echo -e "${ERROR}Error during conversion of ${filename}${RESET}"
