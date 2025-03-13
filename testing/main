@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# whiptail_convert.sh
+# test.sh
 # Author: Jennifer Romero (modified by you)
-# Description: A whiptail-driven version of the file conversion menu
+# Description: A whiptail-driven version of main
 # Version: 6.2
 # Last Updated: Mar 13, 2025
 # GitHub Repository: https://github.com/jennyo88/scripts/convert/main (original source)
@@ -11,7 +11,7 @@
 # -----------------------------------
 script_urls=(
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
+# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_m3u8"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_tubi"
@@ -19,16 +19,22 @@ script_urls=(
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl-playlist"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl_other"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_descargavideos"
+# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_srt"
   "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_cleanup"
+# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
+# Add more script URLs as needed
 )
 
-# Function to download and source a script
+# Function to source a script without download output
 source_script() {
   local script_url=$1
   local script_name
   script_name=$(basename "${script_url}")
+
+  # Download the script silently
   if curl -fsSL "${script_url}" -o "${script_name}" >/dev/null 2>&1; then
+    # Source the script if download is successful
     source "${script_name}"
   else
     echo "Failed to download script: ${script_url}"
@@ -36,151 +42,161 @@ source_script() {
   fi
 }
 
-# Remove downloaded scripts on exit
-cleanup() {
+# Function to remove downloaded script files
+cleanup_downloads() {
   for url in "${script_urls[@]}"; do
     local script_name
     script_name=$(basename "${url}")
     rm -f "${script_name}"
   done
 }
-trap cleanup EXIT
 
-# Source each helper script
+# Set up a trap to run the cleanup function on script exit
+trap cleanup_downloads EXIT
+
+# Iterate through the list of script URLs and source each one
 for url in "${script_urls[@]}"; do
   source_script "${url}"
 done
 
-# (Optionally, load colors if desired – from the original menus script)
-if declare -f load_colors >/dev/null 2>&1; then
-  load_colors
-fi
+# -----------------------------------
+# Main Menu with whiptail
+# -----------------------------------
 
-# -----------------------------------
-# MAIN MENU (using whiptail)
-# -----------------------------------
 while true; do
-  CHOICE=$(whiptail --title "File Conversion Menu" --menu "Choose an option:" 20 60 10 \
-    "1" "Videos" \
-    "2" "Subtitles" \
-    "3" "Clean-up" \
-    "4" "Tmux" \
-    "0" "Exit script" 3>&1 1>&2 2>&3)
+    MAIN_CHOICE=$(whiptail --title "Main Menu" --menu "Choose an option:" 20 60 4 \
+        "Videos"          "Video related tasks" \
+        "Subs"            "Subtitle conversion tasks" \
+        "Clean-up"        "Clean up files" \
+        "Exit"            "Exit the script" 3>&1 1>&2 2>&3)
+        
+    # Exit if user cancels the menu
+    if [ $? -ne 0 ]; then
+        break
+    fi
 
-  RETVAL=$?
-  if [ $RETVAL -ne 0 ]; then
-    break
-  fi
-
-  case $CHOICE in
-    "1")
-      # Videos submenu – adjust these options as desired
-      VIDEO_CHOICE=$(whiptail --title "Videos Menu" --menu "Select an option:" 20 60 10 \
-        "1" "Download m3u8 playlist" \
-        "2" "Download from YouTube" \
-        "3" "Download from Other" \
-        "4" "Download from Tubi" \
-        "5" "Download using yt-dlp" \
-        "6" "Download from descargavideos" \
-        "7" "Convert video to x265" \
-        "8" "Convert ONLY video" \
-        "9" "Convert video & subtitles" \
-        "10" "Encode metadata" \
-        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
-      if [ $? -ne 0 ]; then continue; fi
-      case $VIDEO_CHOICE in
-        "1") m3u8 ;;         # Function from functions_m3u8
-        "2") ydl ;;          # Function from functions_ydl
-        "3") ydl_other ;;    # Function from functions_ydl_other
-        "4") tubi ;;         # Function from functions_tubi
-        "5") ytdl ;;         # Function from functions_ydl-playlist or similar
-        "6") descargavideos ;; # Function from functions_descargavideos
-        "7") x265 ;;         # Function for x265 conversion (assumed defined in functions_videos)
-        "8") plex ;;         # Function for converting ONLY video (example)
-        "9") video_sub && sleep 1 c_all ;;  # Example chain for video & subtitles conversion
-        "10") metadata ;;    # Function for encoding metadata
-        "0") continue ;;
-        *) whiptail --msgbox "Invalid option" 8 45 ;;
-      esac
-      ;;
-    "2")
-      # Subtitles submenu
-      SUB_CHOICE=$(whiptail --title "Subtitles Menu" --menu "Select an option:" 15 60 6 \
-        "1" "Extract subtitles" \
-        "2" "Convert subtitles" \
-        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
-      if [ $? -ne 0 ]; then continue; fi
-      case $SUB_CHOICE in
-        "1") extract_srt ;;  # Function from functions_srt
-        "2") convert_srt ;;  # Function from functions_srt
-        "0") continue ;;
-        *) whiptail --msgbox "Invalid option" 8 45 ;;
-      esac
-      ;;
-    "3")
-      # Clean-up submenu
-      CLEAN_CHOICE=$(whiptail --title "Clean-up Menu" --menu "Select an option:" 15 60 6 \
-        "1" "Clear folder ts" \
-        "2" "Clear folder mkv" \
-        "3" "Clear both folders" \
-        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
-      if [ $? -ne 0 ]; then continue; fi
-      case $CLEAN_CHOICE in
-        "1") c_ts ;;       # Function from functions_cleanup
-        "2") c_mkv ;;      # Function from functions_cleanup
-        "3") c_all ;;      # Function from functions_cleanup
-        "0") continue ;;
-        *) whiptail --msgbox "Invalid option" 8 45 ;;
-      esac
-      ;;
-    "4")
-      # Tmux submenu
-      TMUX_CHOICE=$(whiptail --title "Tmux Menu" --menu "Select an option:" 15 60 6 \
-        "1" "Create new session" \
-        "2" "Attach to session" \
-        "3" "Kill session" \
-        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
-      if [ $? -ne 0 ]; then continue; fi
-      case $TMUX_CHOICE in
-        "1")
-          session_name=$(whiptail --title "New Tmux Session" --inputbox "Enter session name:" 8 60 3>&1 1>&2 2>&3)
-          tmux new-session -A -s "$session_name"
-          ;;
-        "2")
-          sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
-          if [ -z "$sessions" ]; then
-            whiptail --msgbox "No tmux sessions available" 8 45
-          else
-            session_name=$(whiptail --title "Attach to Tmux Session" --inputbox "Enter session name to attach:" 8 60 3>&1 1>&2 2>&3)
-            tmux attach-session -t "$session_name"
-          fi
-          ;;
-        "3")
-          sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
-          if [ -z "$sessions" ]; then
-            whiptail --msgbox "No tmux sessions available" 8 45
-          else
-            session_name=$(whiptail --title "Kill Tmux Session" --inputbox "Enter session name to kill:" 8 60 3>&1 1>&2 2>&3)
-            if tmux has-session -t "$session_name" 2>/dev/null; then
-              tmux kill-session -t "$session_name"
-              whiptail --msgbox "Session '$session_name' has been killed." 8 45
-            else
-              whiptail --msgbox "Session '$session_name' does not exist." 8 45
+    case "$MAIN_CHOICE" in
+        Videos)
+            VIDEO_CHOICE=$(whiptail --title "Videos Menu" --menu "Choose an option:" 20 60 3 \
+                "Download" "Download videos" \
+                "Convert"  "Convert videos" \
+                "Back"     "Return to Main Menu" 3>&1 1>&2 2>&3)
+            if [ $? -ne 0 ]; then
+                continue
             fi
-          fi
-          ;;
-        "0") continue ;;
-        *) whiptail --msgbox "Invalid option" 8 45 ;;
-      esac
-      ;;
-    "0")
-      break
-      ;;
-    *)
-      whiptail --msgbox "Invalid option" 8 45
-      ;;
-  esac
+
+            case "$VIDEO_CHOICE" in
+                Download)
+                    DOWNLOAD_CHOICE=$(whiptail --title "Download Options" --menu "Choose a download option:" 20 60 6 \
+                        "m3u8"           "Download m3u8 playlist" \
+                        "youtube"        "Download from YouTube" \
+                        "playlist"        "Download playlist from YouTube" \
+                        "other"          "Download from other sources" \
+                        "tubi"           "Download from Tubi" \
+                        "descargavideos" "Download from descargavideos" 3>&1 1>&2 2>&3)
+                    if [ $? -ne 0 ]; then
+                        continue
+                    fi
+
+                    case "$DOWNLOAD_CHOICE" in
+                        m3u8)
+                            function_m3u8
+                            ;;
+                        youtube)
+                            function_ydl
+                            ;;
+                        playlist)
+                            function_ydl_playlist
+                            ;;
+                        other)
+                            function_ydl_other
+                            ;;
+                        tubi)
+                            function_tubi
+                            ;;
+                        descargavideos)
+                            function_descargavideos
+                            ;;
+                    esac
+                    ;;
+                Convert)
+                    # Conversion submenu for Videos
+                    CONVERT_CHOICE=$(whiptail --title "Convert Options" --menu "Choose a conversion option:" 20 60 4 \
+                        "x265"        "Convert video to x265" \
+                        "video_only"  "Convert only video" \
+                        "video_subs"  "Convert video & subtitles" \
+                        "metadata"    "Encode metadata" 3>&1 1>&2 2>&3)
+                    if [ $? -ne 0 ]; then
+                        continue
+                    fi
+                    case "$CONVERT_CHOICE" in
+                        x265)
+                            x265
+                            ;;
+                        video_only)
+                            plex
+                            ;;
+                        video_subs)
+                            video_sub
+                            ;;
+                        metadata)
+                            metadata
+                            ;;
+                    esac
+                    ;;
+                Back)
+                    continue
+                    ;;
+            esac
+            ;;
+        Subs)
+            SUBS_CHOICE=$(whiptail --title "Subtitles Menu" --menu "Choose a subtitle option:" 20 60 3 \
+                "Extract" "Download subtitles" \
+                "Convert"  "Convert subtitles" \
+                "Back"     "Return to Main Menu" 3>&1 1>&2 2>&3)
+            if [ $? -ne 0 ]; then
+                continue
+            fi
+            case "$SUBS_CHOICE" in
+                Convert)
+                    convert_srt
+                    ;;
+                Extract)
+                    extract_srt
+                    ;;
+                Back)
+                    continue
+                    ;;
+            esac
+            ;;
+        Clean-up)
+            CLEANUP_CHOICE=$(whiptail --title "Clean-up Menu" --menu "Choose a cleanup option:" 20 60 4 \
+                "ts"           "Remove ts files" \
+                "mkv"          "Remove mkv files" \
+                "Full"         "Perform full cleanup" \
+                "Back"         "Return to Main Menu" 3>&1 1>&2 2>&3)
+            if [ $? -ne 0 ]; then
+                continue
+            fi
+            case "$CLEANUP_CHOICE" in
+                ts)
+                    c_ts
+                    ;;
+                mkv)
+                    c_mkv
+                    ;;
+                Full)
+                    c_all
+                    ;;
+                Back)
+                    continue
+                    ;;
+            esac
+            ;;
+        Exit)
+            break
+            ;;
+    esac
 done
 
-whiptail --title "Exit" --msgbox "Exiting the script. Goodbye!" 8 45
-exit 0
+echo "Exiting script."
