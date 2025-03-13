@@ -87,13 +87,14 @@ while true; do
 
             case "$VIDEO_CHOICE" in
                 Download)
-                    DOWNLOAD_CHOICE=$(whiptail --title "Download Options" --menu "Choose a download option:" 20 60 6 \
-                        "m3u8"           "Download m3u8 playlist" \
-                        "youtube"        "Download from YouTube" \
-                        "playlist"        "Download playlist from YouTube" \
-                        "other"          "Download from other sources" \
-                        "tubi"           "Download from Tubi" \
-                        "descargavideos" "Download from descargavideos" 3>&1 1>&2 2>&3)
+                    DOWNLOAD_CHOICE=$(whiptail --title "Download Options" --menu "Choose a download option:" 20 60 7 \
+                        "m3u8"              "Download m3u8 playlist" \
+                        "youtube"           "Download from YouTube" \
+                        "playlist"          "Download playlist from YouTube" \
+                        "other"             "Download from other sources" \
+                        "tubi"              "Download from Tubi" \
+                        "descargavideos"    "Download from descargavideos" \
+                        "Back"              "Return to Main Menu" 3>&1 1>&2 2>&3)
                     if [ $? -ne 0 ]; then
                         continue
                     fi
@@ -121,11 +122,12 @@ while true; do
                     ;;
                 Convert)
                     # Conversion submenu for Videos
-                    CONVERT_CHOICE=$(whiptail --title "Convert Options" --menu "Choose a conversion option:" 20 60 4 \
+                    CONVERT_CHOICE=$(whiptail --title "Convert Options" --menu "Choose a conversion option:" 20 60 5 \
                         "x265"        "Convert video to x265" \
                         "video_only"  "Convert only video" \
                         "video_subs"  "Convert video & subtitles" \
-                        "metadata"    "Encode metadata" 3>&1 1>&2 2>&3)
+                        "metadata"    "Encode metadata" \
+                        "Back"        "Return to Main Menu" 3>&1 1>&2 2>&3)
                     if [ $? -ne 0 ]; then
                         continue
                     fi
