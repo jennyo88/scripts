@@ -101,22 +101,22 @@ while true; do
 
                     case "$DOWNLOAD_CHOICE" in
                         m3u8)
-                            function_m3u8
+                            m3u8
                             ;;
                         youtube)
-                            function_ydl
+                            ydl
                             ;;
                         playlist)
-                            function_ydl_playlist
+                            playlist
                             ;;
                         other)
-                            function_ydl_other
+                            ydl_other
                             ;;
                         tubi)
-                            function_tubi
+                            tubi
                             ;;
                         descargavideos)
-                            function_descargavideos
+                            descargavideos
                             ;;
                     esac
                     ;;
