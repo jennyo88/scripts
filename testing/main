@@ -1,38 +1,34 @@
 #!/usr/bin/env bash
-
-# MAIN
-# Author: Jennifer Romero
-# Description: This script sources a menu-driven interface to convert files
-# Version: 5.1
-# Last Updated: Feb 27, 2024
-# GitHub Repository: https://github.com/jennyo88/scripts/convert/main
-
+# whiptail_convert.sh
+# Author: Jennifer Romero (modified by you)
+# Description: A whiptail-driven version of the file conversion menu
+# Version: 6.2
+# Last Updated: Mar 13, 2025
+# GitHub Repository: https://github.com/jennyo88/scripts/convert/main (original source)
 
 # -----------------------------------
-# SOURCE SCRIPTS
+# SOURCE SCRIPTS (unchanged)
 # -----------------------------------
-
-# List of script URLs to download and source
 script_urls=(
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/error_handling"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/menus"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_videos"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_ydl"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_ytdlp"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_srt"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_cleanup"
-  # "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/tmux"
-  # Add more script URLs as needed
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_m3u8"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_tubi"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl-playlist"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl_other"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_descargavideos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_srt"
+  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_cleanup"
 )
 
-# Function to source a script without download output
+# Function to download and source a script
 source_script() {
   local script_url=$1
-  local script_name=$(basename "${script_url}")
-
-  # Download the script silently
+  local script_name
+  script_name=$(basename "${script_url}")
   if curl -fsSL "${script_url}" -o "${script_name}" >/dev/null 2>&1; then
-    # Source the script if download is successful
     source "${script_name}"
   else
     echo "Failed to download script: ${script_url}"
@@ -40,39 +36,151 @@ source_script() {
   fi
 }
 
-# Function to remove downloaded script files
+# Remove downloaded scripts on exit
 cleanup() {
   for url in "${script_urls[@]}"; do
-    local script_name=$(basename "${url}")
+    local script_name
+    script_name=$(basename "${url}")
     rm -f "${script_name}"
   done
 }
-
-# Set up a trap to run the cleanup function on script exit
 trap cleanup EXIT
 
-# Iterate through the list of script URLs and source each one
+# Source each helper script
 for url in "${script_urls[@]}"; do
   source_script "${url}"
 done
 
-# Now you can use functions from the sourced scripts
-# Call the functions or execute any code as needed
-
-
-# -----------------------------------
-# MAIN MENU & COLORS
-# -----------------------------------
-main_menu="0"
-
-# Calling the load_colors() function to set color variables
-load_colors # Only loaded once
+# (Optionally, load colors if desired – from the original menus script)
+if declare -f load_colors >/dev/null 2>&1; then
+  load_colors
+fi
 
 # -----------------------------------
-# INFINITE LOOP
+# MAIN MENU (using whiptail)
 # -----------------------------------
+while true; do
+  CHOICE=$(whiptail --title "File Conversion Menu" --menu "Choose an option:" 20 60 10 \
+    "1" "Videos" \
+    "2" "Subtitles" \
+    "3" "Clean-up" \
+    "4" "Tmux" \
+    "0" "Exit script" 3>&1 1>&2 2>&3)
 
-while true
-do
-  show_banner_0 && show_menu_0
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ]; then
+    break
+  fi
+
+  case $CHOICE in
+    "1")
+      # Videos submenu – adjust these options as desired
+      VIDEO_CHOICE=$(whiptail --title "Videos Menu" --menu "Select an option:" 20 60 10 \
+        "1" "Download m3u8 playlist" \
+        "2" "Download from YouTube" \
+        "3" "Download from Other" \
+        "4" "Download from Tubi" \
+        "5" "Download using yt-dlp" \
+        "6" "Download from descargavideos" \
+        "7" "Convert video to x265" \
+        "8" "Convert ONLY video" \
+        "9" "Convert video & subtitles" \
+        "10" "Encode metadata" \
+        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
+      if [ $? -ne 0 ]; then continue; fi
+      case $VIDEO_CHOICE in
+        "1") m3u8 ;;         # Function from functions_m3u8
+        "2") ydl ;;          # Function from functions_ydl
+        "3") ydl_other ;;    # Function from functions_ydl_other
+        "4") tubi ;;         # Function from functions_tubi
+        "5") ytdl ;;         # Function from functions_ydl-playlist or similar
+        "6") descargavideos ;; # Function from functions_descargavideos
+        "7") x265 ;;         # Function for x265 conversion (assumed defined in functions_videos)
+        "8") plex ;;         # Function for converting ONLY video (example)
+        "9") video_sub && sleep 1 c_all ;;  # Example chain for video & subtitles conversion
+        "10") metadata ;;    # Function for encoding metadata
+        "0") continue ;;
+        *) whiptail --msgbox "Invalid option" 8 45 ;;
+      esac
+      ;;
+    "2")
+      # Subtitles submenu
+      SUB_CHOICE=$(whiptail --title "Subtitles Menu" --menu "Select an option:" 15 60 6 \
+        "1" "Extract subtitles" \
+        "2" "Convert subtitles" \
+        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
+      if [ $? -ne 0 ]; then continue; fi
+      case $SUB_CHOICE in
+        "1") extract_srt ;;  # Function from functions_srt
+        "2") convert_srt ;;  # Function from functions_srt
+        "0") continue ;;
+        *) whiptail --msgbox "Invalid option" 8 45 ;;
+      esac
+      ;;
+    "3")
+      # Clean-up submenu
+      CLEAN_CHOICE=$(whiptail --title "Clean-up Menu" --menu "Select an option:" 15 60 6 \
+        "1" "Clear folder ts" \
+        "2" "Clear folder mkv" \
+        "3" "Clear both folders" \
+        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
+      if [ $? -ne 0 ]; then continue; fi
+      case $CLEAN_CHOICE in
+        "1") c_ts ;;       # Function from functions_cleanup
+        "2") c_mkv ;;      # Function from functions_cleanup
+        "3") c_all ;;      # Function from functions_cleanup
+        "0") continue ;;
+        *) whiptail --msgbox "Invalid option" 8 45 ;;
+      esac
+      ;;
+    "4")
+      # Tmux submenu
+      TMUX_CHOICE=$(whiptail --title "Tmux Menu" --menu "Select an option:" 15 60 6 \
+        "1" "Create new session" \
+        "2" "Attach to session" \
+        "3" "Kill session" \
+        "0" "Back to Main Menu" 3>&1 1>&2 2>&3)
+      if [ $? -ne 0 ]; then continue; fi
+      case $TMUX_CHOICE in
+        "1")
+          session_name=$(whiptail --title "New Tmux Session" --inputbox "Enter session name:" 8 60 3>&1 1>&2 2>&3)
+          tmux new-session -A -s "$session_name"
+          ;;
+        "2")
+          sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
+          if [ -z "$sessions" ]; then
+            whiptail --msgbox "No tmux sessions available" 8 45
+          else
+            session_name=$(whiptail --title "Attach to Tmux Session" --inputbox "Enter session name to attach:" 8 60 3>&1 1>&2 2>&3)
+            tmux attach-session -t "$session_name"
+          fi
+          ;;
+        "3")
+          sessions=$(tmux list-sessions -F "#{session_name}" 2>/dev/null)
+          if [ -z "$sessions" ]; then
+            whiptail --msgbox "No tmux sessions available" 8 45
+          else
+            session_name=$(whiptail --title "Kill Tmux Session" --inputbox "Enter session name to kill:" 8 60 3>&1 1>&2 2>&3)
+            if tmux has-session -t "$session_name" 2>/dev/null; then
+              tmux kill-session -t "$session_name"
+              whiptail --msgbox "Session '$session_name' has been killed." 8 45
+            else
+              whiptail --msgbox "Session '$session_name' does not exist." 8 45
+            fi
+          fi
+          ;;
+        "0") continue ;;
+        *) whiptail --msgbox "Invalid option" 8 45 ;;
+      esac
+      ;;
+    "0")
+      break
+      ;;
+    *)
+      whiptail --msgbox "Invalid option" 8 45
+      ;;
+  esac
 done
+
+whiptail --title "Exit" --msgbox "Exiting the script. Goodbye!" 8 45
+exit 0
