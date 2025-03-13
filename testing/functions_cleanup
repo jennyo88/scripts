@@ -6,7 +6,7 @@
 # Function to clean the TS folder
 c_ts() {
   if whiptail --title "Confirm TS Clean-up" --yesno "Are you sure you want to clear the TS folder?" 8 45; then
-    rm -rf /path/to/ts/*
+    rm -rf ./ts/*.ts
     if [ $? -eq 0 ]; then
       whiptail --title "Success" --msgbox "TS folder cleared successfully." 8 45
     else
@@ -20,7 +20,7 @@ c_ts() {
 # Function to clean the MKV folder
 c_mkv() {
   if whiptail --title "Confirm MKV Clean-up" --yesno "Are you sure you want to clear the MKV folder?" 8 45; then
-    rm -rf /path/to/mkv/*
+    rm -rf ./mkv/*.mkv
     if [ $? -eq 0 ]; then
       whiptail --title "Success" --msgbox "MKV folder cleared successfully." 8 45
     else
