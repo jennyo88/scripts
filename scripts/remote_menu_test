@@ -1,0 +1,201 @@
+#!/usr/bin/env bash
+# Remote Script Executor (whiptail version)
+# Author: Converted by ChatGPT based on Jennifer Romero's original script
+# Description: This script provides a menu-driven interface to execute remote Bash and Python scripts using whiptail dialogs.
+# Version: 2.0
+# Last Updated: March 13, 2025
+# GitHub Repository: https://github.com/jennyo88/scripts
+
+# -----------------------------------
+# Check if required commands are available
+# -----------------------------------
+check_commands() {
+  local commands=("bash" "curl" "python3" "whiptail")
+  for cmd in "${commands[@]}"; do
+    if ! command -v "$cmd" &> /dev/null; then
+      whiptail --title "Error" --msgbox "Error: '$cmd' command not found.
+Please install '$cmd' and ensure it is in your PATH." 10 60
+      exit 1
+    fi
+  done
+}
+
+# -----------------------------------
+# Exit the script gracefully
+# -----------------------------------
+goodbye() {
+  whiptail --title "Goodbye" --msgbox "Exiting script. Goodbye!" 8 40
+  clear
+  exit
+}
+
+# -----------------------------------
+# Main Menu: Execute Remote Scripts
+# -----------------------------------
+show_menu_0() {
+  CHOICE=$(whiptail --title "Execute Remote Scripts" --menu "Select an option:" 15 60 4 \
+    "1" "Execute JENNYO88 scripts" \
+    "2" "Execute scripts in OTHER repositories" \
+    "0" "Exit script" \
+    3>&1 1>&2 2>&3)
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ]; then
+    goodbye
+  fi
+  case $CHOICE in
+    "1")
+      show_menu_1
+      ;;
+    "2")
+      show_menu_2
+      ;;
+    "0")
+      goodbye
+      ;;
+  esac
+}
+
+# -----------------------------------
+# JENNYO88 Scripts Menu
+# -----------------------------------
+show_menu_1() {
+  CHOICE=$(whiptail --title "JENNYO88 Scripts" --menu "Select an option:" 17 60 7 \
+    "1" "Go back to Main Menu" \
+    "2" "convert - Converting files" \
+    "3" "tmux_ref - tmux reference" \
+    "4" "payroll - Payroll TEST script" \
+    "5" "testing - Converting TESTING script" \
+    "6" "more" \
+    "7" "Go to OTHER SCRIPTS Menu" \
+    "0" "Exit script" \
+    3>&1 1>&2 2>&3)
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ]; then
+    show_menu_0
+  fi
+  case $CHOICE in
+    "1")
+      show_menu_0
+      ;;
+    "2")
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/convert/main)"
+      ;;
+    "3")
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/tmux_ref)"
+      ;;
+    "4")
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/scripts/test)"
+      ;;
+    "5")
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/jennyo88/scripts/main/testing/main)"
+      ;;
+    "6")
+      execute_bash_script
+      ;;
+    "7")
+      show_menu_2
+      ;;
+    "0")
+      goodbye
+      ;;
+    *)
+      whiptail --title "Error" --msgbox "Invalid option. Please enter a valid option." 8 40
+      show_menu_1
+      ;;
+  esac
+}
+
+# -----------------------------------
+# Other Scripts Menu
+# -----------------------------------
+show_menu_2() {
+  CHOICE=$(whiptail --title "Other Scripts" --menu "Select an option:" 15 60 4 \
+    "1" "Go back to Main Menu" \
+    "2" "Execute Another Bash Script" \
+    "3" "Execute Python Script" \
+    "4" "Go to JENNYO88 Scripts Menu" \
+    "0" "Exit script" \
+    3>&1 1>&2 2>&3)
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ]; then
+    show_menu_0
+  fi
+  case $CHOICE in
+    "1")
+      show_menu_0
+      ;;
+    "2")
+      execute_bash_script
+      ;;
+    "3")
+      execute_python_script
+      ;;
+    "4")
+      show_menu_1
+      ;;
+    "0")
+      goodbye
+      ;;
+    *)
+      whiptail --title "Error" --msgbox "Invalid option. Please enter a valid option." 8 40
+      show_menu_2
+      ;;
+  esac
+}
+
+# -----------------------------------
+# Execute Bash Script Function
+# -----------------------------------
+execute_bash_script() {
+  check_commands
+  URL=$(whiptail --title "Execute Bash Script" --inputbox "Enter the URL of the Bash script:" 10 60 3>&1 1>&2 2>&3)
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ] || [ -z "$URL" ]; then
+    whiptail --title "Error" --msgbox "No URL entered. Returning to menu." 8 40
+    show_menu_2
+    return
+  fi
+  if bash -c "$(curl -fsSL "$URL")"; then
+    whiptail --title "Success" --msgbox "Script execution successful." 8 40
+  else
+    whiptail --title "Error" --msgbox "Failed to execute the remote script." 8 40
+  fi
+}
+
+# -----------------------------------
+# Execute Python Script Function
+# -----------------------------------
+execute_python_script() {
+  check_commands
+  URL=$(whiptail --title "Execute Python Script" --inputbox "Enter the GitHub URL of the Python script:" 10 60 3>&1 1>&2 2>&3)
+  RETVAL=$?
+  if [ $RETVAL -ne 0 ] || [ -z "$URL" ]; then
+    whiptail --title "Error" --msgbox "No URL entered. Returning to menu." 8 40
+    show_menu_2
+    return
+  fi
+  REMOTE_SCRIPT_CONTENT=$(curl -fsSL "$URL")
+  echo "$REMOTE_SCRIPT_CONTENT" > remote_script.py
+  grep -E '^import |^from ' remote_script.py | awk '{print $2}' > requirements.txt
+  if [ -s requirements.txt ]; then
+    if command -v pip3 &> /dev/null; then
+      pip3 install --upgrade -r requirements.txt
+    else
+      whiptail --title "Error" --msgbox "pip3 is not installed. Please install pip3 and try again." 8 40
+      exit 1
+    fi
+  fi
+  if python3 remote_script.py; then
+    whiptail --title "Success" --msgbox "Script execution successful." 8 40
+  else
+    whiptail --title "Error" --msgbox "Failed to execute the remote script." 8 40
+  fi
+}
+
+# -----------------------------------
+# Main Logic
+# -----------------------------------
+check_commands
+while true; do
+  show_menu_0
+done
