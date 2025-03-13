@@ -2,98 +2,56 @@
 # extract_srt / convert_srt
 # -------------------------
 
-# Function to extract subtitles from video files and save as SRT
+# Function: Extract subtitles from a video file to an SRT file
 extract_srt() {
-  check_ffmpeg
-  echo -e "${MENU_2_COLOR}"
-  echo " ╔═════════════════════════════════════════════════╗ "
-  echo " ║              Extract subtitles SCRIPT           ║ "
-  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-
-  # Prompting the user for the source extension (e.g., mp4, mkv)
-  prompt "Source extension? : " srcExt
-
-  # Prompting the user for the destination extension (e.g., srt)
-  prompt "Destination extension? (default: srt): " destExt
-  destExt=${destExt:-srt}
-
-  # Prompting the user for the source directory
-  prompt "Source directory? : " srcDir
-
-  # Prompting the user for the destination directory
-  prompt "Destination directory? : " destDir
-  destDir=${destDir:-srt}
-
-  # Checking if the source directory exists
-  if [ ! -d "$srcDir" ]; then
-    echo -e "${ERROR}Source directory not found.${RESET}"
-    exit 1
+  input=$(whiptail --title "Extract Subtitles" --inputbox "Enter the input video file (e.g., video.mp4):" 8 60 3>&1 1>&2 2>&3)
+  if [ -z "$input" ]; then
+    whiptail --title "Error" --msgbox "Input file is required. Operation aborted." 8 45
+    return 1
   fi
-
-  # Creating the destination directory if it doesn't exist
-  mkdir -p "$destDir"
-
-  # Loop through each file in the source directory with the specified source extension
-  for filename in "$srcDir"/*.$srcExt; do
-    # Extracting the base name and path without the extension
-    basePath=${filename%.*}
-    baseName=${basePath##*/}
-
-    # Using FFmpeg to extract subtitles and save as SRT in the destination directory
-    if ffmpeg -f lavfi -i "movie=$filename[out0+subcc]" -map s "$destDir/$baseName.en.$destExt"; then
-      echo "Subtitles extracted and saved for $baseName.$srcExt"
-    else
-      echo -e "${ERROR}Error extracting subtitles for $baseName.$srcExt${RESET}"
-      continue
-    fi
-  done
-
-  echo -e "Extraction from ${srcExt} to ${destExt} complete!\a"
-  pause
-  show_menu_2
+  
+  output=$(whiptail --title "Extract Subtitles" --inputbox "Enter the output subtitle file name (e.g., output.srt):" 8 60 3>&1 1>&2 2>&3)
+  if [ -z "$output" ]; then
+    whiptail --title "Error" --msgbox "Output file name is required. Operation aborted." 8 45
+    return 1
+  fi
+  
+  whiptail --title "Processing" --infobox "Extracting subtitles from $input..." 8 60
+  # Using ffmpeg to extract the first subtitle stream.
+  ffmpeg -y -i "$input" -map 0:s:0 "$output"
+  
+  if [ $? -eq 0 ]; then
+    whiptail --title "Success" --msgbox "Subtitles extracted successfully to $output." 8 60
+  else
+    whiptail --title "Error" --msgbox "Failed to extract subtitles from $input." 8 60
+  fi
 }
 
-# Function to convert VTT subtitles to SRT format
+# Function: Convert subtitle file encoding/format
 convert_srt() {
-  check_ffmpeg
-  echo -e "${MENU_2_COLOR}"
-  echo " ╔═════════════════════════════════════════════════╗ "
-  echo " ║              Convert Subtitles SCRIPT           ║ "
-  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
-
-  # Prompting the user for the source directory
-  prompt "Source directory? (default: vtt): " srcDir
-  srcDir=${srcDir:-vtt}
-
-  # Prompting the user for the destination directory
-  prompt "Destination directory? (default: srt): " destDir
-  destDir=${destDir:-srt}
-
-  # Checking if the source directory exists
-  if [ ! -d "$srcDir" ]; then
-    echo -e "${ERROR}Source directory not found.${RESET}"
-    exit 1
+  input=$(whiptail --title "Convert Subtitles" --inputbox "Enter the input subtitle file (e.g., input.srt):" 8 60 3>&1 1>&2 2>&3)
+  if [ -z "$input" ]; then
+    whiptail --title "Error" --msgbox "Input file is required. Operation aborted." 8 45
+    return 1
   fi
-
-  # Creating the destination directory if it doesn't exist
-  mkdir -p "$destDir"
-
-  # Loop through each VTT file in the source directory
-  for filename in "$srcDir"/*.vtt; do
-    # Extracting the base name and path without the extension
-    basePath=${filename%.*}
-    baseName=${basePath##*/}
-
-    # Using FFmpeg to convert VTT to SRT and save the file in the destination directory
-    if ffmpeg -i "$filename" "$destDir/$baseName.srt"; then
-      echo "Converted $baseName.vtt to $baseName.srt"
-    else
-      echo -e "${ERROR}Error converting $baseName.vtt to $baseName.srt${RESET}"
-      continue
-    fi
-  done
-
-  echo -e "Conversion from vtt to srt complete!\a"
-  pause
-  show_menu_2
+  
+  output=$(whiptail --title "Convert Subtitles" --inputbox "Enter the output subtitle file name (e.g., output.srt):" 8 60 3>&1 1>&2 2>&3)
+  if [ -z "$output" ]; then
+    whiptail --title "Error" --msgbox "Output file name is required. Operation aborted." 8 45
+    return 1
+  fi
+  
+  charset=$(whiptail --title "Convert Subtitles" --inputbox "Enter the desired character set (e.g., UTF-8):" 8 60 "UTF-8" 3>&1 1>&2 2>&3)
+  
+  whiptail --title "Processing" --infobox "Converting subtitles encoding..." 8 60
+  # Determine the current encoding via file command and convert with iconv.
+  current_charset=$(file -bi "$input" | sed -e 's/.*[ ]charset=//')
+  iconv -f "$current_charset" -t "$charset" "$input" -o "$output"
+  
+  if [ $? -eq 0 ]; then
+    whiptail --title "Success" --msgbox "Subtitle file converted successfully to $output with encoding $charset." 8 60
+  else
+    whiptail --title "Error" --msgbox "Failed to convert subtitle file." 8 60
+  fi
 }
+
