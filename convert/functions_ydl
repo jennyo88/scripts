@@ -93,7 +93,8 @@ download_tv_show_ydl() {
 download_movie_ydl() {
   filename="${movie_name}.${movie_year}.${movie_resolution}.WEBRip.x264.mp4"
   printf "\nDownloading %s...\n" "$filename"
-  yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+  #yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' "$movie_url" --add-metadata -o "$filename"
+  yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a "$movie_url" --add-metadata -o "$filename"
 
   # Download 'en' and 'es' subtitles if available
   if yt-dlp --list-subs --skip-download "$movie_url" | grep -q -E 'en|es'; then
