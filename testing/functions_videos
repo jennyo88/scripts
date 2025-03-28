@@ -28,8 +28,6 @@ x265() {
 	done
 	wait  # Ensure all conversions complete
 	echo -e "Conversion complete!\a"
-	pause
-	show_menu_1
 }
 
 # Function for converting video files and extracting subtitles
@@ -59,8 +57,6 @@ video_sub() {
 	done
 	wait
 	echo -e "Conversion complete!\a"
-	pause
-	show_menu_1
 }
 
 # Function to update language metadata in MP4 video files
@@ -93,8 +89,6 @@ metadata() {
   fi
 
   echo -e "Metadata has been encoded!\a"
-  pause
-  show_menu_1
 }
 
 # Function to convert TS to MKV for PLEX compatibility
@@ -117,6 +111,4 @@ plex() {
   wait
 
   echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
-  pause
-  show_menu_1
 }
