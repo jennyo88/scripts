@@ -10,19 +10,19 @@
 # SOURCE SCRIPTS
 # -----------------------------------
 script_urls=(
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/error_handling"
-# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/menus"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_videos"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_m3u8"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_tubi"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl-playlist"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ydl_other"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_descargavideos"
-# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/functions_ytdlp"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_srt"
-  "https://raw.githubusercontent.com/jennyo88/scripts/main/testing/functions_cleanup"
-# "https://raw.githubusercontent.com/jennyo88/scripts/main/convert/tmux"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/error_handling"
+# "https://raw.githubusercontent.com/jennyo88/scripts/testing/menus"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_videos"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_m3u8"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_tubi"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_ydl"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_ydl-playlist"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_ydl_other"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_descargavideos"
+# "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_ytdlp"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_srt"
+  "https://raw.githubusercontent.com/jennyo88/scripts/testing/functions_cleanup"
+# "https://raw.githubusercontent.com/jennyo88/scripts/testing/tmux"
 # Add more script URLs as needed
 )
 
