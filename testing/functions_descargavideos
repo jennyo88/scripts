@@ -1,0 +1,87 @@
+# Display menu header
+display_menu_header_dvideos() {
+  whiptail --title "Movies & TV Shows" --msgbox "DESCARGAVIDEOS.TV SCRIPT" 10 60
+}
+
+# Prompt user for details (generic prompt function)
+prompt_for_details_dvideos() {
+  local prompt_message="$1"
+  local variable_name="$2"
+  local default_value="$3"
+  result=$(whiptail --title "$prompt_message" --inputbox "$prompt_message" 10 60 "$default_value" 3>&1 1>&2 2>&3)
+  eval "$variable_name=\"$result\""
+}
+
+# Download video and subtitles
+download_video_and_subtitles_dvideos() {
+  local type="$1"
+  local show_name="$2"
+  local season_number="$3"
+  local show_resolution="$4"
+  local first_episode="$5"
+  local last_episode="$6"
+
+  local show_folder="${show_name}"
+  mkdir -p "$show_folder"
+
+  for ((episode_number = 10#$first_episode; episode_number <= 10#$last_episode; episode_number++)); do
+    episode_number=$(printf "%02d" "$episode_number")
+    local video_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.mp4"
+    local subtitle_filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.es.srt"
+
+    prompt_for_details_dvideos "Enter the URL for Season $season_number Episode $episode_number (or leave blank to skip): " episode_url ""
+
+    if [ -z "$episode_url" ]; then
+      printf "Skipping Season $season_number Episode $episode_number.\n"
+    else
+      ffmpeg -i "$episode_url" -metadata:s:a:0 language=spa -c copy "$video_filename"
+      prompt_for_details_dvideos "Enter the URL for subtitles for Season $season_number Episode $episode_number (or leave blank if none): " subtitle_url ""
+
+      if [ -n "$subtitle_url" ]; then
+        ffmpeg -i "$subtitle_url" -c:s srt "$subtitle_filename"
+      else
+        printf "No subtitle URL provided for Season $season_number Episode $episode_number.\n"
+      fi
+    fi
+  done
+}
+
+# Download movie
+download_movie_dvideos() {
+  local movie_name="$1"
+  local movie_year="$2"
+  local movie_resolution="$3"
+  local movie_url="$4"
+
+  local filename="${movie_name}.${movie_year}.${movie_resolution}.WEBRip.x264.mp4"
+  printf "\nDownloading %s...\n" "$filename"
+  ffmpeg -i "$movie_url" -metadata:s:a:0 language=spa -c copy "$filename"
+}
+
+# Main function
+descargavideos() {
+  display_menu_header_dvideos
+  prompt_for_details_dvideos "Enter 'tv' for TV show or 'movie' for movie (default: tv): " type "tv"
+
+  if [ "$type" == "tv" ]; then
+    prompt_for_details_dvideos "Enter the show name (include periods between words): " show_name ""
+    prompt_for_details_dvideos "Enter the season number (two digits; default: 01): " season_number "01"
+    prompt_for_details_dvideos "Enter video resolution (e.g. 480p, 720p, or 1080p | default: 720p): " show_resolution "720p"
+    prompt_for_details_dvideos "Enter the first episode number: " first_episode ""
+    prompt_for_details_dvideos "Enter the last episode number: " last_episode ""
+    download_video_and_subtitles_dvideos "$type" "$show_name" "$season_number" "$show_resolution" "$first_episode" "$last_episode"
+    
+  elif [ "$type" == "movie" ]; then
+    prompt_for_details_dvideos "Enter the name of the movie (include periods between words): " movie_name ""
+    prompt_for_details_dvideos "Enter the year of the movie: " movie_year ""
+    prompt_for_details_dvideos "Enter the resolution (e.g., 480p, 720p, 1080p | default: 720p): " movie_resolution "720p"
+    prompt_for_details_dvideos "Enter the movie URL: " movie_url ""
+    download_movie_dvideos "$movie_name" "$movie_year" "$movie_resolution" "$movie_url"
+  else
+    whiptail --title "Invalid Input" --msgbox "Invalid type. Please enter 'tv' or 'movie'." 8 40
+    exit 1
+  fi
+
+  whiptail --title "Task Completed" --msgbox "Task completed successfully!" 8 40
+  show_menu_1
+}
