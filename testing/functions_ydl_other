@@ -1,0 +1,80 @@
+# Function to display the header
+display_header() {
+  whiptail --title "Movies & TV Shows" --msgbox "YOUTUBE-DL to MP4 SCRIPT" 10 60
+}
+
+# Function to prompt user for type (TV show or movie)
+prompt_for_type() {
+  type=$(whiptail --title "Video Type" --radiolist \
+    "Is it a TV show or a movie?" 15 60 2 \
+    "tv" "TV Show" \
+    "movie" "Movie" 3>&1 1>&2 2>&3)
+}
+
+# Function to prompt user for show details
+prompt_for_show_details() {
+  show_name=$(whiptail --title "Show Name" --inputbox "Enter the show name (include periods between words):" 10 60 3>&1 1>&2 2>&3)
+  season_number=$(whiptail --title "Season Number" --inputbox "Enter the season number (two digits; default: 01):" 10 60 "01" 3>&1 1>&2 2>&3)
+  first_episode=$(whiptail --title "First Episode" --inputbox "Enter the first episode number:" 10 60 3>&1 1>&2 2>&3)
+  last_episode=$(whiptail --title "Last Episode" --inputbox "Enter the last episode number:" 10 60 3>&1 1>&2 2>&3)
+}
+
+# Function to download video
+download_video() {
+  yt-dlp -f b "$episode_url" --add-metadata -o "$filename"
+}
+
+# Function to handle TV show downloads
+download_tv_show() {
+  show_folder="${show_name}_OTHER"
+  mkdir -p "$show_folder"
+
+  for ((episode = first_episode; episode <= last_episode; episode++)); do
+    episode_number=$(printf "%02d" "$episode")
+
+    episode_url=$(whiptail --title "Episode URL" --inputbox "Enter the URL for Season $season_number Episode $episode_number (or leave it blank to skip):" 10 60 3>&1 1>&2 2>&3)
+
+    if [ -z "$episode_url" ]; then
+      whiptail --title "Skip Episode" --msgbox "Skipping Season $season_number Episode $episode_number." 10 60
+      continue
+    fi
+
+    filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.1080p.WEBRip.x264.mp4"
+    download_video
+    whiptail --title "Download Complete" --msgbox "Downloaded for $filename." 10 60
+  done
+}
+
+# Function to handle movie downloads
+download_movie() {
+  filename="${movie_name}.${movie_year}.${resolution}.WEBRip.x264.mp4"
+  whiptail --title "Downloading Movie" --msgbox "Downloading $filename..." 10 60
+  yt-dlp -f b "$movie_url" --add-metadata -o "$filename"
+
+  whiptail --title "Download Complete" --msgbox "Downloaded for $filename." 10 60
+}
+
+# Main function
+download_content() {
+  display_header
+  prompt_for_type
+
+  if [ "$type" == "tv" ]; then
+    prompt_for_show_details
+    download_tv_show
+    
+  elif [ "$type" == "movie" ]; then
+    movie_name=$(whiptail --title "Movie Name" --inputbox "Enter the name of the movie (include periods between words):" 10 60 3>&1 1>&2 2>&3)
+    movie_year=$(whiptail --title "Movie Year" --inputbox "Enter the year of the movie:" 10 60 3>&1 1>&2 2>&3)
+    resolution=$(whiptail --title "Resolution" --inputbox "Enter the resolution (e.g., 480p, 720p, 1080p):" 10 60 3>&1 1>&2 2>&3)
+    movie_url=$(whiptail --title "Movie URL" --inputbox "Enter the movie URL:" 10 60 3>&1 1>&2 2>&3)
+
+    download_movie
+  else
+    whiptail --title "Invalid Input" --msgbox "Invalid type. Please enter 'tv' or 'movie'." 10 60
+    exit 1
+  fi
+}
+
+# Call the main function to start the process
+download_content
