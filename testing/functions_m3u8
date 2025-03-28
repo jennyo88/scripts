@@ -1,0 +1,77 @@
+m3u8() {
+    check_ffmpeg
+    # Get user input using whiptail
+    get_user_input_whiptail
+
+    # Create directory based on movie name and release year
+    create_directory
+
+    # Download M3U8 stream and convert to TS format using FFmpeg
+    convert_m3u8_to_ts
+
+    # Display completion message
+    display_completion_message
+}
+
+get_user_input_whiptail() {
+    # Prompt for destination extension using whiptail (default: ts)
+    destExt=$(whiptail --title "M3U8 to TS Script" --inputbox "Destination extension? (default: ts)" 10 60 "ts" 3>&1 1>&2 2>&3)
+    destExt=${destExt:-ts}
+
+    # Prompt for destination directory (default: ts)
+    destDir=$(whiptail --title "M3U8 to TS Script" --inputbox "Destination directory? (default: ts)" 10 60 "ts" 3>&1 1>&2 2>&3)
+    destDir=${destDir:-ts}
+
+    # Prompt for source web-address (M3U8 URL)
+    srcAdd=$(whiptail --title "M3U8 to TS Script" --inputbox "Source web-address (M3U8 URL):" 10 60 "" 3>&1 1>&2 2>&3)
+
+    # Prompt for movie name (with periods)
+    baseName=$(whiptail --title "M3U8 to TS Script" --inputbox "Movie name? (include periods between words):" 10 60 "" 3>&1 1>&2 2>&3)
+
+    # Prompt for movie release year
+    baseYear=$(whiptail --title "M3U8 to TS Script" --inputbox "Movie release year?" 10 60 "" 3>&1 1>&2 2>&3)
+
+    # Prompt for scene/channel (default: TCM)
+    baseScene=$(whiptail --title "M3U8 to TS Script" --inputbox "Scene/channel of the movie? (default: TCM)" 10 60 "TCM" 3>&1 1>&2 2>&3)
+    baseScene=${baseScene:-TCM}
+
+    # Prompt for resolution (default: 720p)
+    baseResolution=$(whiptail --title "M3U8 to TS Script" --inputbox "Enter the resolution (e.g., 480p, 720p, 1080p | default: 720p):" 10 60 "720p" 3>&1 1>&2 2>&3)
+    baseResolution=${baseResolution:-720p}
+
+    # Get valid language code (three-letter code)
+    validLanguageCode=false
+    while [ "$validLanguageCode" = false ]; do
+        language=$(whiptail --title "M3U8 to TS Script" --inputbox "Movie language? (Enter a three-letter code, e.g., eng, spa, jpn, fre, zho | default: eng):" 10 60 "eng" 3>&1 1>&2 2>&3)
+        if [ ${#language} -eq 3 ]; then
+            validLanguageCode=true
+        else
+            whiptail --title "Invalid Input" --msgbox "Invalid language code. Please enter a three-letter code." 8 40
+        fi
+    done
+}
+
+create_directory() {
+    # Create and format directory
+    dirName="${baseName} (${baseYear})"
+    newname=$(echo "$dirName" | tr '.' ' ' | sed 's/\(.*\) \([^ ]*[aA-zZ][aA-zZ]*$\)/\1.\2/g' )
+    mkdir "$dirName"
+    mv "$dirName" "$newname"
+    mv "$newname" ./DONE/
+}
+
+convert_m3u8_to_ts() {
+    # Run FFmpeg to download and convert the M3U8 stream
+    if ffmpeg -i "$srcAdd" -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 -metadata:s:a:0 language="$language" "$destDir"/"$baseName"."$baseYear"."$baseResolution".WEBRip.x265-"$baseScene"."$destExt"; then
+        echo -e "Conversion from M3U8 to TS complete!\a"
+        sleep 1
+        show_menu_1  # Call to return to menu
+    else
+        echo -e "${ERROR}Error during conversion of M3U8 stream${RESET}"
+    fi
+}
+
+display_completion_message() {
+    # Display completion message (optional)
+    whiptail --title "Conversion Complete" --msgbox "Task completed successfully!" 10 60
+}
