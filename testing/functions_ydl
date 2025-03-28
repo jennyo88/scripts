@@ -1,57 +1,67 @@
-# Function: Download a single video using yt-dlp
-download_ytdlp() {
-  video_url=$(whiptail --title "Download Video with yt-dlp" --inputbox "Enter the video URL:" 8 60 3>&1 1>&2 2>&3)
-  if [ -z "$video_url" ]; then
-    whiptail --title "Error" --msgbox "Video URL is required. Operation aborted." 8 45
-    return 1
-  fi
-  
-  output=$(whiptail --title "Download Video with yt-dlp" --inputbox "Enter the desired output file name (e.g., video.mp4):" 8 60 3>&1 1>&2 2>&3)
-  if [ -z "$output" ]; then
-    whiptail --title "Error" --msgbox "Output file name is required. Operation aborted." 8 45
-    return 1
-  fi
-
-  quality=$(whiptail --title "Download Video with yt-dlp" --inputbox "Enter quality parameter (leave blank for default):" 8 60 3>&1 1>&2 2>&3)
-
-  whiptail --title "Downloading" --infobox "Downloading video from $video_url ..." 8 60
-
-  # Build the yt-dlp command: if a quality parameter is provided, include it; otherwise use defaults.
-  if [ -n "$quality" ]; then
-    yt-dlp -f "$quality" -o "$output" "$video_url"
-  else
-    yt-dlp -o "$output" "$video_url"
-  fi
-
-  if [ $? -eq 0 ]; then
-    whiptail --title "Success" --msgbox "Download completed successfully!" 8 45
-  else
-    whiptail --title "Error" --msgbox "Download failed." 8 45
-  fi
+# Function to display the menu header
+display_menu_header_ydl() {
+  whiptail --title "Movies & TV Shows" --msgbox "YOUTUBE-DL to MP4 SCRIPT" 10 50
 }
 
-# Function: Download a playlist using yt-dlp
-download_ytdlp_playlist() {
-  playlist_url=$(whiptail --title "Download Playlist with yt-dlp" --inputbox "Enter the playlist URL:" 8 60 3>&1 1>&2 2>&3)
-  if [ -z "$playlist_url" ]; then
-    whiptail --title "Error" --msgbox "Playlist URL is required. Operation aborted." 8 45
-    return 1
-  fi
+# Function to prompt user for type (TV show or movie)
+prompt_for_type_ydl() {
+  type=$(whiptail --title "Content Type" --menu "Is it a TV show or a movie?" 15 50 2 \
+    "tv" "TV Show" \
+    "movie" "Movie" 3>&1 1>&2 2>&3)
+  type=${type:-tv}
+}
+
+# Function to prompt user for show details
+prompt_for_show_details_ydl() {
+  show_name=$(whiptail --inputbox "Enter the show name (use periods between words):" 10 60 3>&1 1>&2 2>&3)
+  season_number=$(whiptail --inputbox "Enter the season number (default: 01):" 10 60 "01" 3>&1 1>&2 2>&3)
+  show_resolution=$(whiptail --inputbox "Enter video resolution (default: 1080p):" 10 60 "1080p" 3>&1 1>&2 2>&3)
+  first_episode=$(whiptail --inputbox "Enter the first episode number:" 10 60 3>&1 1>&2 2>&3)
+  last_episode=$(whiptail --inputbox "Enter the last episode number:" 10 60 3>&1 1>&2 2>&3)
+}
+
+# Function to download TV show
+
+download_tv_show_ydl() {
+  show_folder="${show_name}_YouTube"
+  mkdir -p "$show_folder"
+
+  for ((episode = 10#$first_episode; episode <= 10#$last_episode; episode++)); do
+    episode_number=$(printf "%02d" "$episode")
+    episode_url=$(whiptail --inputbox "Enter URL for Season $season_number Episode $episode_number (leave blank to skip):" 10 60 3>&1 1>&2 2>&3)
+    
+    if [ -z "$episode_url" ]; then
+      continue
+    fi
+    
+    filename="${show_folder}/${show_name}.S${season_number}E${episode_number}.${show_resolution}.WEBRip.x264.mp4"
+    yt-dlp -f 'bv+ba' "$episode_url" --add-metadata -o "$filename"
+  done
+}
+
+# Function to handle movie downloads
+download_movie_ydl() {
+  movie_name=$(whiptail --inputbox "Enter the movie name (use periods between words):" 10 60 3>&1 1>&2 2>&3)
+  movie_year=$(whiptail --inputbox "Enter the year of the movie:" 10 60 3>&1 1>&2 2>&3)
+  movie_resolution=$(whiptail --inputbox "Enter the resolution (default: 1080p):" 10 60 "1080p" 3>&1 1>&2 2>&3)
+  movie_url=$(whiptail --inputbox "Enter the movie URL:" 10 60 3>&1 1>&2 2>&3)
   
-  output_dir=$(whiptail --title "Download Playlist with yt-dlp" --inputbox "Enter the output directory (absolute or relative path):" 8 60 3>&1 1>&2 2>&3)
-  if [ -z "$output_dir" ]; then
-    whiptail --title "Error" --msgbox "Output directory is required. Operation aborted." 8 45
-    return 1
-  fi
-  
-  whiptail --title "Downloading Playlist" --infobox "Downloading playlist from $playlist_url ..." 8 60
-  
-  # Download playlist with output file naming based on video title
-  yt-dlp -o "$output_dir/%(title)s.%(ext)s" "$playlist_url"
-  
-  if [ $? -eq 0 ]; then
-    whiptail --title "Success" --msgbox "Playlist download completed successfully!" 8 45
+  filename="${movie_name}.${movie_year}.${movie_resolution}.WEBRip.x264.mp4"
+  yt-dlp -f 'bv+ba' "$movie_url" --add-metadata -o "$filename"
+}
+
+# Main function
+ydl() {
+  display_menu_header_ydl
+  prompt_for_type_ydl
+
+  if [ "$type" == "tv" ]; then
+    prompt_for_show_details_ydl
+    download_tv_show_ydl
+  elif [ "$type" == "movie" ]; then
+    download_movie_ydl
   else
-    whiptail --title "Error" --msgbox "Playlist download failed." 8 45
+    whiptail --msgbox "Invalid selection. Exiting." 10 50
+    exit 1
   fi
 }
