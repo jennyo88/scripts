@@ -1,92 +1,122 @@
 # -------------------------------------------------------
-# x265 / m3u8 / tubi
+# x265 / video_sub / metadata 
 # -------------------------------------------------------
 
-# Function for converting video files to x265 format using FFmpeg with Whiptail
+# Function for converting video files to x265 format using FFmpeg
 x265() {
 	check_ffmpeg
-	whiptail --title "x265 Conversion" --msgbox "This script converts video files to x265 format." 10 50
+	# Prompt user for source extension with default
+	srcExt=$(whiptail --title "x265 Script" --inputbox "Source extension? (default: mkv)" 10 60 "mkv" 3>&1 1>&2 2>&3)
+	srcExt=${srcExt:-mkv}
 
-	srcExt=$(whiptail --inputbox "Enter source extension (mkv, mp4, avi):" 10 50 3>&1 1>&2 2>&3)
-	destExt=$(whiptail --inputbox "Enter destination extension (mkv or mp4; default: mp4):" 10 50 3>&1 1>&2 2>&3)
+	# Prompt user for destination extension with default
+	destExt=$(whiptail --title "x265 Script" --inputbox "Destination extension? (default: mp4)" 10 60 "mp4" 3>&1 1>&2 2>&3)
 	destExt=${destExt:-mp4}
 
-	srcDir=$(whiptail --inputbox "Enter source directory:" 10 50 3>&1 1>&2 2>&3)
-	destDir=$(whiptail --inputbox "Enter destination directory (default: DONE):" 10 50 3>&1 1>&2 2>&3)
+	# Prompt user for source directory
+	srcDir=$(whiptail --title "x265 Script" --inputbox "Source directory?" 10 60 "" 3>&1 1>&2 2>&3)
+
+	# Prompt user for destination directory with default
+	destDir=$(whiptail --title "x265 Script" --inputbox "Destination directory? (default: DONE)" 10 60 "DONE" 3>&1 1>&2 2>&3)
 	destDir=${destDir:-DONE}
 
+	# Convert files in parallel
 	for filename in "$srcDir"/*.$srcExt; do
 		basePath=${filename%.*}
 		baseName=${basePath##*/}
-		if ffmpeg -i "$filename" -c:v libx265 -c:a copy -threads 2 "$destDir/$baseName.$destExt"; then
-			whiptail --msgbox "Conversion complete: $baseName.$destExt" 10 50
-		else
-			whiptail --msgbox "Error during conversion: $filename" 10 50
-		fi
+		ffmpeg -i "$filename" -c:v libx265 -c:a copy -c:s copy -threads 2 "$destDir"/"$baseName"."$destExt" &
 	done
+	wait  # Ensure all conversions complete
+	echo -e "Conversion complete!\a"
+	pause
+	show_menu_1
 }
 
-# Function for converting M3U8 stream to TS format using FFmpeg with Whiptail
-m3u8() {
+# Function for converting video files and extracting subtitles
+video_sub() {
 	check_ffmpeg
-	whiptail --title "M3U8 to TS Conversion" --msgbox "Convert M3U8 streams to TS format." 10 50
-
-	destExt=$(whiptail --inputbox "Enter destination extension (default: ts):" 10 50 3>&1 1>&2 2>&3)
-	destExt=${destExt:-ts}
-	destDir=$(whiptail --inputbox "Enter destination directory (default: ts):" 10 50 3>&1 1>&2 2>&3)
-	destDir=${destDir:-ts}
-
-	srcAdd=$(whiptail --inputbox "Enter source web address:" 10 50 3>&1 1>&2 2>&3)
-	baseName=$(whiptail --inputbox "Enter movie name (use periods between words):" 10 50 3>&1 1>&2 2>&3)
-	baseYear=$(whiptail --inputbox "Enter movie release year:" 10 50 3>&1 1>&2 2>&3)
-	baseResolution=$(whiptail --inputbox "Enter resolution (480p, 720p, 1080p; default: 720p):" 10 50 3>&1 1>&2 2>&3)
-	baseResolution=${baseResolution:-720p}
-
-	if ffmpeg -i "$srcAdd" -bsf:a aac_adtstoasc -c:v copy -c:a aac -map 0 -crf 50 "$destDir/$baseName.$baseYear.$baseResolution.WEBRip.x265-$baseScene.$destExt"; then
-		whiptail --msgbox "Conversion complete!" 10 50
-	else
-		whiptail --msgbox "Error during conversion!" 10 50
-	fi
-}
-
-# Function for downloading and merging video and audio files for Tubi episodes using Whiptail
-tubi() {
-	check_ffmpeg
-	check_wget
-	whiptail --title "Tubi Downloader" --msgbox "Download and merge video/audio files for Tubi episodes." 10 50
-
-	show_name=$(whiptail --inputbox "Enter the name of the show:" 10 50 3>&1 1>&2 2>&3)
-	first_episode=$(whiptail --inputbox "Enter the first episode number:" 10 50 3>&1 1>&2 2>&3)
-	last_episode=$(whiptail --inputbox "Enter the last episode number:" 10 50 3>&1 1>&2 2>&3)
-
-	for ((episode_number = first_episode; episode_number <= last_episode; episode_number++)); do
-		video_url=$(whiptail --inputbox "Enter the video URL for episode $episode_number:" 10 50 3>&1 1>&2 2>&3)
-		audio_url=$(whiptail --inputbox "Enter the audio URL for episode $episode_number:" 10 50 3>&1 1>&2 2>&3)
-		video_file="${show_name}_video_episode_$(printf "%02d" "$episode_number").mp4"
-		audio_file="${show_name}_audio_episode_$(printf "%02d" "$episode_number").mp4"
-		output_file="${show_name}.S01E$(printf "%02d" "$episode_number").WEBRip.x264.mp4"
-
-		wget -O "$video_file" "$video_url"
-		wget -O "$audio_file" "$audio_url"
-
-		ffmpeg -i "$video_file" -i "$audio_file" -c:v copy -c:a aac "$output_file"
-
-		whiptail --msgbox "Episode $episode_number downloaded and merged!" 10 50
+	# Convert TS to MKV in parallel
+	for filename in ts/*.ts; do
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+		ffmpeg -i "$filename" -map 0 -c copy -map_metadata 0 "mkv/$baseName.mkv" &
 	done
+	wait
+
+	# Extract subtitles in parallel
+	for filename in ts/*.ts; do
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+		ffmpeg -f lavfi -i "movie=$filename[out0+subcc]" -map s "srt/$baseName.en.srt" &
+	done
+	wait
+
+	# Convert MKV to MP4 in parallel
+	for filename in mkv/*.mkv; do
+		basePath=${filename%.*}
+		baseName=${basePath##*/}
+		ffmpeg -i "$filename" -map 0 -c:v libx265 -c:a copy -map_metadata 0 -threads 3 "DONE/$baseName.mp4" &
+	done
+	wait
+	echo -e "Conversion complete!\a"
+	pause
+	show_menu_1
 }
 
-# Main menu using Whiptail
-while true; do
-	CHOICE=$(whiptail --title "Media Processing Script" --menu "Choose an option:" 15 60 5 \
-	"1" "Convert to x265" \
-	"2" "Convert M3U8 to TS" \
-	"3" "Download from Tubi" \
-	"4" "Exit" 3>&1 1>&2 2>&3)
+# Function to update language metadata in MP4 video files
+metadata() {
+  check_ffmpeg
+  # Prompting the user to enter the folder path
+  folder_path=$(whiptail --title "Metadata Script" --inputbox "Enter the folder path where the video files are located:" 10 60 "" 3>&1 1>&2 2>&3)
 
-	case $CHOICE in
-		1) x265 ;;
-		2) m3u8 ;;
-		3) tubi ;;
-		4) exit ;;
-	esac
-done
+  # Checking if the folder exists
+  if [ -d "$folder_path" ]; then
+    mkdir -p "$folder_path/Metadata"
+
+    # Prompt user for language once
+    language=$(whiptail --title "Metadata Script" --inputbox "Enter the three-letter language code for all files (default: eng)" 10 60 "eng" 3>&1 1>&2 2>&3)
+    language=${language:-eng}
+
+    cd "$folder_path"
+
+    # Loop through each MP4 file and update metadata in parallel
+    for file in *.mp4; do
+      if [[ -f "$file" && "$file" != "metadata.sh" && "$file" != "Metadata" ]]; then
+        ffmpeg -i "$file" -metadata:s:a:0 language="$language" -codec copy "Metadata/$file" &
+      fi
+    done
+    wait
+
+    echo "Metadata files are saved in $folder_path/Metadata"
+  else
+    echo "Folder not found."
+  fi
+
+  echo -e "Metadata has been encoded!\a"
+  pause
+  show_menu_1
+}
+
+# Function to convert TS to MKV for PLEX compatibility
+plex() {
+  check_ffmpeg
+  # Prompt user with default values
+  srcExt=$(whiptail --title "plex TS to MKV" --inputbox "Source extension? (default: ts)" 10 60 "ts" 3>&1 1>&2 2>&3)
+  srcExt=${srcExt:-ts}
+  destExt=$(whiptail --title "plex TS to MKV" --inputbox "Destination extension? (default: mkv)" 10 60 "mkv" 3>&1 1>&2 2>&3)
+  destExt=${destExt:-mkv}
+  srcDir=$(whiptail --title "plex TS to MKV" --inputbox "Source directory?" 10 60 "" 3>&1 1>&2 2>&3)
+  destDir=$(whiptail --title "plex TS to MKV" --inputbox "Destination directory?" 10 60 "" 3>&1 1>&2 2>&3)
+
+  # Convert in parallel
+  for filename in "$srcDir"/*.$srcExt; do
+    basePath=${filename%.*}
+    baseName=${basePath##*/}
+    ffmpeg -i "$filename" -map 0 -c copy "$destDir"/"$baseName"."$destExt" &
+  done
+  wait
+
+  echo -e "Conversion from ${srcExt} to ${destExt} complete!\a"
+  pause
+  show_menu_1
+}
