@@ -1,0 +1,35 @@
+playlist() {
+  # Prompt for playlist URL using Whiptail
+  playlist_url=$(whiptail --inputbox "Enter the URL of the playlist:" 10 60 3>&1 1>&2 2>&3)
+  if [ $? -ne 0 ]; then return; fi  # Exit if user cancels
+
+  # Ask whether to download the whole playlist
+  if whiptail --yesno "Do you want to download the whole playlist?" 10 60; then
+    playlist_items_option=""
+  else
+    playlist_items=$(whiptail --inputbox "Enter the item numbers to download (e.g., 1,2,5-7):" 10 60 3>&1 1>&2 2>&3)
+    if [ $? -ne 0 ]; then return; fi  # Exit if user cancels
+    playlist_items_option="--playlist-items $playlist_items"
+  fi
+
+  # Start download process
+  yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' --yes-playlist --write-sub --sub-lang en,es $playlist_items_option -o '%(playlist)s/%(title)s.%(height)s.WEBRip.x264.%(ext)s' "$playlist_url"
+
+  # Convert subtitles from VTT to SRT using FFmpeg
+  for dir in */; do
+      if [[ -d "$dir" ]]; then
+          cd "$dir" || exit 1
+          for file in *.vtt; do
+              if [[ -f "$file" ]]; then
+                  ffmpeg -i "$file" "${file%.vtt}.srt"
+                  rm "$file"  # Remove the original VTT file
+              fi
+          done
+          cd .. || exit 1
+      fi
+  done
+
+  whiptail --msgbox "Download complete!" 10 40
+  pause
+  show_menu_1
+}
