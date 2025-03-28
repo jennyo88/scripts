@@ -1,0 +1,86 @@
+# Function for downloading and merging video and audio files for Tubi content
+tubi() {
+  check_ffmpeg
+  check_wget
+  # Prompting the user for content details
+  content_type=$(whiptail --title "Tubi Content Download" --inputbox "Is it a movie or TV show? (Enter 'movie' or 'tv')" 10 60 "" 3>&1 1>&2 2>&3)
+
+  if [ "$content_type" == "movie" ]; then
+    # Prompting the user for movie details
+    movie_name=$(whiptail --title "Tubi Content Download" --inputbox "Enter the name of the movie" 10 60 "" 3>&1 1>&2 2>&3)
+    movie_year=$(whiptail --title "Tubi Content Download" --inputbox "Enter the year of the movie" 10 60 "" 3>&1 1>&2 2>&3)
+    video_resolution=$(whiptail --title "Tubi Content Download" --inputbox "Enter the video resolution (e.g., 720p, 1080p | default: 720p)" 10 60 "720p" 3>&1 1>&2 2>&3)
+    video_url=$(whiptail --title "Tubi Content Download" --inputbox "Enter the web address for video file" 10 60 "" 3>&1 1>&2 2>&3)
+    audio_url=$(whiptail --title "Tubi Content Download" --inputbox "Enter the web address for audio file" 10 60 "" 3>&1 1>&2 2>&3)
+
+    # Generating file names based on user input
+    video_file="${movie_name}.${movie_year}.video.${video_resolution}.mp4"
+    audio_file="${movie_name}.audio.mp4"
+    output_file="${movie_name}.${movie_year}.${video_resolution}.WEBRip.x264.mp4"
+
+    # Debugging: Print file paths
+    echo "Video File: $video_file"
+    echo "Audio File: $audio_file"
+    echo "Output File: $output_file"
+
+    # Downloading video and audio files
+    printf "Downloading video for %s...\n" "${movie_name}"
+    wget -O "${video_file}" "${video_url}"
+
+    printf "Downloading audio for %s...\n" "${movie_name}"
+    wget -O "${audio_file}" "${audio_url}"
+
+    # Merging video and audio files using FFmpeg
+    ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
+
+    printf "Video and audio files merged for %s. Output file: %s\n" "${movie_name}" "${output_file}"
+
+    # Removing downloaded video and audio files
+    rm "${video_file}" "${audio_file}"
+
+  elif [ "$content_type" == "tv" ]; then
+    # Prompting the user for TV show details
+    show_name=$(whiptail --title "Tubi Content Download" --inputbox "Enter the name of the TV show" 10 60 "" 3>&1 1>&2 2>&3)
+    video_resolution=$(whiptail --title "Tubi Content Download" --inputbox "Enter the video resolution (e.g., 720p, 1080p | default: 480p)" 10 60 "480p" 3>&1 1>&2 2>&3)
+    season_number=$(whiptail --title "Tubi Content Download" --inputbox "Enter the season number (two digits | default: 01)" 10 60 "01" 3>&1 1>&2 2>&3)
+    first_episode=$(whiptail --title "Tubi Content Download" --inputbox "Enter the first episode number" 10 60 "" 3>&1 1>&2 2>&3)
+    last_episode=$(whiptail --title "Tubi Content Download" --inputbox "Enter the last episode number" 10 60 "" 3>&1 1>&2 2>&3)
+
+    # Loop through the specified range of episodes
+    for ((episode_number = 10#$first_episode; episode_number <= 10#$last_episode; episode_number++)); do
+      # Prompting the user for video and audio URLs for each episode
+      video_url=$(whiptail --title "Tubi Content Download" --inputbox "Enter the web address for video file of episode %02d" 10 60 "" 3>&1 1>&2 2>&3)
+      audio_url=$(whiptail --title "Tubi Content Download" --inputbox "Enter the web address for audio file of episode %02d" 10 60 "" 3>&1 1>&2 2>&3)
+
+      # Generating file names based on user input
+      video_file="${show_name}.video.${video_resolution}.episode.$(printf "%02d" "${episode_number}").mp4"
+      audio_file="${show_name}.audio.episode.$(printf "%02d" "${episode_number}").mp4"
+      output_file="${show_name}.S${season_number}E$(printf "%02d" "${episode_number}").${video_resolution}.WEBRip.x264.mp4"
+
+      # Debugging: Print file paths
+      echo "Video File: $video_file"
+      echo "Audio File: $audio_file"
+      echo "Output File: $output_file"
+
+      # Downloading video and audio files
+      printf "Downloading video for episode %02d...\n" "${episode_number}"
+      wget -O "${video_file}" "${video_url}"
+
+      printf "Downloading audio for episode %02d...\n" "${episode_number}"
+      wget -O "${audio_file}" "${audio_url}"
+
+      # Merging video and audio files using FFmpeg
+      ffmpeg -i "${video_file}" -i "${audio_file}" -c:v copy -c:a copy "${output_file}"
+
+      printf "Video and audio files merged for episode %02d. Output file: %s\n" "${episode_number}" "${output_file}"
+
+      # Removing downloaded video and audio files
+      rm "${video_file}" "${audio_file}"
+    done
+  else
+    printf "\nInvalid content type. Please enter 'movie' or 'tv'.\n"
+    exit 1
+  fi
+
+  echo -e "Download complete!"
+}
