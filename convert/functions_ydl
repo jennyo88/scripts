@@ -23,7 +23,8 @@ prompt_for_show_details_ydl() {
 
 # Function to download video and subtitles with fallback for 'en' language
 download_video_and_subtitles_ydl() {
-  yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a "$episode_url" --add-metadata -o "$filename" &&
+  #yt-dlp -S vcodec:h264,fps,res:1080,acodec:m4a "$episode_url" --add-metadata -o "$filename" &&
+   yt-dlp -f bv+ba "$episode_url" --add-metadata -o "$filename" &&
     yt-dlp --list-subs --skip-download "$episode_url" | grep -q -E 'en|es' &&
     yt-dlp --write-sub --sub-lang en,es --convert-subs vtt --skip-download -o "${filename%.*}" "$episode_url" ||
     download_fallback_en_subtitles_ydl
