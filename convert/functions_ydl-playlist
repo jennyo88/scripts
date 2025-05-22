@@ -21,7 +21,8 @@ playlist() {
   fi
 
   # Download the playlist with subtitles in VTT format
-  yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' --yes-playlist --write-sub --sub-lang en,es $playlist_items_option -o '%(playlist)s/%(title)s.%(height)s.WEBRip.x264.%(ext)s' "$playlist_url"
+  #yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]' --yes-playlist --write-sub --sub-lang en,es $playlist_items_option -o '%(playlist)s/%(title)s.%(height)s.WEBRip.x264.%(ext)s' "$playlist_url"
+  yt-dlp -f 'bv+ba' --yes-playlist --write-sub --sub-lang en,es $playlist_items_option -o '%(playlist)s/%(title)s.%(height)s.WEBRip.x264.%(ext)s' "$playlist_url"
 
   # Convert subtitles from VTT to SRT using FFmpeg
   for dir in */; do
