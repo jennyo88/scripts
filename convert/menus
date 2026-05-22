@@ -116,7 +116,12 @@ show_menu_0() {
     [pP][lL][aA][yY][lL][iI][sS][tT]|[1][1])
       clear
       show_banner_1
-      playlist
+      video_playlist
+      ;;
+    [bB][oO][oO][kK]|[9][9])
+      clear
+      show_banner_1
+      audiobook_playlist
       ;;
     [mM][3][uU][8]|[1][2])
       clear
