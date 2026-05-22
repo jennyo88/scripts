@@ -8,51 +8,70 @@ audiobook_playlist() {
   read -p "Enter the URL of the audiobook playlist: " playlist_url
   read -p "Output audiobook name, without .m4b: " audiobook_name
   read -p "Audio bitrate? [64k]: " bitrate
-
   bitrate=${bitrate:-64k}
 
   read -p "Do you want to download the whole playlist? [Y/n]: " download_whole_playlist
 
-  if [[ $download_whole_playlist == "n" || $download_whole_playlist == "N" ]]; then
-      read -p "Enter the item numbers to download (e.g., 1,2,5-7): " playlist_items
-      playlist_items_option="--playlist-items $playlist_items"
+  if [[ $download_whole_playlist =~ ^[Nn]$ ]]; then
+      read -p "Enter item numbers to download, e.g. 1,2,5-7: " playlist_items
+      playlist_items_option=(--playlist-items "$playlist_items")
   else
-      playlist_items_option=""
+      playlist_items_option=()
   fi
 
-  workdir="${audiobook_name// /_}_audiobook"
+  safe_name="${audiobook_name// /_}"
+  workdir="${safe_name}_audiobook"
   audiodir="$workdir/audio"
   listfile="$workdir/files.txt"
+  outfile="${safe_name}.m4b"
 
   mkdir -p "$audiodir"
-  rm -f "$audiodir"/*.m4a "$listfile" "$workdir/$audiobook_name.m4b"
+  rm -f "$audiodir"/* "$listfile" "$outfile"
 
   yt-dlp \
     --yes-playlist \
     --ignore-errors \
-    --extract-audio \
+    -x \
     --audio-format m4a \
     --audio-quality "$bitrate" \
     --embed-metadata \
-    $playlist_items_option \
+    "${playlist_items_option[@]}" \
     -o "$audiodir/%(playlist_index)03d - %(title).200B.%(ext)s" \
     "$playlist_url"
 
-  find "$audiodir" -name "*.m4a" | sort | while read -r f; do
+  find "$audiodir" -type f \( -name "*.m4a" -o -name "*.mp4" -o -name "*.webm" -o -name "*.opus" \) | sort > "$workdir/downloaded.txt"
+
+  if [[ ! -s "$workdir/downloaded.txt" ]]; then
+      echo "ERROR: No audio files were downloaded."
+      echo "Check the playlist URL or run: yt-dlp -U"
+      pause
+      show_menu_1
+      return 1
+  fi
+
+  while IFS= read -r f; do
       esc=${f//\'/\'\\\'\'}
       echo "file '$esc'"
-  done > "$listfile"
+  done < "$workdir/downloaded.txt" > "$listfile"
 
-  echo "Creating audiobook: $audiobook_name.m4b"
+  echo "Creating audiobook: $outfile"
 
   ffmpeg -y \
     -f concat \
     -safe 0 \
     -i "$listfile" \
-    -c copy \
-    "$workdir/$audiobook_name.m4b"
+    -c:a aac \
+    -b:a "$bitrate" \
+    "$outfile"
 
-  echo -e "Audiobook complete: $workdir/$audiobook_name.m4b\a"
+  if [[ -f "$outfile" ]]; then
+      echo -e "Audiobook complete: $outfile\a"
+  else
+      echo "ERROR: ffmpeg did not create the M4B."
+      echo "Check this file:"
+      echo "$listfile"
+  fi
+
   pause
   show_menu_1
 }
