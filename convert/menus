@@ -65,6 +65,16 @@ show_banner_4() {
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 }
 
+# Function to display TMUX menu banner
+show_banner_5() {
+  echo "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                                                 ║ "
+  echo " ║                    AUDIOBOOK                    ║ "
+  echo " ║                                                 ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+}
+
 # -----------------------------------
 # MENUS
 # -----------------------------------
@@ -120,7 +130,7 @@ show_menu_0() {
       ;;
     [bB][oO][oO][kK]|[9][9])
       clear
-      show_banner_1
+      show_banner_5
       audiobook_playlist
       ;;
     [mM][3][uU][8]|[1][2])
