@@ -6,27 +6,32 @@ audiobook_playlist() {
   echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
 
   read -p "Enter the URL of the audiobook playlist: " playlist_url
-  read -p "Output audiobook name, without .m4b: " audiobook_name
+  read -p "Output audiobook name (without .m4b): " audiobook_name
   read -p "Audio bitrate? [64k]: " bitrate
+
   bitrate=${bitrate:-64k}
 
-  read -p "Do you want to download the whole playlist? [Y/n]: " download_whole_playlist
+  read -p "Download the whole playlist? [Y/n]: " download_whole_playlist
 
   if [[ $download_whole_playlist =~ ^[Nn]$ ]]; then
-      read -p "Enter item numbers to download, e.g. 1,2,5-7: " playlist_items
+      read -p "Enter item numbers (e.g. 1,2,5-7): " playlist_items
       playlist_items_option=(--playlist-items "$playlist_items")
   else
       playlist_items_option=()
   fi
 
-  safe_name="${audiobook_name// /_}"
+  safe_name=$(echo "$audiobook_name" | tr ' ' '_' | tr -cd '[:alnum:]_-')
+
   workdir="${safe_name}_audiobook"
   audiodir="$workdir/audio"
   listfile="$workdir/files.txt"
   outfile="${safe_name}.m4b"
 
   mkdir -p "$audiodir"
-  rm -f "$audiodir"/* "$listfile" "$outfile"
+
+  rm -f "$audiodir"/*
+  rm -f "$listfile"
+  rm -f "$outfile"
 
   yt-dlp \
     --yes-playlist \
@@ -36,25 +41,28 @@ audiobook_playlist() {
     --audio-quality "$bitrate" \
     --embed-metadata \
     "${playlist_items_option[@]}" \
-    -o "$audiodir/%(playlist_index)03d - %(title).200B.%(ext)s" \
+    -o "$audiodir/%(playlist_index)03d_%(title).200B.%(ext)s" \
     "$playlist_url"
 
-  find "$audiodir" -type f \( -name "*.m4a" -o -name "*.mp4" -o -name "*.webm" -o -name "*.opus" \) | sort > "$workdir/downloaded.txt"
+  counter=1
 
-  if [[ ! -s "$workdir/downloaded.txt" ]]; then
-      echo "ERROR: No audio files were downloaded."
-      echo "Check the playlist URL or run: yt-dlp -U"
-      pause
-      show_menu_1
-      return 1
-  fi
+  find "$audiodir" -type f | sort | while read -r oldfile; do
 
-  while IFS= read -r f; do
-      esc=${f//\'/\'\\\'\'}
-      echo "file '$esc'"
-  done < "$workdir/downloaded.txt" > "$listfile"
+      ext="${oldfile##*.}"
 
-  echo "Creating audiobook: $outfile"
+      newname=$(printf "%03d_chapter.%s" "$counter" "$ext")
+
+      mv "$oldfile" "$audiodir/$newname"
+
+      counter=$((counter + 1))
+
+  done
+
+  find "$audiodir" -type f | sort | while read -r f; do
+      echo "file '$f'"
+  done > "$listfile"
+
+  echo "Creating audiobook..."
 
   ffmpeg -y \
     -f concat \
@@ -65,11 +73,14 @@ audiobook_playlist() {
     "$outfile"
 
   if [[ -f "$outfile" ]]; then
-      echo -e "Audiobook complete: $outfile\a"
+      echo ""
+      echo "======================================"
+      echo "Audiobook created successfully:"
+      echo "$outfile"
+      echo "======================================"
   else
-      echo "ERROR: ffmpeg did not create the M4B."
-      echo "Check this file:"
-      echo "$listfile"
+      echo ""
+      echo "ERROR: Failed to create M4B."
   fi
 
   pause
