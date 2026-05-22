@@ -1,0 +1,58 @@
+audiobook_playlist() {
+  echo -e "${MENU_1_COLOR}"
+  echo " ╔═════════════════════════════════════════════════╗ "
+  echo " ║                   Audiobooks                    ║ "
+  echo " ║            YT-DLP PLAYLIST TO M4B               ║ "
+  echo " ╚═════════════════════════════════════════════════╝ ""${RESET}"
+
+  read -p "Enter the URL of the audiobook playlist: " playlist_url
+  read -p "Output audiobook name, without .m4b: " audiobook_name
+  read -p "Audio bitrate? [64k]: " bitrate
+
+  bitrate=${bitrate:-64k}
+
+  read -p "Do you want to download the whole playlist? [Y/n]: " download_whole_playlist
+
+  if [[ $download_whole_playlist == "n" || $download_whole_playlist == "N" ]]; then
+      read -p "Enter the item numbers to download (e.g., 1,2,5-7): " playlist_items
+      playlist_items_option="--playlist-items $playlist_items"
+  else
+      playlist_items_option=""
+  fi
+
+  workdir="${audiobook_name// /_}_audiobook"
+  audiodir="$workdir/audio"
+  listfile="$workdir/files.txt"
+
+  mkdir -p "$audiodir"
+  rm -f "$audiodir"/*.m4a "$listfile" "$workdir/$audiobook_name.m4b"
+
+  yt-dlp \
+    --yes-playlist \
+    --ignore-errors \
+    --extract-audio \
+    --audio-format m4a \
+    --audio-quality "$bitrate" \
+    --embed-metadata \
+    $playlist_items_option \
+    -o "$audiodir/%(playlist_index)03d - %(title).200B.%(ext)s" \
+    "$playlist_url"
+
+  find "$audiodir" -name "*.m4a" | sort | while read -r f; do
+      esc=${f//\'/\'\\\'\'}
+      echo "file '$esc'"
+  done > "$listfile"
+
+  echo "Creating audiobook: $audiobook_name.m4b"
+
+  ffmpeg -y \
+    -f concat \
+    -safe 0 \
+    -i "$listfile" \
+    -c copy \
+    "$workdir/$audiobook_name.m4b"
+
+  echo -e "Audiobook complete: $workdir/$audiobook_name.m4b\a"
+  pause
+  show_menu_1
+}
