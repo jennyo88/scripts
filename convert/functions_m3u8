@@ -4,34 +4,50 @@ m3u8() {
 
     echo -e "${MENU_1_COLOR}"
     echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║               VIDEO/AUDIO TO MKV               ║ "
-    echo " ║                MOVIES & TV SHOWS                ║ "
-    echo " ║             1080P - SPANISH AUDIO              ║ "
+    echo " ║              VIDEO/AUDIO TO MKV                ║ "
+    echo " ║               MOVIES & TV SHOWS                ║ "
+    echo " ║          1080P - AUDIO & SUBTITLES             ║ "
     echo " ╚═════════════════════════════════════════════════╝ ${RESET}"
 
     # Get user input
     get_user_input || return 1
 
-    # Create directory
+    # Create directory based on movie or TV show
     create_directory || return 1
 
-    # Download and combine video and Spanish audio
+    # Download streams and combine directly into MKV
     convert_m3u8_to_mkv || return 1
 
     # Display completion message
     display_completion_message
 
+    # Return to original menu
     show_menu_1
 }
 
 get_user_input() {
     prompt "Destination directory? (default: DONE): " destDir "DONE"
 
-    prompt "1080p video URL: " videoURL
-    prompt "Spanish audio URL: " spanishURL
+    echo ""
+    prompt "1080p video URL (required): " videoURL
+    prompt "Spanish audio URL (required): " spanishURL
+    prompt "English audio URL (optional, enter skip): " englishURL
+    prompt "Spanish VTT URL (optional, enter skip): " spanishVTT
+    prompt "English VTT URL (optional, enter skip): " englishVTT
 
-    if [ -z "$videoURL" ] || [ -z "$spanishURL" ]; then
-        echo "Both video and Spanish audio URLs are required."
+    # Normalize optional inputs
+    local variable value
+    for variable in englishURL spanishVTT englishVTT; do
+        value="${!variable}"
+        if [[ -z "$value" || "${value,,}" == "skip" ]]; then
+            printf -v "$variable" '%s' ""
+        fi
+    done
+
+    if [[ -z "$videoURL" || -z "$spanishURL" ||
+          "${videoURL,,}" == "skip" ||
+          "${spanishURL,,}" == "skip" ]]; then
+        echo "Video and Spanish audio URLs are required."
         return 1
     fi
 
@@ -41,29 +57,19 @@ get_user_input() {
     prompt "Media type? (default: 1): " mediaType "1"
 
     prompt "Movie/TV show name? (periods between words): " baseName
-
-    if [ -z "$baseName" ]; then
-        echo "A title is required."
-        return 1
-    fi
+    [[ -n "$baseName" ]] || return 1
 
     case "$mediaType" in
         1)
             prompt "Movie release year?: " baseYear
-            if ! [[ "$baseYear" =~ ^[0-9]{4}$ ]]; then
-                echo "Invalid release year."
-                return 1
-            fi
+            [[ "$baseYear" =~ ^[0-9]{4}$ ]] || return 1
             ;;
         2)
             prompt "Season number?: " seasonNumber
             prompt "Episode number?: " episodeNumber
 
-            if ! [[ "$seasonNumber" =~ ^[0-9]+$ &&
-                    "$episodeNumber" =~ ^[0-9]+$ ]]; then
-                echo "Invalid season or episode."
-                return 1
-            fi
+            [[ "$seasonNumber" =~ ^[0-9]+$ &&
+               "$episodeNumber" =~ ^[0-9]+$ ]] || return 1
             ;;
         *)
             echo "Invalid media type."
@@ -71,8 +77,11 @@ get_user_input() {
             ;;
     esac
 
-    # No default scene/channel/source
-    prompt "Scene/channel/source? (optional): " baseScene ""
+    prompt "Scene/channel/source? (optional, enter skip): " baseScene ""
+
+    if [[ "${baseScene,,}" == "skip" ]]; then
+        baseScene=""
+    fi
 
     baseResolution="1080p"
     destExt="mkv"
@@ -85,7 +94,7 @@ create_directory() {
     cleanName="${cleanName//\//_}"
     cleanName="${cleanName//\\/_}"
 
-    if [ "$mediaType" = "1" ]; then
+    if [[ "$mediaType" == "1" ]]; then
         dirName="${cleanName//./ } (${baseYear})"
         outputBase="${cleanName}.${baseYear}.1080p.WEBRip"
     else
@@ -99,7 +108,7 @@ create_directory() {
         outputBase="${cleanName}.S${season}E${episode}.1080p.WEBRip"
     fi
 
-    if [ -n "$baseScene" ]; then
+    if [[ -n "$baseScene" ]]; then
         sourceName="${baseScene// /_}"
         sourceName="${sourceName//\//_}"
         sourceName="${sourceName//\\/_}"
@@ -114,26 +123,75 @@ create_directory() {
 
 convert_m3u8_to_mkv() {
     echo ""
-    echo "Downloading 1080p video and Spanish audio..."
-    echo ""
+    echo "Downloading 1080p video, audio and subtitles..."
+
+    local -a inputs=(-i "$videoURL" -i "$spanishURL")
+    local -a maps=(-map "0:v:0" -map "1:a:0")
+    local -a metadataArgs=(
+        -metadata:s:a:0 language=spa
+        -metadata:s:a:0 title=Spanish
+        -disposition:a:0 default
+    )
+
+    local inputIndex=2
+    local audioIndex=1
+    local subtitleIndex=0
+
+    # Optional English audio
+    if [[ -n "$englishURL" ]]; then
+        inputs+=(-i "$englishURL")
+        maps+=(-map "${inputIndex}:a:0")
+
+        metadataArgs+=(
+            "-metadata:s:a:${audioIndex}" "language=eng"
+            "-metadata:s:a:${audioIndex}" "title=English"
+            "-disposition:a:${audioIndex}" "0"
+        )
+
+        ((inputIndex+=1))
+        ((audioIndex+=1))
+    fi
+
+    # Optional Spanish VTT
+    if [[ -n "$spanishVTT" ]]; then
+        inputs+=(-i "$spanishVTT")
+        maps+=(-map "${inputIndex}:s:0")
+
+        metadataArgs+=(
+            "-metadata:s:s:${subtitleIndex}" "language=spa"
+            "-metadata:s:s:${subtitleIndex}" "title=Spanish"
+        )
+
+        ((inputIndex+=1))
+        ((subtitleIndex+=1))
+    fi
+
+    # Optional English VTT
+    if [[ -n "$englishVTT" ]]; then
+        inputs+=(-i "$englishVTT")
+        maps+=(-map "${inputIndex}:s:0")
+
+        metadataArgs+=(
+            "-metadata:s:s:${subtitleIndex}" "language=eng"
+            "-metadata:s:s:${subtitleIndex}" "title=English"
+        )
+    fi
 
     if ffmpeg \
         -hide_banner \
         -stats \
-        -i "$videoURL" \
-        -i "$spanishURL" \
-        -map 0:v:0 \
-        -map 1:a:0 \
-        -c copy \
-        -metadata:s:a:0 language=spa \
-        -metadata:s:a:0 title="Spanish" \
-        -disposition:a:0 default \
+        "${inputs[@]}" \
+        "${maps[@]}" \
+        "${metadataArgs[@]}" \
+        -c:v copy \
+        -c:a copy \
+        -c:s srt \
         -y "$mkvFile"; then
 
-        echo "Video and Spanish audio merged successfully!"
+        echo "Conversion completed successfully!"
         return 0
     else
-        echo -e "${ERROR}Error merging video and audio.${RESET}"
+        echo -e "${ERROR}Error converting streams to MKV.${RESET}"
         return 1
     fi
 }
@@ -144,13 +202,14 @@ display_completion_message() {
     echo " ║             DOWNLOAD COMPLETED                 ║ "
     echo " ╚═════════════════════════════════════════════════╝ "
 
-    echo "Video: 1080p source"
-    echo "Audio: Spanish"
+    echo "Resolution: 1080p"
+    echo "Audio: Spanish + optional English"
+    echo "Subtitles: Optional Spanish / English"
     echo "Container: MKV"
     echo "Output: $mkvFile"
 
     echo ""
-    echo "Final stream information:"
+    echo "Final streams:"
 
     ffprobe \
         -v error \
