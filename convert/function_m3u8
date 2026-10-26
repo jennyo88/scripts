@@ -1,0 +1,184 @@
+
+m3u8() {
+    check_ffmpeg
+
+    if ! command -v ffprobe >/dev/null 2>&1 ||
+       ! command -v python3 >/dev/null 2>&1; then
+        echo "Error: ffprobe and python3 are required."
+        return 1
+    fi
+
+    echo -e "${MENU_1_COLOR}"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║              M3U8 TO TS TO MKV                  ║ "
+    echo " ║          1080P VIDEO + ALL AUDIO                ║ "
+    echo " ╚═════════════════════════════════════════════════╝ ${RESET}"
+
+    get_user_input
+    create_directory || return 1
+
+    if convert_m3u8_to_ts && convert_ts_to_mkv; then
+        display_completion_message
+        show_menu_1
+    else
+        echo -e "${ERROR}Conversion failed.${RESET}"
+        return 1
+    fi
+}
+
+get_user_input() {
+    prompt "Destination directory? (default: DONE): " destDir "DONE"
+    prompt "Source M3U8 web-address?: " srcAdd
+    prompt "Movie name? (periods between words): " baseName
+    prompt "Movie release year?: " baseYear
+    prompt "Scene/channel? (default: TCM): " baseScene "TCM"
+    prompt "Keep intermediate TS? (y/n | default: n): " keepTS "n"
+
+    baseResolution="1080p"
+    destExt="mkv"
+}
+
+create_directory() {
+    # Movie.Name (2026)
+    dirName="${baseName//./ } (${baseYear})"
+
+    outputDir="${destDir}/${dirName}"
+    mkdir -p "$outputDir" || return 1
+
+    outputBase="${baseName}.${baseYear}.${baseResolution}.WEBRip-${baseScene}"
+
+    tsFile="${outputDir}/${outputBase}.ts"
+    mkvFile="${outputDir}/${outputBase}.mkv"
+}
+
+convert_m3u8_to_ts() {
+    echo "Inspecting M3U8 streams..."
+
+    local probeFile
+    probeFile=$(mktemp) || return 1
+
+    if ! ffprobe -v error \
+        -show_streams \
+        -of json \
+        "$srcAdd" > "$probeFile"; then
+        rm -f "$probeFile"
+        echo "Unable to inspect the playlist."
+        return 1
+    fi
+
+    local streamList
+    streamList=$(python3 - "$probeFile" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1]) as f:
+    streams = json.load(f).get("streams", [])
+
+videos = [
+    s for s in streams
+    if s.get("codec_type") == "video"
+    and s.get("width") == 1920
+    and s.get("height") == 1080
+]
+
+if not videos:
+    sys.exit("ERROR: No 1920x1080 video found.")
+
+video = max(
+    videos,
+    key=lambda s: int(s.get("bit_rate") or 0)
+)
+
+print("VIDEO", video["index"])
+
+audios = [
+    s for s in streams
+    if s.get("codec_type") == "audio"
+]
+
+for audio in audios:
+    language = audio.get("tags", {}).get(
+        "language", "und"
+    )
+    print("AUDIO", audio["index"], language)
+PY
+)
+    local status=$?
+    rm -f "$probeFile"
+
+    if [ "$status" -ne 0 ]; then
+        echo "$streamList"
+        return 1
+    fi
+
+    local videoIndex=""
+    local -a audioIndexes=()
+    local type index language
+
+    while read -r type index language; do
+        case "$type" in
+            VIDEO)
+                videoIndex="$index"
+                ;;
+            AUDIO)
+                audioIndexes+=("$index")
+                echo "Detected audio: $language (stream $index)"
+                ;;
+        esac
+    done <<< "$streamList"
+
+    if [ -z "$videoIndex" ]; then
+        echo "Error: 1080p video unavailable."
+        return 1
+    fi
+
+    echo "Selected 1080p video stream: $videoIndex"
+    echo "Total audio streams: ${#audioIndexes[@]}"
+
+    local -a maps=("-map" "0:${videoIndex}")
+
+    for index in "${audioIndexes[@]}"; do
+        maps+=("-map" "0:${index}")
+    done
+
+    echo "Downloading and creating TS..."
+
+    ffmpeg -hide_banner -stats \
+        -i "$srcAdd" \
+        "${maps[@]}" \
+        -c copy \
+        -f mpegts \
+        -y "$tsFile"
+}
+
+convert_ts_to_mkv() {
+    echo "Remuxing TS into MKV..."
+
+    if ffmpeg -hide_banner -stats \
+        -i "$tsFile" \
+        -map 0 \
+        -c copy \
+        -y "$mkvFile"; then
+
+        if [ "$keepTS" != "y" ] &&
+           [ "$keepTS" != "Y" ]; then
+            rm -f "$tsFile"
+        fi
+
+        return 0
+    else
+        echo "Error while creating MKV."
+        return 1
+    fi
+}
+
+display_completion_message() {
+    echo ""
+    echo "════════════════════════════════════════"
+    echo " Conversion completed successfully!"
+    echo " Resolution: 1080p"
+    echo " Audio: All detected streams"
+    echo " File: $mkvFile"
+    echo "════════════════════════════════════════"
+    echo -e "\a"
+}
