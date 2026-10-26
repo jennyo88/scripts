@@ -2,26 +2,31 @@
 m3u8() {
     check_ffmpeg || return 1
 
+    # Check additional dependencies
+    for tool in ffprobe python3; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            echo -e "${ERROR}Missing dependency: $tool${RESET}"
+            return 1
+        fi
+    done
+
     echo -e "${MENU_1_COLOR}"
     echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║                M3U8 TO TS TO MKV                ║ "
-    echo " ║             MOVIES AND TV SHOWS                 ║ "
-    echo " ║        1080P - ENGLISH/SPANISH AUDIO            ║ "
+    echo " ║               M3U8 TO MKV SCRIPT               ║ "
+    echo " ║              MOVIES AND TV SHOWS                ║ "
+    echo " ║         1080P - ENGLISH/SPANISH AUDIO           ║ "
     echo " ╚═════════════════════════════════════════════════╝ ${RESET}"
 
     # Get user input
     get_user_input || return 1
 
-    # Create directory based on media type
+    # Create output directory
     create_directory || return 1
 
-    # Download M3U8 and convert to TS
-    convert_m3u8_to_ts || return 1
+    # Download directly to MKV
+    convert_m3u8_to_mkv || return 1
 
-    # Convert TS to MKV
-    convert_ts_to_mkv || return 1
-
-    # Display completion message
+    # Completion
     display_completion_message
 
     show_menu_1
@@ -29,28 +34,52 @@ m3u8() {
 
 get_user_input() {
     prompt "Destination directory? (default: DONE): " destDir "DONE"
-    prompt "Source web-address?: " srcAdd
+    prompt "Source M3U8 web-address?: " srcAdd
 
+    [[ -n "$srcAdd" ]] || {
+        echo "A source URL is required."
+        return 1
+    }
+
+    echo ""
     echo " 1) Movie"
     echo " 2) TV Show"
     prompt "Media type? (default: 1): " mediaType "1"
 
     prompt "Movie/TV show name? (periods between words): " baseName
 
-    if [ "$mediaType" = "1" ]; then
-        prompt "Movie release year?: " baseYear
-    elif [ "$mediaType" = "2" ]; then
-        prompt "Season number?: " seasonNumber
-        prompt "Episode number?: " episodeNumber
-    else
-        echo "Invalid media type."
+    [[ -n "$baseName" ]] || {
+        echo "A title is required."
         return 1
-    fi
+    }
 
-    # Source/release group - no default
+    case "$mediaType" in
+        1)
+            prompt "Movie release year?: " baseYear
+
+            [[ "$baseYear" =~ ^[0-9]{4}$ ]] || {
+                echo "Invalid release year."
+                return 1
+            }
+            ;;
+        2)
+            prompt "Season number?: " seasonNumber
+            prompt "Episode number?: " episodeNumber
+
+            [[ "$seasonNumber" =~ ^[0-9]+$ &&
+               "$episodeNumber" =~ ^[0-9]+$ ]] || {
+                echo "Invalid season/episode."
+                return 1
+            }
+            ;;
+        *)
+            echo "Invalid media type."
+            return 1
+            ;;
+    esac
+
+    # No default source
     prompt "Scene/channel/source? (optional): " baseScene ""
-
-    prompt "Keep intermediate TS? (y/n | default: n): " keepTS "n"
 
     baseResolution="1080p"
     destExt="mkv"
@@ -61,30 +90,41 @@ create_directory() {
 
     cleanName="${baseName// /.}"
     cleanName="${cleanName//\//_}"
+    cleanName="${cleanName//\\/_}"
 
     if [ "$mediaType" = "1" ]; then
         dirName="${cleanName//./ } (${baseYear})"
         outputBase="${cleanName}.${baseYear}.${baseResolution}.WEBRip"
     else
-        printf -v season "%02d" "$((10#$seasonNumber))"
-        printf -v episode "%02d" "$((10#$episodeNumber))"
+        season=$((10#$seasonNumber))
+        episode=$((10#$episodeNumber))
+
+        printf -v season "%02d" "$season"
+        printf -v episode "%02d" "$episode"
 
         dirName="${cleanName//./ }/Season ${season}"
         outputBase="${cleanName}.S${season}E${episode}.${baseResolution}.WEBRip"
     fi
 
     if [ -n "$baseScene" ]; then
-        outputBase="${outputBase}-${baseScene}"
+        local sourceName="${baseScene// /_}"
+        sourceName="${sourceName//\//_}"
+        sourceName="${sourceName//\\/_}"
+        outputBase="${outputBase}-${sourceName}"
     fi
 
     outputDir="./${destDir}/${dirName}"
     mkdir -p "$outputDir" || return 1
 
-    tsFile="${outputDir}/${outputBase}.ts"
-    mkvFile="${outputDir}/${outputBase}.mkv"
+    mkvFile="${outputDir}/${outputBase}.${destExt}"
+
+    echo ""
+    echo "Output directory: $outputDir"
+    echo "Filename: $outputBase.$destExt"
 }
 
-convert_m3u8_to_ts() {
+convert_m3u8_to_mkv() {
+    echo ""
     echo "Checking available streams..."
 
     local probeFile streamList
@@ -97,20 +137,23 @@ convert_m3u8_to_ts() {
 
     probeFile=$(mktemp) || return 1
 
-    if ! ffprobe -v error \
+    if ! ffprobe \
+        -v error \
         -show_streams \
         -of json \
         "$srcAdd" > "$probeFile"; then
+
         rm -f "$probeFile"
-        echo "Error reading M3U8."
+        echo -e "${ERROR}Error reading M3U8.${RESET}"
         return 1
     fi
 
+    # Identify 1080p video and English/Spanish audio
     streamList=$(python3 - "$probeFile" <<'PY'
 import json
 import sys
 
-with open(sys.argv[1]) as f:
+with open(sys.argv[1], encoding="utf-8") as f:
     streams = json.load(f).get("streams", [])
 
 videos = [
@@ -145,7 +188,7 @@ for audio in streams:
 PY
 ) || {
         rm -f "$probeFile"
-        echo "Stream selection failed."
+        echo -e "${ERROR}Stream selection failed.${RESET}"
         return 1
     }
 
@@ -164,16 +207,17 @@ PY
     done <<< "$streamList"
 
     if [ -z "$videoIndex" ]; then
-        echo "1080p video not found."
+        echo -e "${ERROR}1080p video not found.${RESET}"
         return 1
     fi
 
     if [ ${#audioIndexes[@]} -eq 0 ]; then
-        echo "No English or Spanish audio found."
+        echo -e "${ERROR}No English or Spanish audio detected.${RESET}"
         return 1
     fi
 
-    echo "1080p video selected."
+    echo ""
+    echo "Video: 1920x1080"
     echo "Audio tracks: ${#audioIndexes[@]}"
 
     maps=(-map "0:${videoIndex}")
@@ -188,49 +232,50 @@ PY
         echo " Audio $((i+1)): ${audioLanguages[$i]}"
     done
 
-    # M3U8 to TS without re-encoding
+    echo ""
+    echo "Downloading M3U8 directly to MKV..."
+    echo ""
+
     if ffmpeg \
+        -hide_banner \
+        -stats \
+        -fflags +genpts \
         -i "$srcAdd" \
         "${maps[@]}" \
         "${metadataArgs[@]}" \
         -c copy \
-        -f mpegts \
-        -y "$tsFile"; then
-
-        echo "M3U8 to TS conversion complete!"
-        return 0
-    else
-        echo -e "${ERROR}Error converting M3U8 to TS.${RESET}"
-        return 1
-    fi
-}
-
-convert_ts_to_mkv() {
-    # TS to MKV without re-encoding
-    if ffmpeg \
-        -i "$tsFile" \
-        -map 0 \
-        -c copy \
+        -avoid_negative_ts make_zero \
         -y "$mkvFile"; then
 
-        echo "TS to MKV conversion complete!"
-
-        if [ "$keepTS" != "y" ] && [ "$keepTS" != "Y" ]; then
-            rm -f "$tsFile"
-        fi
-
+        echo ""
+        echo "M3U8 to MKV conversion complete!"
         return 0
     else
-        echo -e "${ERROR}Error converting TS to MKV.${RESET}"
+        echo -e "${ERROR}Error converting M3U8 to MKV.${RESET}"
         return 1
     fi
 }
 
 display_completion_message() {
     echo ""
-    echo "Task completed successfully!"
+    echo " ╔═════════════════════════════════════════════════╗ "
+    echo " ║            DOWNLOAD COMPLETED                 ║ "
+    echo " ╚═════════════════════════════════════════════════╝ "
+
     echo "Resolution: 1080p"
-    echo "Audio: English and Spanish only"
+    echo "Audio: English / Spanish"
+    echo "Container: MKV"
     echo "Output: $mkvFile"
+
+    echo ""
+    echo "Final stream information:"
+
+    ffprobe \
+        -v error \
+        -show_entries \
+        stream=index,codec_type,codec_name,width,height:stream_tags=language \
+        -of compact \
+        "$mkvFile"
+
     echo -e "\a"
 }
