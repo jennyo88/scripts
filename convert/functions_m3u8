@@ -4,9 +4,9 @@ m3u8() {
 
     echo -e "${MENU_1_COLOR}"
     echo " ╔═════════════════════════════════════════════════╗ "
-    echo " ║              VIDEO/AUDIO TO MKV                ║ "
+    echo " ║                 M3U8 TO MKV                    ║ "
     echo " ║               MOVIES & TV SHOWS                ║ "
-    echo " ║          1080P - AUDIO & SUBTITLES             ║ "
+    echo " ║          1080P - ENGLISH / SPANISH             ║ "
     echo " ╚═════════════════════════════════════════════════╝ ${RESET}"
 
     # Get user input
@@ -15,7 +15,7 @@ m3u8() {
     # Create directory based on movie or TV show
     create_directory || return 1
 
-    # Download streams and combine directly into MKV
+    # Download and combine video, audio and subtitles
     convert_m3u8_to_mkv || return 1
 
     # Display completion message
@@ -28,29 +28,31 @@ m3u8() {
 get_user_input() {
     prompt "Destination directory? (default: DONE): " destDir "DONE"
 
-    echo ""
+    # Get separate stream addresses
     prompt "1080p video URL (required): " videoURL
-    prompt "Spanish audio URL (required): " spanishURL
-    prompt "English audio URL (optional, enter skip): " englishURL
-    prompt "Spanish VTT URL (optional, enter skip): " spanishVTT
+    prompt "English audio URL (required): " englishURL
+    prompt "Spanish audio URL (optional, enter skip): " spanishURL
     prompt "English VTT URL (optional, enter skip): " englishVTT
+    prompt "Spanish VTT URL (optional, enter skip): " spanishVTT
 
     # Normalize optional inputs
     local variable value
-    for variable in englishURL spanishVTT englishVTT; do
+    for variable in spanishURL englishVTT spanishVTT; do
         value="${!variable}"
         if [[ -z "$value" || "${value,,}" == "skip" ]]; then
             printf -v "$variable" '%s' ""
         fi
     done
 
-    if [[ -z "$videoURL" || -z "$spanishURL" ||
+    # Validate required inputs
+    if [[ -z "$videoURL" || -z "$englishURL" ||
           "${videoURL,,}" == "skip" ||
-          "${spanishURL,,}" == "skip" ]]; then
-        echo "Video and Spanish audio URLs are required."
+          "${englishURL,,}" == "skip" ]]; then
+        echo "Video and English audio URLs are required."
         return 1
     fi
 
+    # Select movie or TV show
     echo ""
     echo " 1) Movie"
     echo " 2) TV Show"
@@ -62,14 +64,20 @@ get_user_input() {
     case "$mediaType" in
         1)
             prompt "Movie release year?: " baseYear
-            [[ "$baseYear" =~ ^[0-9]{4}$ ]] || return 1
+            [[ "$baseYear" =~ ^[0-9]{4}$ ]] || {
+                echo "Invalid release year."
+                return 1
+            }
             ;;
         2)
             prompt "Season number?: " seasonNumber
             prompt "Episode number?: " episodeNumber
 
             [[ "$seasonNumber" =~ ^[0-9]+$ &&
-               "$episodeNumber" =~ ^[0-9]+$ ]] || return 1
+               "$episodeNumber" =~ ^[0-9]+$ ]] || {
+                echo "Invalid season or episode number."
+                return 1
+            }
             ;;
         *)
             echo "Invalid media type."
@@ -77,6 +85,7 @@ get_user_input() {
             ;;
     esac
 
+    # No default source or release group
     prompt "Scene/channel/source? (optional, enter skip): " baseScene ""
 
     if [[ "${baseScene,,}" == "skip" ]]; then
@@ -96,7 +105,7 @@ create_directory() {
 
     if [[ "$mediaType" == "1" ]]; then
         dirName="${cleanName//./ } (${baseYear})"
-        outputBase="${cleanName}.${baseYear}.1080p.WEBRip"
+        outputBase="${cleanName}.${baseYear}.${baseResolution}.WEBRip"
     else
         season=$((10#$seasonNumber))
         episode=$((10#$episodeNumber))
@@ -105,7 +114,7 @@ create_directory() {
         printf -v episode "%02d" "$episode"
 
         dirName="${cleanName//./ }/Season ${season}"
-        outputBase="${cleanName}.S${season}E${episode}.1080p.WEBRip"
+        outputBase="${cleanName}.S${season}E${episode}.${baseResolution}.WEBRip"
     fi
 
     if [[ -n "$baseScene" ]]; then
@@ -125,48 +134,33 @@ convert_m3u8_to_mkv() {
     echo ""
     echo "Downloading 1080p video, audio and subtitles..."
 
-    local -a inputs=(-i "$videoURL" -i "$spanishURL")
+    # Required video and English audio
+    local -a inputs=(-i "$videoURL" -i "$englishURL")
     local -a maps=(-map "0:v:0" -map "1:a:0")
     local -a metadataArgs=(
-        -metadata:s:a:0 language=spa
-        -metadata:s:a:0 title=Spanish
+        -metadata:s:a:0 language=eng
+        -metadata:s:a:0 title=English
         -disposition:a:0 default
     )
 
     local inputIndex=2
-    local audioIndex=1
     local subtitleIndex=0
 
-    # Optional English audio
-    if [[ -n "$englishURL" ]]; then
-        inputs+=(-i "$englishURL")
+    # Optional Spanish audio
+    if [[ -n "$spanishURL" ]]; then
+        inputs+=(-i "$spanishURL")
         maps+=(-map "${inputIndex}:a:0")
 
         metadataArgs+=(
-            "-metadata:s:a:${audioIndex}" "language=eng"
-            "-metadata:s:a:${audioIndex}" "title=English"
-            "-disposition:a:${audioIndex}" "0"
+            "-metadata:s:a:1" "language=spa"
+            "-metadata:s:a:1" "title=Spanish"
+            "-disposition:a:1" "0"
         )
 
         ((inputIndex+=1))
-        ((audioIndex+=1))
     fi
 
-    # Optional Spanish VTT
-    if [[ -n "$spanishVTT" ]]; then
-        inputs+=(-i "$spanishVTT")
-        maps+=(-map "${inputIndex}:s:0")
-
-        metadataArgs+=(
-            "-metadata:s:s:${subtitleIndex}" "language=spa"
-            "-metadata:s:s:${subtitleIndex}" "title=Spanish"
-        )
-
-        ((inputIndex+=1))
-        ((subtitleIndex+=1))
-    fi
-
-    # Optional English VTT
+    # Optional English VTT subtitles
     if [[ -n "$englishVTT" ]]; then
         inputs+=(-i "$englishVTT")
         maps+=(-map "${inputIndex}:s:0")
@@ -174,8 +168,28 @@ convert_m3u8_to_mkv() {
         metadataArgs+=(
             "-metadata:s:s:${subtitleIndex}" "language=eng"
             "-metadata:s:s:${subtitleIndex}" "title=English"
+            "-disposition:s:${subtitleIndex}" "0"
+        )
+
+        ((inputIndex+=1))
+        ((subtitleIndex+=1))
+    fi
+
+    # Optional Spanish VTT subtitles
+    if [[ -n "$spanishVTT" ]]; then
+        inputs+=(-i "$spanishVTT")
+        maps+=(-map "${inputIndex}:s:0")
+
+        metadataArgs+=(
+            "-metadata:s:s:${subtitleIndex}" "language=spa"
+            "-metadata:s:s:${subtitleIndex}" "title=Spanish"
+            "-disposition:s:${subtitleIndex}" "0"
         )
     fi
+
+    echo ""
+    echo "Output: $mkvFile"
+    echo ""
 
     if ffmpeg \
         -hide_banner \
@@ -202,14 +216,14 @@ display_completion_message() {
     echo " ║             DOWNLOAD COMPLETED                 ║ "
     echo " ╚═════════════════════════════════════════════════╝ "
 
-    echo "Resolution: 1080p"
-    echo "Audio: Spanish + optional English"
-    echo "Subtitles: Optional Spanish / English"
+    echo "Resolution: 1080p source"
+    echo "Audio: English (default) + optional Spanish"
+    echo "Subtitles: Optional English / Spanish"
     echo "Container: MKV"
     echo "Output: $mkvFile"
 
     echo ""
-    echo "Final streams:"
+    echo "Final stream information:"
 
     ffprobe \
         -v error \
